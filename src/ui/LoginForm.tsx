@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 function LoginForm() {
   return (
@@ -12,6 +13,7 @@ function LoginForm() {
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" />
       </Form.Group>
+      <Button variant="dark">Dark</Button>
     </Form>
   );
 }
