@@ -3,13 +3,15 @@
 ### Screenshot (Optional)
 
 ### This is a...
+
 - [ ] New feature
 - [ ] Bug fix
 - [ ] Refactoring
 - [ ] Test Case
 - [ ] Documentation update
-- [ ] Other 
+- [ ] Other
 
 ### Changes
+
 - Tweaked configuration to be able to work with a new set of components.
 - Introduced tests to cover new functionality.
