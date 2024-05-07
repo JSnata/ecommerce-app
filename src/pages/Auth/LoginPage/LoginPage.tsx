@@ -1,12 +1,12 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import styles from './LoginForm.module.css';
+import styles from './LoginPage.module.css';
 
 function LoginForm() {
   return (
     <div className={styles.formWrapper}>
-      <h1>Sign up</h1>
+      <h1>Sign in</h1>
       <Form className={styles.form}>
         <Form.Group className="email">
           <Form.Label>Email address</Form.Label>

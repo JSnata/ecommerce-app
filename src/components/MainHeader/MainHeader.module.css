@@ -1,0 +1,7 @@
+.main_header {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: 20px 0;
+  min-height: 90px;
+}
