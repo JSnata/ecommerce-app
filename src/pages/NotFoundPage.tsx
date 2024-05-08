@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import SecondaryButton from '../ui/Buttons/SecondaryButton';
 
 function NotFoundPage() {
   return (
@@ -8,6 +9,9 @@ function NotFoundPage() {
         <Col className="text-center">
           <h1>404 - Page Not Found</h1>
           <p>Oooops, the page does not exist.</p>
+          <SecondaryButton to="/" link="/">
+            Return to Main page
+          </SecondaryButton>
         </Col>
       </Row>
     </Container>
