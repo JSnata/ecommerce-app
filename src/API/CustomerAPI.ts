@@ -3,7 +3,7 @@ import { getApiUser } from './root/BuildUser';
 /**
  * Retrieves the API root for the authenticated user..
  */
-const apiUser = getApiUser();
+export const apiUser = getApiUser();
 
 /**
  * Signs in a customer with the provided email and password.
@@ -29,5 +29,3 @@ export const signingCustomer = async (email: string, password: string) => {
     console.error(error);
   }
 };
-
-export default signingCustomer;
