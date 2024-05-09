@@ -2,8 +2,18 @@ import { CustomerDraft } from '@commercetools/platform-sdk';
 import { getApiUser } from './root/BuildUser';
 import { ICustomerCreateData } from '../types/CustomerTypes';
 
-const apiUser = getApiUser();
-export const signinCustomer = async (email: string, password: string) => {
+/**
+ * Retrieves the API root for the authenticated user..
+ */
+export const apiUser = getApiUser();
+
+/**
+ * Signs in a customer with the provided email and password.
+ * @param {string} email - The email of the customer.
+ * @param {string} password - The password of the customer.
+ * @returns {Promise<void>} A Promise that resolves when the customer is signed in successfully.
+ */
+export const signingCustomer = async (email: string, password: string) => {
   try {
     const response = await apiUser
       .me()
@@ -20,6 +30,11 @@ export const signinCustomer = async (email: string, password: string) => {
     console.error(error);
   }
 };
+
+/**
+ * Gets the next available customer number.
+ * @returns {Promise<string>} A Promise that resolves with the next available customer number.
+ */
 const getCustomerNumber = async () => {
   try {
     const response = await apiUser.customers().get().execute();
@@ -30,6 +45,11 @@ const getCustomerNumber = async () => {
   }
 };
 
+/**
+ * Creates a new customer with the provided data.
+ * @param {ICustomerCreateData} data - The data for creating the customer.
+ * @returns {Promise<CustomerDraft | null>} A Promise that resolves with the created customer or null if there was an error.
+ */
 export const createCustomer = async (data: ICustomerCreateData): Promise<CustomerDraft | null> => {
   try {
     const customerNumber = await getCustomerNumber();
