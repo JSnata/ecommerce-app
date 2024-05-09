@@ -7,8 +7,19 @@ import styles from './LoginPage.module.css';
 
 function LoginForm() {
   const validationSchema = yup.object().shape({
-    email: yup.string().required('This field is required!').email('Invalid email'),
-    password: yup.string().required('This field is required!'),
+    email: yup
+      .string()
+      .required('This field is required!')
+      .email('Invalid email')
+      .matches(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Invalid email'),
+    password: yup
+      .string()
+      .required('This field is required!')
+      .min(8)
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
+        'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character',
+      ),
   });
 
   const handleSubmitForm = (values: { email: string; password: string }) => {
