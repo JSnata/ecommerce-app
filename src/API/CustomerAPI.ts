@@ -6,6 +6,10 @@ import { ICustomerCreateData } from '../types/CustomerTypes';
  * Retrieves the API root for the authenticated user..
  */
 export const apiUser = getApiUser();
+/**
+ * Retrieves the Current Store ID
+ */
+const storeId = '59ad2c93-402f-4af9-9728-d9a2c65f6e86';
 
 /**
  * Signs in a customer with the provided email and password.
@@ -57,7 +61,7 @@ export const createCustomer = async (data: ICustomerCreateData): Promise<Custome
       .customers()
       .post({
         body: {
-          stores: [{ typeId: 'store', id: '59ad2c93-402f-4af9-9728-d9a2c65f6e86' }],
+          stores: [{ typeId: 'store', id: storeId }],
           ...data,
           customerNumber,
         },
