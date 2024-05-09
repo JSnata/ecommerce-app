@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Product } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/product';
-import { apiUser } from '../API/CustomerAPI';
+import { apiRoot } from '../API/ClientAPI';
 
 function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
 
   const getProducts = async () => {
     try {
-      const productsData = await apiUser.products().get().execute();
+      const productsData = await apiRoot.products().get().execute();
       setProducts(productsData.body.results);
     } catch (e) {
       console.error(e);

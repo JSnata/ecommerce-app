@@ -35,7 +35,7 @@ function MainPage() {
       });
   };
   const handlerSignIn = () => {
-    signingCustomer('seb@example.com', 'D{k-i]`_=cqsonA8')
+    signingCustomer('jen@example.de', '{G+0BJcyVGW46|yP')
       .then((response) => {
         console.log('Customer signed in successfully', response);
       })
