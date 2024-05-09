@@ -38,7 +38,7 @@ const createNewCustomer = (username: string, password: string) => {
     .withLoggerMiddleware()
     .build();
 };
-// eslint-disable-next-line import/prefer-default-export
+
 const getApiCustomer = (username: string, password: string) => {
   return createApiBuilderFromCtpClient(createNewCustomer(username, password)).withProjectKey({ projectKey });
 };

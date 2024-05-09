@@ -26,7 +26,8 @@ const client = new ClientBuilder()
   .withLoggerMiddleware()
   .build();
 
-// eslint-disable-next-line import/prefer-default-export
 export const getApiRoot = () => {
   return createApiBuilderFromCtpClient(client).withProjectKey({ projectKey });
 };
+
+export default getApiRoot;

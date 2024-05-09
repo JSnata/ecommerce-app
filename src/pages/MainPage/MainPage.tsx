@@ -2,8 +2,8 @@ import React from 'react';
 import ProductsList from '../../components/ProdictsList/ProductsList';
 import { ICustomerAddress, ICustomerCreateData } from '../../types/CustomerTypes';
 import { Country } from '../../types/enumCounty';
-import { createCustomer } from '../../API/ClientAPI';
 import { signingCustomer } from '../../API/CustomerAPI';
+import { createCustomer } from '../../API/ClientAPI';
 
 function MainPage() {
   const testCustomerAddress: ICustomerAddress = {
@@ -14,10 +14,10 @@ function MainPage() {
   };
 
   const testCustomer: ICustomerCreateData = {
-    email: 'TESTCustomer1@example.com',
-    password: '123123123',
-    firstName: 'I need Flower!!!',
-    lastName: 'Faster!!!',
+    email: 'sss@example.com',
+    password: '1q3EJO6Ele4BTF',
+    firstName: 'Test2',
+    lastName: 'Test2',
     addresses: [testCustomerAddress],
     defaultShippingAddress: 0,
     shippingAddresses: [0],
@@ -35,7 +35,7 @@ function MainPage() {
       });
   };
   const handlerSignIn = () => {
-    signingCustomer('jen@example.de', '{G+0BJcyVGW46|yP')
+    signingCustomer('sss@example.com', '1q3EJO6Ele4BTF')
       .then((response) => {
         console.log('Customer signed in successfully', response);
       })
