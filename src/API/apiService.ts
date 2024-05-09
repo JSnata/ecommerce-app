@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-class CustomAPI {
+class ApiService {
   static headers = {
     Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`,
   };
@@ -13,7 +13,7 @@ class CustomAPI {
   }
 
   static async getData(endpoint: string) {
-    const url = CustomAPI.createUrl(endpoint);
+    const url = ApiService.createUrl(endpoint);
     try {
       const response = await axios.get(`${url}`, { headers: this.headers });
       // console.log(response);
@@ -25,4 +25,4 @@ class CustomAPI {
   }
 }
 
-export default CustomAPI;
+export default ApiService;
