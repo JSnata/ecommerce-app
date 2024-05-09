@@ -3,6 +3,8 @@ import { Container, Navbar } from 'react-bootstrap';
 import SecondaryButton from '../../ui/Buttons/SecondaryButton';
 
 function NavigationBar() {
+  // console.log(createCustomer({ email: 'HHHHH', password: 'HHHHH', firstName: 'HHHH', lastName: 'HHHH' }));
+  // console.log(getStoreData());
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
