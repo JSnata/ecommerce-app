@@ -23,15 +23,14 @@ function LoginForm() {
       .string()
       .required('This field is required!')
       .email('Invalid email')
-      .matches(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Invalid email'),
+      .matches(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Email must be xxx@xxx.xx'),
     password: yup
       .string()
       .required('This field is required!')
-      .min(8)
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
-        'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character',
-      ),
+      .min(8, 'Password must be at least 8 characters')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/[0-9]/, 'Password must contain at least one digit'),
   });
 
   const handleSubmitForm = (values: FormValues) => {
