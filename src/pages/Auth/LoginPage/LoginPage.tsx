@@ -7,6 +7,11 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import styles from './LoginPage.module.css';
 
+interface FormValues {
+  email: string;
+  password: string;
+}
+
 function LoginForm() {
   const [showPass, setShowPass] = useState(false);
   const clickHandler = () => {
@@ -29,7 +34,7 @@ function LoginForm() {
       ),
   });
 
-  const handleSubmitForm = (values: { email: string; password: string }) => {
+  const handleSubmitForm = (values: FormValues) => {
     console.log('Email:', values.email);
     console.log('Password:', values.password);
   };
@@ -45,7 +50,7 @@ function LoginForm() {
           password: '',
         }}
       >
-        {({ handleSubmit, handleChange, values, touched, errors, isValid }) => (
+        {({ handleSubmit, handleChange, values, touched, errors }) => (
           <Form className={styles.form} noValidate onSubmit={handleSubmit}>
             <Form.Group className="email">
               <Form.Label>Email address</Form.Label>
@@ -69,11 +74,11 @@ function LoginForm() {
                   onChange={handleChange}
                   isInvalid={touched.password && !!errors.password}
                 />
+                <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                 <InputGroup.Text onClick={clickHandler}>{showPass ? <Eye /> : <EyeSlashFill />}</InputGroup.Text>
               </InputGroup>
-              <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
             </Form.Group>
-            <Button variant="dark" type="submit" disabled={!isValid}>
+            <Button variant="dark" type="submit">
               Continue
             </Button>
           </Form>
