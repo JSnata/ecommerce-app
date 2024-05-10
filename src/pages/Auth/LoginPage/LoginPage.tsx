@@ -73,8 +73,8 @@ function LoginForm() {
                   onChange={handleChange}
                   isInvalid={touched.password && !!errors.password}
                 />
+                <InputGroup.Text onClick={clickHandler}>{showPass ? <Eye /> : <EyeSlashFill />}</InputGroup.Text>´
                 <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-                <InputGroup.Text onClick={clickHandler}>{showPass ? <Eye /> : <EyeSlashFill />}</InputGroup.Text>
               </InputGroup>
             </Form.Group>
             <Button variant="dark" type="submit">
