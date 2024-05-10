@@ -1,9 +1,9 @@
 import fetch from 'node-fetch';
-import { ClientBuilder } from '@commercetools/sdk-client-v2';
+import { AuthMiddlewareOptions, ClientBuilder } from '@commercetools/sdk-client-v2';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 
-export const projectKey = process.env.REACT_APP_API_PROJECT_KEY!;
-const authMiddlewareOptions = {
+const projectKey = process.env.REACT_APP_API_PROJECT_KEY!;
+const options: AuthMiddlewareOptions = {
   host: 'https://auth.europe-west1.gcp.commercetools.com',
   projectKey,
   credentials: {
@@ -21,11 +21,13 @@ const httpMiddlewareOptions = {
 
 const client = new ClientBuilder()
   .withProjectKey(projectKey)
-  .withClientCredentialsFlow(authMiddlewareOptions)
+  .withClientCredentialsFlow(options)
   .withHttpMiddleware(httpMiddlewareOptions)
   .withLoggerMiddleware()
   .build();
 
 export const getApiRoot = () => {
-  return createApiBuilderFromCtpClient(client);
+  return createApiBuilderFromCtpClient(client).withProjectKey({ projectKey });
 };
+
+export default getApiRoot;
