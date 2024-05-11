@@ -1,12 +1,12 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
-import { getApiRoot } from './root/BuildClient';
-import { ICustomerCreateData } from '../types/CustomerTypes';
+import { ICustomerCreateData } from '../../types/CustomerTypes';
+import createApiRoot from '../root/BuildClient';
 
 /**
  * Retrieves the API root for the authenticated client.
  * Needs to manage the project and all data
  */
-export const apiRoot = getApiRoot();
+export const apiRoot = createApiRoot();
 /**
  * Retrieves store data from the API.
  * @returns {Promise<any>} A Promise that resolves with the store data if successful, or null if there was an error.
