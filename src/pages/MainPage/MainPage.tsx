@@ -2,8 +2,7 @@ import React from 'react';
 import ProductsList from '../../components/ProdictsList/ProductsList';
 import { ICustomerAddress, ICustomerCreateData } from '../../types/CustomerTypes';
 import { Country } from '../../types/enumCounty';
-import { signingCustomer } from '../../API/CustomerAPI';
-import { createCustomer } from '../../API/ClientAPI';
+import ApiService from '../../API/apiService';
 
 function MainPage() {
   const testCustomerAddress: ICustomerAddress = {
@@ -14,7 +13,7 @@ function MainPage() {
   };
 
   const testCustomer: ICustomerCreateData = {
-    email: 'sss@example.com',
+    email: 'sss4@example.com',
     password: '1q3EJO6Ele4BTF',
     firstName: 'Test2',
     lastName: 'Test2',
@@ -26,22 +25,18 @@ function MainPage() {
   };
 
   const handleCreate = () => {
-    createCustomer({ ...testCustomer })
-      .then((response) => {
-        console.log('Customer created:', response);
-      })
-      .catch((error) => {
-        console.error('Error creating customer:', error);
-      });
+    ApiService.register(testCustomer).then((response) => {
+      console.log(response);
+    });
   };
   const handlerSignIn = () => {
-    signingCustomer('sss@example.com', '1q3EJO6Ele4BTF')
-      .then((response) => {
-        console.log('Customer signed in successfully', response);
-      })
-      .catch((error) => {
-        console.error('Error signing in customer:', error);
-      });
+    ApiService.login('sss@example.com', '1q3EJO6Ele4BTF').then((response) => {
+      console.log('Customer signed in:', response);
+    });
+  };
+
+  const randomHandler = () => {
+    ApiService.getProducts();
   };
 
   return (
@@ -52,7 +47,9 @@ function MainPage() {
       <button type="button" onClick={handlerSignIn}>
         LoginCustomer
       </button>
-
+      <button type="button" onClick={randomHandler}>
+        Random
+      </button>
       <ProductsList />
     </div>
   );
