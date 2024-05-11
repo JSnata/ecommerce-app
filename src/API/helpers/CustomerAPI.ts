@@ -3,9 +3,11 @@ import { createApiCustomer } from '../root/BuildCustomer';
 
 /**
  * Signs in a customer with the provided email and password.
+ *
  * @param {string} username - The email/username of the customer.
  * @param {string} password - The password of the customer.
- * @returns {Promise<void>} A Promise that resolves when the customer is signed in successfully.
+ * @returns {Promise<ByProjectKeyRequestBuilder | undefined>} A Promise that resolves with the API customer instance if the login is successful,
+ * or `undefined` if there is an error during the login process.
  */
 const signingCustomer = async (username: string, password: string): Promise<ByProjectKeyRequestBuilder | undefined> => {
   const apiCustomer = createApiCustomer(username, password);

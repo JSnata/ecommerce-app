@@ -7,25 +7,16 @@ import createApiRoot from '../root/BuildClient';
  * Needs to manage the project and all data
  */
 export const apiRoot = createApiRoot();
-/**
- * Retrieves store data from the API.
- * @returns {Promise<any>} A Promise that resolves with the store data if successful, or null if there was an error.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getStoreData = async () => {
-  try {
-    const response = await apiRoot.stores().get().execute();
-    return response.body;
-  } catch (error) {
-    console.error('Error creating customer:', error);
-    return null;
-  }
-};
 
 /**
  * Creates a new customer with the provided data.
+ *
  * @param {ICustomerCreateData} data - The data for creating the customer.
  * @returns {Promise<CustomerDraft | null>} A Promise that resolves with the created customer or null if there was an error.
+ *
+ * @remarks
+ * This function uses the authenticated client to create a new customer.
+ * It sets the `isEmailVerified` field to `true` by default.
  */
 export const createCustomer = async (data: ICustomerCreateData): Promise<CustomerDraft | null> => {
   try {
