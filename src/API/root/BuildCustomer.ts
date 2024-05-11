@@ -1,8 +1,24 @@
 import fetch from 'node-fetch';
-import { ClientBuilder, PasswordAuthMiddlewareOptions } from '@commercetools/sdk-client-v2';
+import { ClientBuilder, PasswordAuthMiddlewareOptions, TokenCache, TokenStore } from '@commercetools/sdk-client-v2';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 
 const projectKey = process.env.REACT_APP_CTP_PROJECT_KEY!;
+export const userTokenCache: TokenCache = {
+  get: () => {
+    const tokenString = localStorage.getItem('token');
+    if (tokenString) {
+      const tokenStore: TokenStore = JSON.parse(tokenString);
+      if (tokenStore.expirationTime > Date.now()) {
+        return tokenStore;
+      }
+      localStorage.removeItem('token');
+    }
+    return { token: '', expirationTime: 0 };
+  },
+  set: (cache) => {
+    localStorage.setItem('token', JSON.stringify(cache));
+  },
+};
 const createOptions = (username: string, password: string): PasswordAuthMiddlewareOptions => {
   return {
     host: 'https://auth.europe-west1.gcp.commercetools.com',
@@ -21,6 +37,7 @@ const createOptions = (username: string, password: string): PasswordAuthMiddlewa
       `manage_my_profile:${projectKey}`,
       `view_categories:${projectKey}`,
     ],
+    tokenCache: userTokenCache,
     fetch,
   };
 };
@@ -39,8 +56,6 @@ const createNewCustomer = (username: string, password: string) => {
     .build();
 };
 
-const getApiCustomer = (username: string, password: string) => {
+export const createApiCustomer = (username: string, password: string) => {
   return createApiBuilderFromCtpClient(createNewCustomer(username, password)).withProjectKey({ projectKey });
 };
-
-export default getApiCustomer;
