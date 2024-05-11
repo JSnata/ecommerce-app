@@ -1,28 +1,41 @@
-import axios from 'axios';
+import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
+import { AxiosInstance } from 'axios';
+import signingCustomer from './helpers/CustomerAPI';
+import { ICustomerCreateData } from '../types/CustomerTypes';
+import { createCustomer } from './helpers/ClientAPI';
+import createAxiosInstance from './helpers/axiosInstance';
 
-class ApiService {
-  // TODO: needed to switch token to user token
-  static headers = {
-    Authorization: `Bearer ${process.env}`,
-  };
+export default class ApiService {
+  static userApi: ByProjectKeyRequestBuilder | undefined = undefined;
 
-  static createUrl(endpoint: string): string {
-    if (!process.env.REACT_APP_CTP_AUTH_URL || !process.env.REACT_APP_CTP_PROJECT_KEY) {
-      throw new Error('API_HOST or API_KEY environment variables are not defined');
-    }
-    return `${process.env.REACT_APP_CTP_AUTH_URL}/${process.env.REACT_APP_CTP_PROJECT_KEY}/${endpoint}`;
-  }
+  static axiosInstance: AxiosInstance;
 
-  static async getData(endpoint: string) {
-    const url = ApiService.createUrl(endpoint);
+  static async login(email: string, password: string) {
     try {
-      const response = await axios.get(`${url}`, { headers: this.headers });
-      return response.data;
+      this.userApi = await signingCustomer(email, password);
+      this.axiosInstance = createAxiosInstance();
     } catch (err) {
       console.error(err);
-      return null;
     }
   }
-}
 
-export default ApiService;
+  static async register(data: ICustomerCreateData) {
+    try {
+      await createCustomer({ ...data });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  static async getProducts() {
+    console.log();
+    await this.axiosInstance
+      .get('/product-projections')
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+}
