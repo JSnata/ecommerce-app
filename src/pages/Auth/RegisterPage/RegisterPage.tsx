@@ -200,7 +200,7 @@ function RegisterPage() {
                 </Form.Group>
               </Col>
             </Row>
-            <Button variant="dark" type="submit">
+            <Button variant="dark" type="submit" className={styles.submitBtn}>
               Continue
             </Button>
           </Form>
