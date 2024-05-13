@@ -97,29 +97,6 @@ function RegisterPage() {
                   />
                   <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group className="text">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="name"
-                    value={values.name}
-                    onChange={handleChange}
-                    isInvalid={touched.name && !!errors.name}
-                  />
-                  <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group className="date">
-                  <Form.Label>Date of Birth</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="date"
-                    value={values.date}
-                    onChange={handleChange}
-                    isInvalid={touched.date && !!errors.date}
-                    max={new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toISOString().split('T')[0]}
-                  />
-                  <Form.Control.Feedback type="invalid">{errors.date}</Form.Control.Feedback>
-                </Form.Group>
               </Col>
               <Col xs={10} md={6} className={styles.column}>
                 <Form.Group className="password">
@@ -136,6 +113,23 @@ function RegisterPage() {
                     <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                   </InputGroup>
                 </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={10} md={6} className={styles.column}>
+                <Form.Group className="text">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    value={values.name}
+                    onChange={handleChange}
+                    isInvalid={touched.name && !!errors.name}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col xs={10} md={6} className={styles.column}>
                 <Form.Group className="text">
                   <Form.Label>Surname</Form.Label>
                   <Form.Control
@@ -146,6 +140,22 @@ function RegisterPage() {
                     isInvalid={touched.surname && !!errors.surname}
                   />
                   <Form.Control.Feedback type="invalid">{errors.surname}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={10} md={12} className={styles.column}>
+                <Form.Group className="date">
+                  <Form.Label>Date of Birth</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="date"
+                    value={values.date}
+                    onChange={handleChange}
+                    isInvalid={touched.date && !!errors.date}
+                    max={new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toISOString().split('T')[0]}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.date}</Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -167,17 +177,6 @@ function RegisterPage() {
                   />
                   <Form.Control.Feedback type="invalid">{errors.country}</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group className="street">
-                  <Form.Label>Street</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="street"
-                    value={values.street}
-                    onChange={handleChange}
-                    isInvalid={touched.street && !!errors.street}
-                  />
-                  <Form.Control.Feedback type="invalid">{errors.street}</Form.Control.Feedback>
-                </Form.Group>
               </Col>
               <Col xs={10} md={6} className={styles.column}>
                 <Form.Group className="city">
@@ -191,6 +190,23 @@ function RegisterPage() {
                   />
                   <Form.Control.Feedback type="invalid">{errors.city}</Form.Control.Feedback>
                 </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={10} md={6} className={styles.column}>
+                <Form.Group className="street">
+                  <Form.Label>Street</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="street"
+                    value={values.street}
+                    onChange={handleChange}
+                    isInvalid={touched.street && !!errors.street}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.street}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col xs={10} md={6} className={styles.column}>
                 <Form.Group className="code">
                   <Form.Label>Postal code</Form.Label>
                   <Form.Control
