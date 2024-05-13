@@ -14,3 +14,8 @@
 .column {
   margin: 0 auto;
 }
+
+.submitBtn {
+  margin-top: 2vh;
+  width: 100%;
+}
