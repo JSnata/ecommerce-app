@@ -149,7 +149,11 @@ function RegisterPage() {
                 </Form.Group>
               </Col>
             </Row>
-            <hr className={styles.line} />
+            <Row>
+              <Col xs={10} md={12} className={styles.column}>
+                <hr className={styles.line} />
+              </Col>
+            </Row>
             <Row>
               <Col xs={10} md={6} className={styles.column}>
                 <Form.Group className="country">
@@ -200,9 +204,13 @@ function RegisterPage() {
                 </Form.Group>
               </Col>
             </Row>
-            <Button variant="dark" type="submit" className={styles.submitBtn}>
-              Continue
-            </Button>
+            <Row>
+              <Col xs={10} md={12} className={styles.column}>
+                <Button variant="dark" type="submit" className={styles.submitBtn}>
+                  Continue
+                </Button>
+              </Col>
+            </Row>
           </Form>
         )}
       </Formik>
