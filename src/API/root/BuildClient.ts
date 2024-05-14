@@ -26,8 +26,8 @@ const client = new ClientBuilder()
   .withLoggerMiddleware()
   .build();
 
-export const getApiRoot = () => {
+const createApiRoot = () => {
   return createApiBuilderFromCtpClient(client).withProjectKey({ projectKey });
 };
 
-export default getApiRoot;
+export default createApiRoot;
