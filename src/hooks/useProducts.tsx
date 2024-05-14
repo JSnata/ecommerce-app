@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Product } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/product';
-import { apiRoot } from '../API/ClientAPI';
+import { apiRoot } from '../API/helpers/ClientAPI';
 
 function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);

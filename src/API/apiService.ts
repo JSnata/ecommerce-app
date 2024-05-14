@@ -1,5 +1,6 @@
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import { AxiosInstance } from 'axios';
+import { toast } from 'react-toastify';
 import signingCustomer from './helpers/CustomerAPI';
 import { ICustomerCreateData } from '../types/CustomerTypes';
 import { createCustomer } from './helpers/ClientAPI';
@@ -34,6 +35,7 @@ export default class ApiService {
       this.axiosInstance = createAxiosInstance();
     } catch (err) {
       console.error(err);
+      toast.error(`${err}`);
     }
   }
 
@@ -47,6 +49,7 @@ export default class ApiService {
       await createCustomer({ ...data });
     } catch (err) {
       console.error(err);
+      toast.error(`${err}`);
     }
   }
 

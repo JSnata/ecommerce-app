@@ -1,6 +1,7 @@
+// import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import { createApiCustomer } from '../root/BuildCustomer';
-
 /**
  * Signs in a customer with the provided email and password.
  *
@@ -23,10 +24,12 @@ const signingCustomer = async (username: string, password: string): Promise<ByPr
       })
       .execute();
     if (response.statusCode === 200) {
+      toast.success('Succesfully logged in!');
       return apiCustomer;
     }
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    toast.error(`${err}`);
+    console.error(err);
     return undefined;
   }
   return apiCustomer;

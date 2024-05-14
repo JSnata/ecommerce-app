@@ -5,6 +5,7 @@ import { Eye, EyeSlashFill } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import ApiService from '../../../API/apiService';
 import styles from './LoginPage.module.css';
 
 interface FormValues {
@@ -34,8 +35,13 @@ function LoginForm() {
   });
 
   const handleSubmitForm = (values: FormValues) => {
+    // const apiCustomer = await signingCustomer(values.email, values.password);
     console.log('Email:', values.email);
     console.log('Password:', values.password);
+    ApiService.login(values.email, values.password);
+    // if (apiCustomer) {
+    //   history.push('/');
+    // }
   };
 
   return (
