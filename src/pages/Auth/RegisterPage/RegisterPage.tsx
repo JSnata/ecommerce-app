@@ -60,7 +60,22 @@ function RegisterPage() {
       .matches(/^[^0-9]*$/, 'Field must not contain numbers')
       .matches(/^[a-zA-Z]+$/, 'Field must not contain special characters'),
     country: yup.string().required('This field is required!'),
-    code: yup.string().required('This field is required!'),
+    code: yup
+      .string()
+      .required('This field is required!')
+      .test('custom-validation', 'Wrong format', (value, context) => {
+        console.log(context.parent.country);
+        switch (context.parent.country) {
+          case '1':
+            return /^(2[1-4]{1}[0-7]{1}[0-9]{3})$/.test(value);
+          case '2':
+            return /^([1-6]{1}[0-9]{5})$/.test(value);
+          case '3':
+            return /^([0-9]{2}-[0-9]{3})$/.test(value);
+          default:
+            return false;
+        }
+      }),
   });
 
   return (
@@ -169,12 +184,17 @@ function RegisterPage() {
                 <Form.Group className="country">
                   <Form.Label>Country</Form.Label>
                   <Form.Control
+                    as="select"
                     type="text"
                     name="country"
                     value={values.country}
                     onChange={handleChange}
                     isInvalid={touched.country && !!errors.country}
-                  />
+                  >
+                    <option value="1">Russia</option>
+                    <option value="2">Belarus</option>
+                    <option value="3">Poland</option>
+                  </Form.Control>
                   <Form.Control.Feedback type="invalid">{errors.country}</Form.Control.Feedback>
                 </Form.Group>
               </Col>
