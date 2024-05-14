@@ -64,7 +64,6 @@ function RegisterPage() {
       .string()
       .required('This field is required!')
       .test('custom-validation', 'Wrong format', (value, context) => {
-        console.log(context.parent.country);
         switch (context.parent.country) {
           case '1':
             return /^(2[1-4]{1}[0-7]{1}[0-9]{3})$/.test(value);
