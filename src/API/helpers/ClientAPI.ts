@@ -1,4 +1,5 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
+import { toast } from 'react-toastify';
 import { ICustomerCreateData } from '../../types/CustomerTypes';
 import createApiRoot from '../root/BuildClient';
 
@@ -30,8 +31,12 @@ export const createCustomer = async (data: ICustomerCreateData): Promise<Custome
         },
       })
       .execute();
+    if (response.statusCode === 200) {
+      toast.success('Registration successful!');
+    }
     return response.body.customer;
   } catch (error) {
+    toast.error(`Something went wrong: (${error})`);
     console.error('Error creating customer:', error);
     return null;
   }

@@ -7,7 +7,12 @@ import { Eye, EyeSlashFill } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import ApiService from '../../../API/apiService';
+import { ICustomerCreateData } from '../../../types/CustomerTypes';
+import { Country } from '../../../types/enumCounty';
 import styles from './RegisterPage.module.css';
+
+type FormValues = Record<string, string>;
 
 function RegisterPage() {
   const [showPass, setShowPass] = useState(false);
@@ -15,8 +20,47 @@ function RegisterPage() {
     setShowPass((prev) => !prev);
   };
 
-  const handleSubmitForm = () => {
-    console.log(1);
+  const handleSubmitForm = (values: FormValues) => {
+    let country: Country;
+
+    switch (values.country) {
+      case 'Belarus':
+        country = Country.Belarus;
+        break;
+      case 'Russia':
+        country = Country.RussianFederation;
+        break;
+      case 'Poland':
+        country = Country.Poland;
+        break;
+      default:
+        country = Country.RussianFederation; // По умолчанию выбрана Россия
+        break;
+    }
+
+    const registerValues: ICustomerCreateData = {
+      email: values.email,
+      password: values.password,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      dateOfBirth: values.dateOfBirth,
+      addresses: [
+        {
+          street: values.street,
+          city: values.city,
+          postalCode: values.code,
+          country,
+        },
+      ],
+      defaultShippingAddress: 0,
+      shippingAddresses: [0],
+      defaultBillingAddress: 0,
+      billingAddresses: [0],
+    };
+    console.log(registerValues);
+    ApiService.register(registerValues).then((response) => {
+      console.log(response);
+    });
   };
 
   const validationSchema = yup.object().shape({
@@ -32,19 +76,19 @@ function RegisterPage() {
       .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
       .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
       .matches(/[0-9]/, 'Password must contain at least one digit'),
-    name: yup
+    firstName: yup
       .string()
       .required('This field is required!')
-      .min(1, 'The name must contain at least 1 character')
+      .min(1, 'The first name must contain at least 1 character')
       .matches(/^[^0-9]*$/, 'Field must not contain numbers')
       .matches(/^[a-zA-Z]+$/, 'Field must not contain special characters'),
-    surname: yup
+    lastName: yup
       .string()
       .required('This field is required!')
-      .min(1, 'The name must contain at least 1 character')
+      .min(1, 'The surname must contain at least 1 character')
       .matches(/^[^0-9]*$/, 'Field must not contain numbers')
       .matches(/^[a-zA-Z]+$/, 'Field must not contain special characters'),
-    date: yup
+    dateOfBirth: yup
       .date()
       .required('This field is required!')
       .max(new Date(new Date().setFullYear(new Date().getFullYear() - 14)), 'You must be at least 14 years old')
@@ -86,9 +130,9 @@ function RegisterPage() {
         initialValues={{
           email: '',
           password: '',
-          name: '',
-          surname: '',
-          date: '',
+          firstName: '',
+          lastName: '',
+          dateOfBirth: '',
           country: '',
           city: '',
           street: '',
@@ -132,15 +176,15 @@ function RegisterPage() {
             <Row>
               <Col xs={10} md={6} className={styles.column}>
                 <Form.Group className="text">
-                  <Form.Label>Name</Form.Label>
+                  <Form.Label>First Name</Form.Label>
                   <Form.Control
                     type="text"
-                    name="name"
-                    value={values.name}
+                    name="firstName"
+                    value={values.firstName}
                     onChange={handleChange}
-                    isInvalid={touched.name && !!errors.name}
+                    isInvalid={touched.firstName && !!errors.firstName}
                   />
-                  <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">{errors.firstName}</Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col xs={10} md={6} className={styles.column}>
@@ -148,12 +192,12 @@ function RegisterPage() {
                   <Form.Label>Surname</Form.Label>
                   <Form.Control
                     type="text"
-                    name="surname"
-                    value={values.surname}
+                    name="lastName"
+                    value={values.lastName}
                     onChange={handleChange}
-                    isInvalid={touched.surname && !!errors.surname}
+                    isInvalid={touched.lastName && !!errors.lastName}
                   />
-                  <Form.Control.Feedback type="invalid">{errors.surname}</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">{errors.lastName}</Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -163,13 +207,13 @@ function RegisterPage() {
                   <Form.Label>Date of Birth</Form.Label>
                   <Form.Control
                     type="date"
-                    name="date"
-                    value={values.date}
+                    name="dateOfBirth"
+                    value={values.dateOfBirth}
                     onChange={handleChange}
-                    isInvalid={touched.date && !!errors.date}
+                    isInvalid={touched.dateOfBirth && !!errors.dateOfBirth}
                     max={new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toISOString().split('T')[0]}
                   />
-                  <Form.Control.Feedback type="invalid">{errors.date}</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">{errors.dateOfBirth}</Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
