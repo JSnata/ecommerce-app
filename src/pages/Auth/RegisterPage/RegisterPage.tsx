@@ -81,13 +81,13 @@ function RegisterPage() {
       .required('This field is required!')
       .min(1, 'The first name must contain at least 1 character')
       .matches(/^[^0-9]*$/, 'Field must not contain numbers')
-      .matches(/^[a-zA-Z]+$/, 'Field must not contain special characters'),
+      .matches(/^[^!@#$%^&-+=№;:")(]*$/, 'Field must not contain special characters'),
     lastName: yup
       .string()
       .required('This field is required!')
       .min(1, 'The surname must contain at least 1 character')
       .matches(/^[^0-9]*$/, 'Field must not contain numbers')
-      .matches(/^[a-zA-Z]+$/, 'Field must not contain special characters'),
+      .matches(/^[^!@#$%^&-+=№;:")(]*$/, 'Field must not contain special characters'),
     dateOfBirth: yup
       .date()
       .required('This field is required!')
@@ -102,7 +102,7 @@ function RegisterPage() {
       .required('This field is required!')
       .min(1, 'Must contain at least 1 character')
       .matches(/^[^0-9]*$/, 'Field must not contain numbers')
-      .matches(/^[a-zA-Z]+$/, 'Field must not contain special characters'),
+      .matches(/^[^!@#$%^&-+=№;:")(]*$/, 'Field must not contain special characters'),
     country: yup.string().required('This field is required!'),
     code: yup
       .string()
