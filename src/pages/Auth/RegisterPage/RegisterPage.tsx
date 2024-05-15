@@ -123,7 +123,7 @@ function RegisterPage() {
 
   return (
     <div className={styles.formWrapper}>
-      <h1>Register </h1>
+      <h1>Register</h1>
       <Formik
         validationSchema={validationSchema}
         onSubmit={handleSubmitForm}
@@ -220,6 +220,82 @@ function RegisterPage() {
             <Row>
               <Col xs={10} md={12} className={styles.column}>
                 <hr className={styles.line} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={10} md={12} className={styles.column}>
+                <h4>Billing address</h4>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={10} md={6} className={styles.column}>
+                <Form.Group className="country">
+                  <Form.Label>Country</Form.Label>
+                  <Form.Control
+                    as="select"
+                    type="text"
+                    name="country"
+                    value={values.country}
+                    onChange={handleChange}
+                    isInvalid={touched.country && !!errors.country}
+                  >
+                    <option value="1">Russia</option>
+                    <option value="2">Belarus</option>
+                    <option value="3">Poland</option>
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">{errors.country}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col xs={10} md={6} className={styles.column}>
+                <Form.Group className="city">
+                  <Form.Label>City</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="city"
+                    value={values.city}
+                    onChange={handleChange}
+                    isInvalid={touched.city && !!errors.city}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.city}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={10} md={6} className={styles.column}>
+                <Form.Group className="street">
+                  <Form.Label>Street</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="street"
+                    value={values.street}
+                    onChange={handleChange}
+                    isInvalid={touched.street && !!errors.street}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.street}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col xs={10} md={6} className={styles.column}>
+                <Form.Group className="code">
+                  <Form.Label>Postal code</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="code"
+                    value={values.code}
+                    onChange={handleChange}
+                    isInvalid={touched.code && !!errors.code}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.code}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={10} md={12} className={styles.column}>
+                <hr className={styles.line} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={10} md={12} className={styles.column}>
+                <h4>Delivery address</h4>
               </Col>
             </Row>
             <Row>
