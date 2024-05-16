@@ -238,6 +238,7 @@ function RegisterPage() {
                         onChange={handleChange}
                         isInvalid={touched.country && !!errors.country}
                       >
+                        <option value="">Select a country</option>
                         <option value="1">Russia</option>
                         <option value="2">Belarus</option>
                         <option value="3">Poland</option>
@@ -323,6 +324,7 @@ function RegisterPage() {
                         onChange={handleChange}
                         isInvalid={touched.country && !!errors.country}
                       >
+                        <option value="">Select a country</option>
                         <option value="1">Russia</option>
                         <option value="2">Belarus</option>
                         <option value="3">Poland</option>
