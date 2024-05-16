@@ -1,11 +1,13 @@
+/* eslint-disable */
 // import { useState } from 'react';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
-import { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 import signingCustomer from './helpers/CustomerAPI';
 import { ICustomerCreateData } from '../types/CustomerTypes';
 import { createCustomer } from './helpers/ClientAPI';
 import createAxiosInstance from './helpers/axiosInstance';
+import { userTokenCache } from './root/BuildCustomer';
 
 /**
  * ApiService is a class that provides methods for interacting with the CommerceTools API.
@@ -52,6 +54,19 @@ export default class ApiService {
     } catch (err) {
       console.error(err);
       toast.error(`${err}`);
+    }
+  }
+
+  static async checkAuth() {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_CTP_API_URL}/refresh`, { withCredentials: true });
+      console.log(response);
+
+      userTokenCache.set(response.data.token);
+
+      return response;
+    } catch (err) {
+      console.error(err);
     }
   }
 

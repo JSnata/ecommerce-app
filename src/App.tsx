@@ -10,15 +10,25 @@ import NotFoundPage from './pages/NotFoundPage';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import useAuthContext from './hooks/useAuthContext';
+import ApiService from './API/apiService';
 
 function App() {
-  const { user } = useAuthContext();
+  const { user, authIsReady, dispatch } = useAuthContext();
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
+      ApiService.checkAuth().then((response) => {
+        if (response) {
+          dispatch({ type: 'AUTH_IS_READY', payload: response.data.user });
+        }
+      });
       console.log(user);
     }
   }, []);
+
+  useEffect(() => {
+    console.log('authIsReady', authIsReady);
+  }, [authIsReady]);
 
   return (
     <>
