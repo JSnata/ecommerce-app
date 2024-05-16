@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import LoginPage from './pages/Auth/LoginPage/LoginPage';
@@ -9,8 +9,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NotFoundPage from './pages/NotFoundPage';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+import useAuthContext from './hooks/useAuthContext';
 
 function App() {
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      console.log(user);
+    }
+  }, []);
+
   return (
     <>
       <NavigationBar />

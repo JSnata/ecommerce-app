@@ -11,11 +11,14 @@ import ApiService from '../../../API/apiService';
 import { ICustomerCreateData } from '../../../types/CustomerTypes';
 import { Country } from '../../../types/enumCounty';
 import styles from './RegisterPage.module.css';
+import useAuthContext from '../../../hooks/useAuthContext';
 
 type FormValues = Record<string, string>;
 
 function RegisterPage() {
   const [showPass, setShowPass] = useState(false);
+  const { dispatch } = useAuthContext();
+
   const clickHandler = () => {
     setShowPass((prev) => !prev);
   };
@@ -57,9 +60,10 @@ function RegisterPage() {
       defaultBillingAddress: 0,
       billingAddresses: [0],
     };
-    console.log(registerValues);
-    ApiService.register(registerValues).then((response) => {
-      console.log(response);
+    ApiService.register(registerValues).then(() => {
+      ApiService.login(values.email, values.password).then((userApi) => {
+        dispatch({ type: 'LOGIN', payload: userApi });
+      });
     });
   };
 

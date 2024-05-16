@@ -1,3 +1,4 @@
+// import { useState } from 'react';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
@@ -37,6 +38,7 @@ export default class ApiService {
       console.error(err);
       toast.error(`${err}`);
     }
+    return this.userApi;
   }
 
   /**
@@ -59,7 +61,6 @@ export default class ApiService {
    * @returns {Promise<void>}
    */
   static async getProducts() {
-    console.log();
     await this.axiosInstance
       .get('/product-projections')
       .then((response) => {
