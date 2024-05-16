@@ -296,6 +296,13 @@ function RegisterPage() {
                 </Row>
                 <Row>
                   <Col xs={10} md={12} className={styles.column}>
+                    <div key="default-checkbox">
+                      <Form.Check type="checkbox" id="default-checkbox" label="Add billing address for delivery" />
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={10} md={12} className={styles.column}>
                     <hr className={styles.line} />
                   </Col>
                 </Row>
