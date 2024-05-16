@@ -110,9 +110,9 @@ function RegisterPage() {
       .test('custom-validation', 'Wrong format', (value, context) => {
         switch (context.parent.country) {
           case '1':
-            return /^(2[1-4]{1}[0-7]{1}[0-9]{3})$/.test(value);
-          case '2':
             return /^([1-6]{1}[0-9]{5})$/.test(value);
+          case '2':
+            return /^(2[1-4]{1}[0-7]{1}[0-9]{3})$/.test(value);
           case '3':
             return /^([0-9]{2}-[0-9]{3})$/.test(value);
           default:
