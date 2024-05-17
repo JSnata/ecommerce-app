@@ -18,7 +18,7 @@ export default class ApiService {
    * It is initialized as undefined and will be set after a successful login.
    */
   static userApi: ByProjectKeyRequestBuilder | undefined = undefined;
-
+  static baseUrlApi: string = `${process.env.REACT_APP_CTP_API_URL}/${process.env.REACT_APP_CTP_PROJECT_KEY}`;
   /**
    * A static property that holds an instance of AxiosInstance.
    * It is initialized after a successful login.
@@ -57,14 +57,15 @@ export default class ApiService {
     }
   }
 
-  static async checkAuth() {
+  static async makeAuthorizedRequest() {
+    const tokenCurrent = userTokenCache.get().token;
     try {
-      const response = await axios.get(`${process.env.REACT_APP_CTP_API_URL}/refresh`, { withCredentials: true });
-      console.log(response);
-
-      userTokenCache.set(response.data.token);
-
-      return response;
+      return await axios.get(`${this.baseUrlApi}/me`, {
+        headers: {
+          Authorization: `Bearer ${tokenCurrent}`,
+          'Content-Type': 'application/json',
+        },
+      });
     } catch (err) {
       console.error(err);
     }

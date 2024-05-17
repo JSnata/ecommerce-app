@@ -10,6 +10,8 @@ export const authReducer = (state, action) => {
       return { ...state, user: null };
     case 'AUTH_IS_READY':
       return { user: action.payload, authIsReady: true };
+    case 'AUTH_ERROR':
+      return { ...state, error: action.payload };
     default:
       return state;
   }
@@ -19,6 +21,7 @@ export function AuthContextProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
     authIsReady: false,
+    error: null,
   });
   console.log('AuthContext state:', state);
 

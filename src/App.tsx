@@ -11,20 +11,40 @@ import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import useAuthContext from './hooks/useAuthContext';
 import ApiService from './API/apiService';
+import { userTokenCache } from './API/root/BuildCustomer';
 
 function App() {
   const { user, authIsReady, dispatch } = useAuthContext();
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      ApiService.checkAuth().then((response) => {
-        if (response) {
-          dispatch({ type: 'AUTH_IS_READY', payload: response.data.user });
-        }
-      });
-      console.log(user);
+    const tokenCurrentUser = userTokenCache.get()?.token;
+    if (tokenCurrentUser) {
+      let isMounted = true;
+
+      ApiService.makeAuthorizedRequest()
+        .then((response) => {
+          if (isMounted) {
+            if (response?.data) {
+              dispatch({ type: 'AUTH_IS_READY', payload: response.data });
+            } else {
+              console.error('Response data is undefined');
+              dispatch({ type: 'AUTH_ERROR', payload: 'Response data is undefined' });
+            }
+          }
+        })
+        .catch((error) => {
+          if (isMounted) {
+            console.error('The authorized request failed:', error);
+            dispatch({ type: 'AUTH_ERROR', payload: error.message });
+          }
+        });
+
+      return () => {
+        isMounted = false;
+      };
     }
-  }, []);
+    return undefined;
+  }, [dispatch]);
 
   useEffect(() => {
     console.log('authIsReady', authIsReady);
@@ -33,6 +53,9 @@ function App() {
   return (
     <>
       <NavigationBar />
+      {authIsReady && user && (
+        <div>Welcome, {`${user.firstName} ${user.lastName}`}!</div> // Используем объект пользователя
+      )}
       <Switch>
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
