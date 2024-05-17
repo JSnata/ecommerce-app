@@ -8,9 +8,9 @@ export interface ICustomerCreateData extends CustomerDraft {
   lastName: string;
   dateOfBirth?: string;
   addresses: ICustomerAddress[] | undefined;
-  defaultShippingAddress: number;
+  defaultShippingAddress?: number;
   shippingAddresses: number[];
-  defaultBillingAddress: number;
+  defaultBillingAddress?: number;
   billingAddresses: number[];
 }
 export interface ICustomerAddress extends BaseAddress {

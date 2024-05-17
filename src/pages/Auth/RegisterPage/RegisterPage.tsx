@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable */
+import React, { useCallback, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Col from 'react-bootstrap/Col';
@@ -12,58 +13,64 @@ import { ICustomerCreateData } from '../../../types/CustomerTypes';
 import { Country } from '../../../types/enumCounty';
 import styles from './RegisterPage.module.css';
 
-type FormValues = Record<string, string>;
+// type FormValues = Record<string, string | boolean>;
 
 function RegisterPage() {
   const [showPass, setShowPass] = useState(false);
+  const [sameAsBilling, setSameAsBilling] = useState(0);
+
   const clickHandler = () => {
     setShowPass((prev) => !prev);
   };
 
-  const handleSubmitForm = (values: FormValues) => {
-    let country: Country;
-
-    switch (values.country) {
-      case 'Belarus':
-        country = Country.Belarus;
-        break;
-      case 'Russia':
-        country = Country.RussianFederation;
-        break;
-      case 'Poland':
-        country = Country.Poland;
-        break;
-      default:
-        country = Country.RussianFederation; // По умолчанию выбрана Россия
-        break;
-    }
-
-    const registerValues: ICustomerCreateData = {
-      email: values.email,
-      password: values.password,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      dateOfBirth: values.dateOfBirth,
-      addresses: [
-        {
-          street: values.street,
-          city: values.city,
-          postalCode: values.code,
-          country,
-        },
-      ],
-      defaultShippingAddress: 0,
-      shippingAddresses: [0],
-      defaultBillingAddress: 0,
-      billingAddresses: [0],
-    };
-    console.log(registerValues);
-    ApiService.register(registerValues).then((response) => {
-      console.log(response);
-    });
+  const setSameAddressHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSameAsBilling(e.target.checked ? 1 : 0);
   };
 
-  const validationSchema = yup.object().shape({
+  const handleSubmitForm = useCallback(
+    (values: FormValues) => {
+      const registerValues: ICustomerCreateData = {
+        email: values.email,
+        password: values.password,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        dateOfBirth: values.dateOfBirth,
+        addresses: [
+          {
+            street: sameAsBilling ? values.street_billing : values.street,
+            city: sameAsBilling ? values.city_billing : values.city,
+            postalCode: sameAsBilling ? values.code_billing : values.code,
+            country: Country[(sameAsBilling ? values.country_billing : values.country) as keyof typeof Country],
+          },
+          {
+            street: values.street_billing,
+            city: values.city_billing,
+            postalCode: values.code_billing,
+            country: Country[values.country_billing as keyof typeof Country],
+          },
+        ],
+        shippingAddresses: [0],
+        billingAddresses: [1],
+      };
+
+      if (values.default_delivery) {
+        registerValues.defaultShippingAddress = 0;
+      }
+
+      if (values.default_billing) {
+        registerValues.defaultBillingAddress = 1;
+      }
+
+      console.log(registerValues);
+
+      ApiService.register(registerValues).then((response) => {
+        console.log(response);
+      });
+    },
+    [sameAsBilling],
+  );
+
+  const defaultValidationSchema = {
     email: yup
       .string()
       .required('This field is required!')
@@ -96,50 +103,108 @@ function RegisterPage() {
         const cutoffDate = new Date(new Date().setFullYear(new Date().getFullYear() - 14));
         return new Date(value) <= cutoffDate;
       }),
+
+    default_billing: yup.boolean(),
+    default_delivery: yup.boolean(),
+
+    street_billing: yup.string().required('This field is required!').min(1, 'Must contain at least 1 character'),
+    country_billing: yup.string().required('This field is required!'),
+    city_billing: yup
+      .string()
+      .required('This field is required!')
+      .min(1, 'Must contain at least 1 character')
+      .matches(/^[^0-9]*$/, 'Field must not contain numbers')
+      .matches(/^[^!@#$%^&-+=№;:")(]*$/, 'Field must not contain special characters'),
+
+    code_billing: yup
+      .string()
+      .required('This field is required!')
+      .test('custom-validation', 'Wrong format', (value, context) => {
+        switch (context.parent.country_billing) {
+          case 'Russia':
+            return /^([1-6]{1}[0-9]{5})$/.test(value);
+          case 'Belarus':
+            return /^(2[1-4]{1}[0-7]{1}[0-9]{3})$/.test(value);
+          case 'Poland':
+            return /^([0-9]{2}-[0-9]{3})$/.test(value);
+          default:
+            return false;
+        }
+      }),
+  };
+
+  const deliveryValidationSchema = {
     street: yup.string().required('This field is required!').min(1, 'Must contain at least 1 character'),
+    country: yup.string().required('This field is required!'),
     city: yup
       .string()
       .required('This field is required!')
       .min(1, 'Must contain at least 1 character')
       .matches(/^[^0-9]*$/, 'Field must not contain numbers')
       .matches(/^[^!@#$%^&-+=№;:")(]*$/, 'Field must not contain special characters'),
-    country: yup.string().required('This field is required!'),
     code: yup
       .string()
       .required('This field is required!')
       .test('custom-validation', 'Wrong format', (value, context) => {
         switch (context.parent.country) {
-          case '1':
+          case 'Russia':
             return /^([1-6]{1}[0-9]{5})$/.test(value);
-          case '2':
+          case 'Belarus':
             return /^(2[1-4]{1}[0-7]{1}[0-9]{3})$/.test(value);
-          case '3':
+          case 'Poland':
             return /^([0-9]{2}-[0-9]{3})$/.test(value);
           default:
             return false;
         }
       }),
-  });
+  };
+
+  interface FormValues {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    country: string;
+    city: string;
+    street: string;
+    code: string;
+    country_billing: string;
+    city_billing: string;
+    street_billing: string;
+    code_billing: string;
+    default_billing: boolean;
+    default_delivery: boolean;
+  }
+
+  const initialValues: FormValues = {
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
+    country: '',
+    city: '',
+    street: '',
+    code: '',
+    country_billing: '',
+    city_billing: '',
+    street_billing: '',
+    code_billing: '',
+
+    default_billing: false,
+    default_delivery: false,
+  };
+
+  const validationSchema = yup
+    .object()
+    .shape({ ...defaultValidationSchema, ...(sameAsBilling ? {} : deliveryValidationSchema) });
 
   return (
     <div className={styles.formWrapper}>
       <h1>Register</h1>
-      <Formik
-        validationSchema={validationSchema}
-        onSubmit={handleSubmitForm}
-        initialValues={{
-          email: '',
-          password: '',
-          firstName: '',
-          lastName: '',
-          dateOfBirth: '',
-          country: '',
-          city: '',
-          street: '',
-          code: '',
-        }}
-      >
-        {({ handleSubmit, handleChange, values, touched, errors }) => (
+      <Formik validationSchema={validationSchema} onSubmit={handleSubmitForm} initialValues={initialValues}>
+        {({ handleSubmit, handleChange, values, touched, errors, setFieldValue }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Row>
               <Col xs={10} md={6} className={styles.column}>
@@ -147,7 +212,7 @@ function RegisterPage() {
                   <h4>Personal data</h4>
                 </Col>
                 <Col xs={10} md={11} className={styles.column}>
-                  <Form.Group className="email">
+                  <Form.Group className="email mb-3">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control
                       type="email"
@@ -161,7 +226,7 @@ function RegisterPage() {
                   </Form.Group>
                 </Col>
                 <Col xs={10} md={11} className={styles.column}>
-                  <Form.Group className="password">
+                  <Form.Group className="password mb-3">
                     <Form.Label>Password</Form.Label>
                     <InputGroup>
                       <Form.Control
@@ -177,7 +242,7 @@ function RegisterPage() {
                   </Form.Group>
                 </Col>
                 <Col xs={10} md={11} className={styles.column}>
-                  <Form.Group className="text">
+                  <Form.Group className="text mb-3">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control
                       type="text"
@@ -190,7 +255,7 @@ function RegisterPage() {
                   </Form.Group>
                 </Col>
                 <Col xs={10} md={11} className={styles.column}>
-                  <Form.Group className="text">
+                  <Form.Group className="text mb-3">
                     <Form.Label>Surname</Form.Label>
                     <Form.Control
                       type="text"
@@ -203,7 +268,7 @@ function RegisterPage() {
                   </Form.Group>
                 </Col>
                 <Col xs={10} md={11} className={styles.column}>
-                  <Form.Group className="date">
+                  <Form.Group className="date mb-3">
                     <Form.Label>Date of Birth</Form.Label>
                     <Form.Control
                       type="date"
@@ -220,6 +285,7 @@ function RegisterPage() {
                   <hr className={styles.line} />
                 </Col>
               </Col>
+
               <Col xs={10} md={6} className={styles.column}>
                 <Row>
                   <Col xs={10} md={12} className={styles.column}>
@@ -228,160 +294,189 @@ function RegisterPage() {
                 </Row>
                 <Row>
                   <Col xs={10} md={6} className={styles.column}>
-                    <Form.Group className="country">
+                    <Form.Group className="country mb-3">
                       <Form.Label>Country</Form.Label>
                       <Form.Control
                         as="select"
                         type="text"
-                        name="country"
-                        value={values.country}
+                        name="country_billing"
+                        value={values.country_billing}
                         onChange={handleChange}
-                        isInvalid={touched.country && !!errors.country}
+                        isInvalid={touched.country_billing && !!errors.country_billing}
                       >
                         <option value="">Select a country</option>
-                        <option value="1">Russia</option>
-                        <option value="2">Belarus</option>
-                        <option value="3">Poland</option>
+                        <option value="Russia">Russia</option>
+                        <option value="Belarus">Belarus</option>
+                        <option value="Poland">Poland</option>
                       </Form.Control>
-                      <Form.Control.Feedback type="invalid">{errors.country}</Form.Control.Feedback>
+                      <Form.Control.Feedback type="invalid">{errors.country_billing}</Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col xs={10} md={6} className={styles.column}>
-                    <Form.Group className="city">
+                    <Form.Group className="city mb-3">
                       <Form.Label>City</Form.Label>
                       <Form.Control
                         type="text"
-                        name="city"
-                        value={values.city}
+                        name="city_billing"
+                        value={values.city_billing}
                         onChange={handleChange}
-                        isInvalid={touched.city && !!errors.city}
+                        isInvalid={touched.city_billing && !!errors.city_billing}
                       />
-                      <Form.Control.Feedback type="invalid">{errors.city}</Form.Control.Feedback>
+                      <Form.Control.Feedback type="invalid">{errors.city_billing}</Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
                 <Row>
                   <Col xs={10} md={6} className={styles.column}>
-                    <Form.Group className="street">
+                    <Form.Group className="street mb-3">
                       <Form.Label>Street</Form.Label>
                       <Form.Control
                         type="text"
-                        name="street"
-                        value={values.street}
+                        name="street_billing"
+                        value={values.street_billing}
                         onChange={handleChange}
-                        isInvalid={touched.street && !!errors.street}
+                        isInvalid={touched.street_billing && !!errors.street_billing}
                       />
-                      <Form.Control.Feedback type="invalid">{errors.street}</Form.Control.Feedback>
+                      <Form.Control.Feedback type="invalid">{errors.street_billing}</Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col xs={10} md={6} className={styles.column}>
-                    <Form.Group className="code">
+                    <Form.Group className="code mb-3">
                       <Form.Label>Postal code</Form.Label>
                       <Form.Control
                         type="text"
-                        name="code"
-                        value={values.code}
+                        name="code_billing"
+                        value={values.code_billing}
                         onChange={handleChange}
-                        isInvalid={touched.code && !!errors.code}
+                        isInvalid={touched.code_billing && !!errors.code_billing}
                       />
-                      <Form.Control.Feedback type="invalid">{errors.code}</Form.Control.Feedback>
+                      <Form.Control.Feedback type="invalid">{errors.code_billing}</Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
                 <Row>
                   <Col xs={10} md={12} className={styles.column}>
-                    <div key="default-checkbox">
-                      <Form.Check type="checkbox" id="default-checkbox" label="Set as default billing address" />
+                    <div key="default_billing">
+                      <Form.Check
+                        type="checkbox"
+                        name="default_billing"
+                        id="default_billing"
+                        onChange={(e) => setFieldValue('default_billing', e.target.checked)}
+                        checked={values.default_billing}
+                        label="Set as default billing address"
+                      />
                     </div>
                   </Col>
                 </Row>
-                <Row>
-                  <Col xs={10} md={12} className={styles.column}>
-                    <div key="default-checkbox">
-                      <Form.Check type="checkbox" id="default-checkbox" label="Add billing address for delivery" />
-                    </div>
-                  </Col>
-                </Row>
+
                 <Row>
                   <Col xs={10} md={12} className={styles.column}>
                     <hr className={styles.line} />
                   </Col>
                 </Row>
+
                 <Row>
-                  <Col xs={10} md={12} className={styles.column}>
-                    <h4>Delivery address</h4>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={10} md={6} className={styles.column}>
-                    <Form.Group className="country">
-                      <Form.Label>Country</Form.Label>
-                      <Form.Control
-                        as="select"
-                        type="text"
-                        name="country"
-                        value={values.country}
-                        onChange={handleChange}
-                        isInvalid={touched.country && !!errors.country}
-                      >
-                        <option value="">Select a country</option>
-                        <option value="1">Russia</option>
-                        <option value="2">Belarus</option>
-                        <option value="3">Poland</option>
-                      </Form.Control>
-                      <Form.Control.Feedback type="invalid">{errors.country}</Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col xs={10} md={6} className={styles.column}>
-                    <Form.Group className="city">
-                      <Form.Label>City</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="city"
-                        value={values.city}
-                        onChange={handleChange}
-                        isInvalid={touched.city && !!errors.city}
+                  <Col xs={10} md={12} className={`${styles.column} mb-3`}>
+                    <div key="address-same-checkbox">
+                      <Form.Check
+                        type="checkbox"
+                        id="address-same-checkbox"
+                        label="Delivery address is the same as billing address"
+                        value={sameAsBilling}
+                        onChange={setSameAddressHandler}
                       />
-                      <Form.Control.Feedback type="invalid">{errors.city}</Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={10} md={6} className={styles.column}>
-                    <Form.Group className="street">
-                      <Form.Label>Street</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="street"
-                        value={values.street}
-                        onChange={handleChange}
-                        isInvalid={touched.street && !!errors.street}
-                      />
-                      <Form.Control.Feedback type="invalid">{errors.street}</Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col xs={10} md={6} className={styles.column}>
-                    <Form.Group className="code">
-                      <Form.Label>Postal code</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="code"
-                        value={values.code}
-                        onChange={handleChange}
-                        isInvalid={touched.code && !!errors.code}
-                      />
-                      <Form.Control.Feedback type="invalid">{errors.code}</Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={10} md={12} className={styles.column}>
-                    <div key="default-checkbox">
-                      <Form.Check type="checkbox" id="default-checkbox" label="Set as default delivery address" />
                     </div>
                   </Col>
                 </Row>
+
+                {/* Delivery fields */}
+                {sameAsBilling ? null : (
+                  <Col>
+                    <Row>
+                      <Col xs={10} md={12} className={styles.column}>
+                        <h4>Delivery address</h4>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs={10} md={6} className={styles.column}>
+                        <Form.Group className="country mb-3">
+                          <Form.Label>Country</Form.Label>
+                          <Form.Control
+                            as="select"
+                            type="text"
+                            name="country"
+                            value={values.country}
+                            onChange={handleChange}
+                            isInvalid={touched.country && !!errors.country}
+                          >
+                            <option value="">Select a country</option>
+                            <option value="Russia">Russia</option>
+                            <option value="Belarus">Belarus</option>
+                            <option value="Poland">Poland</option>
+                          </Form.Control>
+                          <Form.Control.Feedback type="invalid">{errors.country}</Form.Control.Feedback>
+                        </Form.Group>
+                      </Col>
+                      <Col xs={10} md={6} className={styles.column}>
+                        <Form.Group className="city">
+                          <Form.Label>City</Form.Label>
+                          <Form.Control
+                            type="text"
+                            name="city"
+                            value={values.city}
+                            onChange={handleChange}
+                            isInvalid={touched.city && !!errors.city}
+                          />
+                          <Form.Control.Feedback type="invalid">{errors.city}</Form.Control.Feedback>
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs={10} md={6} className={styles.column}>
+                        <Form.Group className="street mb-3">
+                          <Form.Label>Street</Form.Label>
+                          <Form.Control
+                            type="text"
+                            name="street"
+                            value={values.street}
+                            onChange={handleChange}
+                            isInvalid={touched.street && !!errors.street}
+                          />
+                          <Form.Control.Feedback type="invalid">{errors.street}</Form.Control.Feedback>
+                        </Form.Group>
+                      </Col>
+                      <Col xs={10} md={6} className={styles.column}>
+                        <Form.Group className="code mb-3">
+                          <Form.Label>Postal code</Form.Label>
+                          <Form.Control
+                            type="text"
+                            name="code"
+                            value={values.code}
+                            onChange={handleChange}
+                            isInvalid={touched.code && !!errors.code}
+                          />
+                          <Form.Control.Feedback type="invalid">{errors.code}</Form.Control.Feedback>
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs={10} md={12} className={styles.column}>
+                        <div key="default_delivery">
+                          <Form.Check
+                            type="checkbox"
+                            name="default_delivery"
+                            id="default_delivery"
+                            onChange={(e) => setFieldValue('default_delivery', e.target.checked)}
+                            checked={values.default_delivery}
+                            label="Set as default delivery address"
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                  </Col>
+                )}
               </Col>
+
               <Row>
                 <Col xs={10} md={8} className={styles.column}>
                   <Button variant="dark" type="submit" className={styles.submitBtn}>
