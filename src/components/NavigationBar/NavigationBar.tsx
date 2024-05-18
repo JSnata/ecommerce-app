@@ -20,8 +20,7 @@ function NavigationBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href={location.pathname === '/' ? '' : '/'}>Flower Shop</Navbar.Brand>
-        <Navbar.Brand href="/">
+        <Navbar.Brand href={location.pathname === '/' ? '' : '/'}>
           <img src="./logo.png" className={`d-inline-block align-top ${styles.logo}`} alt="React Bootstrap logo" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
