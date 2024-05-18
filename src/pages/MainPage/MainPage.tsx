@@ -3,6 +3,7 @@ import ProductsList from '../../components/ProdictsList/ProductsList';
 import { ICustomerAddress, ICustomerCreateData } from '../../types/CustomerTypes';
 import { Country } from '../../types/enumCounty';
 import ApiService from '../../API/apiService';
+import BenefitBlock from '../../ui/BenefitBlock/BenefitBlock';
 
 function MainPage() {
   const testCustomerAddress: ICustomerAddress = {
@@ -51,6 +52,13 @@ function MainPage() {
         Random
       </button>
       <ProductsList />
+      <BenefitBlock>
+        <h3>Stylish bouquets by florists</h3>
+        <p>
+          The task of the organization, especially the strengthening and development of the structure allows us to
+          assess the importance of the directions of progressive development.{' '}
+        </p>
+      </BenefitBlock>
     </div>
   );
 }
