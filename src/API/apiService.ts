@@ -8,7 +8,7 @@ import { ICustomerCreateData } from '../types/CustomerTypes';
 import { createCustomer } from './helpers/ClientAPI';
 import createAxiosInstance from './helpers/axiosInstance';
 import { userTokenCache } from './root/BuildCustomer';
-
+import { createApiCustomerWithKey } from './root/BuildCustomerWithKey';
 /**
  * ApiService is a class that provides methods for interacting with the CommerceTools API.
  */
@@ -18,12 +18,23 @@ export default class ApiService {
    * It is initialized as undefined and will be set after a successful login.
    */
   static userApi: ByProjectKeyRequestBuilder | undefined = undefined;
-  static baseUrlApi: string = `${process.env.REACT_APP_CTP_API_URL}/${process.env.REACT_APP_CTP_PROJECT_KEY}`;
+
+  // TODO Remove this
+  static baseApiUrl: string = `${process.env.REACT_APP_CTP_API_URL}/${process.env.REACT_APP_CTP_PROJECT_KEY}`;
   /**
    * A static property that holds an instance of AxiosInstance.
    * It is initialized after a successful login.
    */
   static axiosInstance: AxiosInstance;
+
+  static start() {
+    const token = userTokenCache.get().token;
+    if (!token) {
+      return;
+    }
+    this.axiosInstance = createAxiosInstance();
+    this.userApi = createApiCustomerWithKey(token);
+  }
 
   /**
    * A static asynchronous method that logs in a user using their email and password.
@@ -57,25 +68,31 @@ export default class ApiService {
     }
   }
 
-  static async makeAuthorizedRequest() {
-    const tokenCurrent = userTokenCache.get().token;
-    try {
-      return await axios.get(`${this.baseUrlApi}/me`, {
-        headers: {
-          Authorization: `Bearer ${tokenCurrent}`,
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  // TODO: Remove this. Added for example
+  // static async makeAuthorizedRequest() {
+  //   const tokenCurrent = userTokenCache.get().token;
+  //   if (!tokenCurrent) {
+  //     throw new Error('invalid token or token not exist');
+  //     return;
+  //   }
+  //   try {
+  //     return await axios.get(`${this.baseApiUrl}/me`, {
+  //       headers: {
+  //         Authorization: `Bearer ${tokenCurrent}`,
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
 
   /**
    * A static asynchronous method that retrieves a list of products from the API.
    * It logs the response data to the console.
    * @returns {Promise<void>}
    */
+  // TODO remove this method
   static async getProducts() {
     await this.axiosInstance
       .get('/product-projections')
@@ -87,3 +104,5 @@ export default class ApiService {
       });
   }
 }
+
+ApiService.start();

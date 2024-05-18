@@ -36,7 +36,18 @@ function MainPage() {
   };
 
   const randomHandler = () => {
-    ApiService.getProducts();
+    console.log('new api', ApiService.userApi, ApiService.axiosInstance);
+    ApiService.userApi
+      ?.me()
+      .get()
+      .execute()
+      .then((response) => {
+        console.log(response, 'user logged in api returned');
+      });
+
+    ApiService.axiosInstance.get('/me').then((response) => {
+      console.log(response, 'axios instance returned');
+    });
   };
 
   return (
