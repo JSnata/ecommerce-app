@@ -3,7 +3,7 @@ import ProductsList from '../../components/ProdictsList/ProductsList';
 import { ICustomerAddress, ICustomerCreateData } from '../../types/CustomerTypes';
 import { Country } from '../../types/enumCounty';
 import ApiService from '../../API/apiService';
-import BenefitBlock from '../../ui/BenefitBlock/BenefitBlock';
+import BenefitBlock from '../../components/Cards/BenefitBlock/BenefitBlock';
 
 function MainPage() {
   const testCustomerAddress: ICustomerAddress = {
