@@ -7,6 +7,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import ApiService from '../../../API/apiService';
 import styles from './LoginPage.module.css';
+import useAuthContext from '../../../hooks/useAuthContext';
 
 interface FormValues {
   email: string;
@@ -15,6 +16,8 @@ interface FormValues {
 
 function LoginForm() {
   const [showPass, setShowPass] = useState(false);
+  const { dispatch } = useAuthContext();
+
   const clickHandler = () => {
     setShowPass((prev) => !prev);
   };
@@ -38,7 +41,10 @@ function LoginForm() {
     // const apiCustomer = await signingCustomer(values.email, values.password);
     console.log('Email:', values.email);
     console.log('Password:', values.password);
-    ApiService.login(values.email, values.password);
+    ApiService.login(values.email, values.password).then((userApi) => {
+      dispatch({ type: 'LOGIN', payload: userApi });
+    });
+
     // if (apiCustomer) {
     //   history.push('/');
     // }
