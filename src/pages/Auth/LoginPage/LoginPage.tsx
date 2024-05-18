@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory, Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Eye, EyeSlashFill } from 'react-bootstrap-icons';
@@ -16,7 +17,8 @@ interface FormValues {
 
 function LoginForm() {
   const [showPass, setShowPass] = useState(false);
-  const { dispatch } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
+  const history = useHistory();
 
   const clickHandler = () => {
     setShowPass((prev) => !prev);
@@ -41,13 +43,15 @@ function LoginForm() {
     // const apiCustomer = await signingCustomer(values.email, values.password);
     console.log('Email:', values.email);
     console.log('Password:', values.password);
-    ApiService.login(values.email, values.password).then((userApi) => {
-      dispatch({ type: 'LOGIN', payload: userApi });
-    });
-
-    // if (apiCustomer) {
-    //   history.push('/');
-    // }
+    ApiService.login(values.email, values.password)
+      .then((userApi) => {
+        dispatch({ type: 'LOGIN', payload: userApi });
+      })
+      .then(() => {
+        if (user) {
+          history.push('/');
+        }
+      });
   };
 
   return (
@@ -88,6 +92,14 @@ function LoginForm() {
                 <InputGroup.Text onClick={clickHandler}>{showPass ? <Eye /> : <EyeSlashFill />}</InputGroup.Text>´
                 <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
               </InputGroup>
+            </Form.Group>
+            <Form.Group className="d-flex justify-content-between align-items-center">
+              <Form.Text className="text-muted">
+                Do not have an account?{' '}
+                <Link to="/register" className="btn btn-link p-0 ">
+                  Register here
+                </Link>
+              </Form.Text>
             </Form.Group>
             <Button variant="dark" type="submit">
               Continue

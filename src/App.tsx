@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Redirect, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import LoginPage from './pages/Auth/LoginPage/LoginPage';
 import RegisterPage from './pages/Auth/RegisterPage/RegisterPage';
@@ -60,9 +60,11 @@ function App() {
         <div>Welcome, {`${user.firstName} ${user.lastName}`}!</div> // Используем объект пользователя
       )}
       <Switch>
-        <Route path="/login" component={LoginPage} />
-        <Route path="/register" component={RegisterPage} />
-        <Route exact path="/" component={MainPage} />
+        <Route exact path="/">
+          <MainPage />
+        </Route>
+        <Route path="/login">{user ? <Redirect to="/" /> : <LoginPage />}</Route>
+        <Route path="/register">{user ? <Redirect to="/" /> : <RegisterPage />}</Route>
         <Route component={NotFoundPage} />
       </Switch>
       <ToastContainer position="bottom-right" />
