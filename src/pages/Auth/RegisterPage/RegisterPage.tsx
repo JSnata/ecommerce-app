@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory, Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Col from 'react-bootstrap/Col';
@@ -16,8 +17,9 @@ import useAuthContext from '../../../hooks/useAuthContext';
 
 function RegisterPage() {
   const [showPass, setShowPass] = useState(false);
-  const { dispatch } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
   const [sameAsBilling, setSameAsBilling] = useState(0);
+  const history = useHistory();
 
   const clickHandler = () => {
     setShowPass((prev) => !prev);
@@ -52,7 +54,7 @@ function RegisterPage() {
         shippingAddresses: [0],
         billingAddresses: [1],
       };
-      
+
       if (values.default_delivery) {
         registerValues.defaultShippingAddress = 0;
       }
@@ -60,12 +62,18 @@ function RegisterPage() {
       if (values.default_billing) {
         registerValues.defaultBillingAddress = 1;
       }
-      
-    ApiService.register(registerValues).then(() => {
-      ApiService.login(values.email, values.password).then((userApi) => {
-        dispatch({ type: 'LOGIN', payload: userApi });
+
+      ApiService.register(registerValues).then(() => {
+        ApiService.login(values.email, values.password)
+          .then((userApi) => {
+            dispatch({ type: 'LOGIN', payload: userApi });
+          })
+          .then(() => {
+            if (user) {
+              history.push('/');
+            }
+          });
       });
-    });
     },
     [sameAsBilling],
   );
@@ -479,6 +487,14 @@ function RegisterPage() {
 
               <Row>
                 <Col xs={10} md={8} className={styles.column}>
+                  <Form.Group className="d-flex justify-content-between align-items-center">
+                    <Form.Text className="text-muted">
+                      Already have an account?{' '}
+                      <Link to="/login" className="btn btn-link p-0 ">
+                        Login here
+                      </Link>
+                    </Form.Text>
+                  </Form.Group>
                   <Button variant="dark" type="submit" className={styles.submitBtn}>
                     Continue
                   </Button>
