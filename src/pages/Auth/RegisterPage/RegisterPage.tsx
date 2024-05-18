@@ -216,10 +216,10 @@ function RegisterPage() {
           <Form noValidate onSubmit={handleSubmit}>
             <Row>
               <Col xs={10} md={6} className={styles.column}>
-                <Col xs={10} md={11} className={styles.column}>
+                <Col>
                   <h4>Personal data</h4>
                 </Col>
-                <Col xs={10} md={11} className={styles.column}>
+                <Col>
                   <Form.Group className="email mb-3">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control
@@ -233,7 +233,7 @@ function RegisterPage() {
                     <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                   </Form.Group>
                 </Col>
-                <Col xs={10} md={11} className={styles.column}>
+                <Col>
                   <Form.Group className="password mb-3">
                     <Form.Label>Password</Form.Label>
                     <InputGroup>
@@ -249,7 +249,7 @@ function RegisterPage() {
                     </InputGroup>
                   </Form.Group>
                 </Col>
-                <Col xs={10} md={11} className={styles.column}>
+                <Col>
                   <Form.Group className="text mb-3">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control
@@ -262,7 +262,7 @@ function RegisterPage() {
                     <Form.Control.Feedback type="invalid">{errors.firstName}</Form.Control.Feedback>
                   </Form.Group>
                 </Col>
-                <Col xs={10} md={11} className={styles.column}>
+                <Col>
                   <Form.Group className="text mb-3">
                     <Form.Label>Surname</Form.Label>
                     <Form.Control
@@ -275,7 +275,7 @@ function RegisterPage() {
                     <Form.Control.Feedback type="invalid">{errors.lastName}</Form.Control.Feedback>
                   </Form.Group>
                 </Col>
-                <Col xs={10} md={11} className={styles.column}>
+                <Col>
                   <Form.Group className="date mb-3">
                     <Form.Label>Date of Birth</Form.Label>
                     <Form.Control
@@ -289,19 +289,19 @@ function RegisterPage() {
                     <Form.Control.Feedback type="invalid">{errors.dateOfBirth}</Form.Control.Feedback>
                   </Form.Group>
                 </Col>
-                <Col xs={10} md={12} className={`${styles.column} ${styles.lineCol}`}>
+                <Col className={`${styles.column} ${styles.lineCol}`}>
                   <hr className={styles.line} />
                 </Col>
               </Col>
 
               <Col xs={10} md={6} className={styles.column}>
                 <Row>
-                  <Col xs={10} md={12} className={styles.column}>
+                  <Col md={12} className={styles.column}>
                     <h4 className={styles.billing}>Billing address</h4>
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={10} md={6} className={styles.column}>
+                  <Col md={6} className={styles.column}>
                     <Form.Group className="country mb-3">
                       <Form.Label>Country</Form.Label>
                       <Form.Control
@@ -320,7 +320,7 @@ function RegisterPage() {
                       <Form.Control.Feedback type="invalid">{errors.country_billing}</Form.Control.Feedback>
                     </Form.Group>
                   </Col>
-                  <Col xs={10} md={6} className={styles.column}>
+                  <Col md={6} className={styles.column}>
                     <Form.Group className="city mb-3">
                       <Form.Label>City</Form.Label>
                       <Form.Control
@@ -335,7 +335,7 @@ function RegisterPage() {
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={10} md={6} className={styles.column}>
+                  <Col md={6} className={styles.column}>
                     <Form.Group className="street mb-3">
                       <Form.Label>Street</Form.Label>
                       <Form.Control
@@ -348,7 +348,7 @@ function RegisterPage() {
                       <Form.Control.Feedback type="invalid">{errors.street_billing}</Form.Control.Feedback>
                     </Form.Group>
                   </Col>
-                  <Col xs={10} md={6} className={styles.column}>
+                  <Col md={6} className={styles.column}>
                     <Form.Group className="code mb-3">
                       <Form.Label>Postal code</Form.Label>
                       <Form.Control
@@ -363,7 +363,7 @@ function RegisterPage() {
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={10} md={12} className={styles.column}>
+                  <Col md={12} className={styles.column}>
                     <div key="default_billing">
                       <Form.Check
                         type="checkbox"
@@ -378,13 +378,13 @@ function RegisterPage() {
                 </Row>
 
                 <Row>
-                  <Col xs={10} md={12} className={styles.column}>
+                  <Col md={12} className={styles.column}>
                     <hr className={styles.line} />
                   </Col>
                 </Row>
 
                 <Row>
-                  <Col xs={10} md={12} className={`${styles.column} mb-3`}>
+                  <Col md={12} className={`${styles.column} mb-3`}>
                     <div key="address-same-checkbox">
                       <Form.Check
                         type="checkbox"
@@ -401,12 +401,12 @@ function RegisterPage() {
                 {sameAsBilling ? null : (
                   <Col>
                     <Row>
-                      <Col xs={10} md={12} className={styles.column}>
+                      <Col md={12} className={styles.column}>
                         <h4>Delivery address</h4>
                       </Col>
                     </Row>
                     <Row>
-                      <Col xs={10} md={6} className={styles.column}>
+                      <Col md={6} className={styles.column}>
                         <Form.Group className="country mb-3">
                           <Form.Label>Country</Form.Label>
                           <Form.Control
@@ -425,7 +425,7 @@ function RegisterPage() {
                           <Form.Control.Feedback type="invalid">{errors.country}</Form.Control.Feedback>
                         </Form.Group>
                       </Col>
-                      <Col xs={10} md={6} className={styles.column}>
+                      <Col md={6} className={styles.column}>
                         <Form.Group className="city">
                           <Form.Label>City</Form.Label>
                           <Form.Control
@@ -440,7 +440,7 @@ function RegisterPage() {
                       </Col>
                     </Row>
                     <Row>
-                      <Col xs={10} md={6} className={styles.column}>
+                      <Col md={6} className={styles.column}>
                         <Form.Group className="street mb-3">
                           <Form.Label>Street</Form.Label>
                           <Form.Control
@@ -453,7 +453,7 @@ function RegisterPage() {
                           <Form.Control.Feedback type="invalid">{errors.street}</Form.Control.Feedback>
                         </Form.Group>
                       </Col>
-                      <Col xs={10} md={6} className={styles.column}>
+                      <Col md={6} className={styles.column}>
                         <Form.Group className="code mb-3">
                           <Form.Label>Postal code</Form.Label>
                           <Form.Control
@@ -468,7 +468,7 @@ function RegisterPage() {
                       </Col>
                     </Row>
                     <Row>
-                      <Col xs={10} md={12} className={styles.column}>
+                      <Col md={12} className={styles.column}>
                         <div key="default_delivery">
                           <Form.Check
                             type="checkbox"
