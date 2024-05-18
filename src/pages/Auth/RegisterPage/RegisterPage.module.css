@@ -19,3 +19,14 @@
   margin-top: 2vh;
   width: 100%;
 }
+
+.lineCol {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+
+  .lineCol {
+    display: block;
+  }
+}
