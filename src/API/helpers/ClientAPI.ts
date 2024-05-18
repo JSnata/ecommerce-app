@@ -31,7 +31,7 @@ export const createCustomer = async (data: ICustomerCreateData): Promise<Custome
         },
       })
       .execute();
-    if (response.statusCode === 200) {
+    if (response.statusCode === 201) {
       toast.success('Registration successful!');
     }
     return response.body.customer;
