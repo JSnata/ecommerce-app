@@ -31,14 +31,12 @@ function App() {
               dispatch({ type: 'AUTH_IS_READY', payload: response.body });
             } else {
               console.error('Response data is undefined');
-              dispatch({ type: 'AUTH_ERROR', payload: 'Response data is undefined' });
             }
           }
         })
         .catch((error) => {
           if (isMounted) {
             console.error('The authorized request failed:', error);
-            dispatch({ type: 'AUTH_ERROR', payload: error.message });
           }
         });
 
@@ -56,9 +54,7 @@ function App() {
   return (
     <>
       <NavigationBar />
-      {authIsReady && user && (
-        <div>Welcome, {`${user.firstName} ${user.lastName}`}!</div> // Используем объект пользователя
-      )}
+      {authIsReady && user && console.log('USERRR', user)}
       <Switch>
         <Route exact path="/">
           <MainPage />

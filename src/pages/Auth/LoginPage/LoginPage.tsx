@@ -40,12 +40,18 @@ function LoginForm() {
   });
 
   const handleSubmitForm = (values: FormValues) => {
-    // const apiCustomer = await signingCustomer(values.email, values.password);
-    console.log('Email:', values.email);
-    console.log('Password:', values.password);
     ApiService.login(values.email, values.password)
       .then((userApi) => {
-        dispatch({ type: 'LOGIN', payload: userApi });
+        if (userApi) {
+          userApi
+            .me()
+            .get()
+            .execute()
+            .then((response) => {
+              dispatch({ type: 'LOGIN', payload: response.body });
+              return response.body;
+            });
+        }
       })
       .then(() => {
         if (user) {
