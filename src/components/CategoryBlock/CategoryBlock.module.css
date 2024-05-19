@@ -1,0 +1,24 @@
+.categoryBlock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+}
+
+.itemContainer, .cardContainer {
+  height: 25vw;
+}
+
+/*TODO: Fix for 390*/
+@media (max-width: 768px) {
+  .itemContainer, .cardContainer {
+    height: 50vw;
+  }
+}
+
+@media (max-width: 390px) {
+  .itemContainer, .cardContainer {
+    height: 54vw;
+  }
+}
+
+

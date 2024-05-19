@@ -21,7 +21,6 @@ export const apiRoot = createApiRoot();
  */
 export const createCustomer = async (data: ICustomerCreateData): Promise<CustomerDraft | null> => {
   try {
-    // const customerNumber = await getCustomerNumber();
     const response = await apiRoot
       .customers()
       .post({

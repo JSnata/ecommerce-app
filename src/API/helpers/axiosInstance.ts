@@ -20,8 +20,6 @@ function createAxiosInstance(): AxiosInstance {
   });
   instance.interceptors.request.use((config) => {
     // eslint-disable-next-line no-param-reassign
-    console.log(userTokenCache.get(), 'token');
-    // eslint-disable-next-line no-param-reassign
     config.headers.Authorization = `Bearer ${getStorageKey().token}`;
     return config;
   });
