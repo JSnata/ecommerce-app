@@ -9,7 +9,7 @@ interface SecondaryButtonProps extends NavLinkProps {
   clickHandler?: () => void;
 }
 
-function SecondaryButton({ children, link, clickHandler, ...rest }: SecondaryButtonProps) {
+function SecondaryButton({ children, link, clickHandler = undefined, ...rest }: SecondaryButtonProps) {
   const location = useLocation();
   const isActive = location.pathname === link;
 
@@ -21,9 +21,5 @@ function SecondaryButton({ children, link, clickHandler, ...rest }: SecondaryBut
     </Button>
   );
 }
-
-SecondaryButton.defaultProps = {
-  clickHandler: undefined,
-};
 
 export default SecondaryButton;
