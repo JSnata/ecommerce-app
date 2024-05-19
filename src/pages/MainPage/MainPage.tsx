@@ -1,67 +1,10 @@
 import React from 'react';
-import ProductsList from '../../components/ProdictsList/ProductsList';
-import { ICustomerAddress, ICustomerCreateData } from '../../types/CustomerTypes';
-import { Country } from '../../types/enumCounty';
-import ApiService from '../../API/apiService';
+import MainSection from '../../components/Sections/MainSection';
 
 function MainPage() {
-  const testCustomerAddress: ICustomerAddress = {
-    street: 'Street for Test',
-    city: 'Test City',
-    postalCode: '12345',
-    country: Country.Afghanistan,
-  };
-
-  const testCustomer: ICustomerCreateData = {
-    email: 'sss4@example.com',
-    password: '1q3EJO6Ele4BTF',
-    firstName: 'Test2',
-    lastName: 'Test2',
-    addresses: [testCustomerAddress],
-    defaultShippingAddress: 0,
-    shippingAddresses: [0],
-    defaultBillingAddress: 0,
-    billingAddresses: [0],
-  };
-
-  const handleCreate = () => {
-    ApiService.register(testCustomer).then((response) => {
-      console.log(response);
-    });
-  };
-  const handlerSignIn = () => {
-    ApiService.login('sss@example.com', '1q3EJO6Ele4BTF').then((response) => {
-      console.log('Customer signed in:', response);
-    });
-  };
-
-  const randomHandler = () => {
-    console.log('new api', ApiService.userApi, ApiService.axiosInstance);
-    ApiService.userApi
-      ?.me()
-      .get()
-      .execute()
-      .then((response) => {
-        console.log(response, 'user logged in api returned');
-      });
-
-    ApiService.axiosInstance.get('/me').then((response) => {
-      console.log(response, 'axios instance returned');
-    });
-  };
-
   return (
     <div>
-      <button type="button" onClick={handleCreate}>
-        CreateCustomer
-      </button>
-      <button type="button" onClick={handlerSignIn}>
-        LoginCustomer
-      </button>
-      <button type="button" onClick={randomHandler}>
-        Random
-      </button>
-      <ProductsList />
+      <MainSection />
     </div>
   );
 }

@@ -15,6 +15,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
+    'react/require-default-props': 'off',
     'prettier/prettier': 'error',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'react/prop-types': 'off', // Disable prop-types as we use TypeScript for type checking

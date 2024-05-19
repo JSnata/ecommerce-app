@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import { createApiCustomer } from '../root/BuildCustomer';

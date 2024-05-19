@@ -8,10 +8,10 @@ import MainPage from './pages/MainPage/MainPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NotFoundPage from './pages/NotFoundPage';
 import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
 import useAuthContext from './hooks/useAuthContext';
 import ApiService from './API/apiService';
 import { userTokenCache } from './API/root/BuildCustomer';
+import './styles/App.css';
 
 function App() {
   const { user, authIsReady, dispatch } = useAuthContext();
@@ -54,7 +54,6 @@ function App() {
   return (
     <>
       <NavigationBar />
-      {authIsReady && user && console.log('USERRR', user)}
       <Switch>
         <Route exact path="/">
           <MainPage />
