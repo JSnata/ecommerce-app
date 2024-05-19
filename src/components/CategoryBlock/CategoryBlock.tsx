@@ -15,37 +15,6 @@ type CategoryCardProps = {
 function CategoryBlock(props: CategoryCardProps) {
   const { reverse, categoryName, buttonLabel, onClick, imageLink, categoryDescription } = props;
   return (
-    // <Row>
-    //   {reverse ? (
-    //     <>
-    //       <Col>
-    //         <CardItem imageLink={imageLink} />
-    //       </Col>
-    //       <Col xl={8}>
-    //         <CardCategory
-    //           label={categoryName}
-    //           buttonLabel={buttonLabel}
-    //           onClick={onClick}
-    //           description={categoryDescription}
-    //         />
-    //       </Col>
-    //     </>
-    //   ) : (
-    //     <>
-    //       <Col xl={8}>
-    //         <CardCategory
-    //           label={categoryName}
-    //           buttonLabel={buttonLabel}
-    //           onClick={onClick}
-    //           description={categoryDescription}
-    //         />
-    //       </Col>
-    //       <Col>
-    //         <CardItem imageLink={imageLink} />
-    //       </Col>
-    //     </>
-    //   )}
-    // </Row>
     <div className={styles.categoryBlock}>
       {reverse ? (
         <>
