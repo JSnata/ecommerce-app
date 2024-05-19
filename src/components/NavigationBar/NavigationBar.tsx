@@ -12,7 +12,7 @@ function NavigationBar() {
   const location = useLocation();
 
   const handleLogout = () => {
-    dispatch({ type: 'LOGOUT' });
+    dispatch({ type: 'LOGOUT', payload: null });
     localStorage.removeItem('token');
     toast('Logged out');
   };

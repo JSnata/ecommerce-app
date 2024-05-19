@@ -31,14 +31,12 @@ function App() {
               dispatch({ type: 'AUTH_IS_READY', payload: response.body });
             } else {
               console.error('Response data is undefined');
-              dispatch({ type: 'AUTH_ERROR', payload: 'Response data is undefined' });
             }
           }
         })
         .catch((error) => {
           if (isMounted) {
             console.error('The authorized request failed:', error);
-            dispatch({ type: 'AUTH_ERROR', payload: error.message });
           }
         });
 

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -66,7 +66,16 @@ function RegisterPage() {
       ApiService.register(registerValues).then(() => {
         ApiService.login(values.email, values.password)
           .then((userApi) => {
-            dispatch({ type: 'LOGIN', payload: userApi });
+            if (userApi) {
+              userApi
+                .me()
+                .get()
+                .execute()
+                .then((response) => {
+                  dispatch({ type: 'LOGIN', payload: response.body });
+                  return response;
+                });
+            }
           })
           .then(() => {
             if (user) {
