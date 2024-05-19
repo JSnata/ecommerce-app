@@ -13,7 +13,7 @@ function CardCategory(props: CardCategoryProps) {
   const { label, buttonLabel, onClick, description } = props;
   return (
     <div className={styles.container}>
-      <h3>{label}</h3>
+      <h3 className="text-center">{label}</h3>
       {description && <p className="text-center lead">{description}</p>}
       <Button variant="outline-dark" size="sm" onClick={onClick}>
         {buttonLabel}

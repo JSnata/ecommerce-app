@@ -17,7 +17,7 @@ function BenefitBlock(props: BenefitBlockProps) {
         // TODO need test this
         const stickyEndPoint = window.innerHeight;
         const scrollToTop = window.scrollY;
-        console.log(stickyEndPoint, scrollToTop);
+        // console.log(stickyEndPoint, scrollToTop);
         if (scrollToTop >= stickyEndPoint) {
           setIsSticky(false);
         } else {
