@@ -1,0 +1,11 @@
+@import '../lib/normalize.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 16px;
+  line-height: 120%;
+  font-weight: 400;
+}

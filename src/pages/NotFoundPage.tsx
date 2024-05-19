@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import SecondaryButton from '../ui/Buttons/SecondaryButton';
+import SecondaryButton from '../ui/Buttons/SecondaryButton/SecondaryButton';
 
 function NotFoundPage() {
   return (
