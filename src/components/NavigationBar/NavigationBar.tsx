@@ -1,12 +1,10 @@
 import React from 'react';
 import { Container, Navbar } from 'react-bootstrap';
-import SecondaryButton from '../../ui/Buttons/SecondaryButton';
+import SecondaryButton from '../../ui/Buttons/SecondaryButton/SecondaryButton';
 
 function NavigationBar() {
-  // console.log(createCustomer({ email: 'HHHHH', password: 'HHHHH', firstName: 'HHHH', lastName: 'HHHH' }));
-  // console.log(getStoreData());
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-body-tertiary" sticky="top">
       <Container>
         <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
