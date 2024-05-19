@@ -8,7 +8,7 @@ import MainPage from './pages/MainPage/MainPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NotFoundPage from './pages/NotFoundPage';
 import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
+import './styles/App.css';
 
 function App() {
   return (
