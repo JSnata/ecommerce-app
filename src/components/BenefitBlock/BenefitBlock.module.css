@@ -12,7 +12,7 @@
   height: 100vh;
 }
 
-@media (max-width: 375px) {
+@media (max-width: 768px) {
   .container {
     padding: 40px 16px;
   }

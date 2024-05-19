@@ -20,31 +20,7 @@ const defaultText = {
 
 function MainSection() {
   const categoryWithProduct = useCategory();
-
   return (
-    // <Container fluid>
-    //   {categoryWithProduct.length > 0 ? (
-    //     <Row>
-    //       <Col>
-    //         <BenefitBlock label={defaultText.benefitBlock.label} description={defaultText.benefitBlock.description} />
-    //       </Col>
-    //       <Col>
-    //         {categoryWithProduct.map(({ category, product }, index) => (
-    //           <CategoryBlock
-    //             key={product?.id}
-    //             categoryName={category.name?.['en-GB'] ?? ''}
-    //             buttonLabel="Shop Now"
-    //             onClick={() => {}}
-    //             imageLink={product?.masterVariant?.images?.[0]?.url ?? ''}
-    //             reverse={index % 2 === 0}
-    //           />
-    //         ))}
-    //       </Col>
-    //     </Row>
-    //   ) : (
-    //     ''
-    //   )}
-    // </Container>
     <div className={styles.sectionContainer}>
       {categoryWithProduct.length > 0 ? (
         <>
@@ -52,7 +28,6 @@ function MainSection() {
             <BenefitBlock label={defaultText.benefitBlock.label} description={defaultText.benefitBlock.description} />
             <div>
               <CardItem imageLink={image} />
-              <CardItem description="123" showDescription />
             </div>
           </div>
           <div className={styles.column2}>

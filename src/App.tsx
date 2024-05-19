@@ -56,9 +56,6 @@ function App() {
   return (
     <>
       <NavigationBar />
-      {authIsReady && user && (
-        <div>Welcome, {`${user.firstName} ${user.lastName}`}!</div> // Используем объект пользователя
-      )}
       <Switch>
         <Route exact path="/">
           <MainPage />
