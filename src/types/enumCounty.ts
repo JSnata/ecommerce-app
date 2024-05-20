@@ -181,7 +181,7 @@ enum Country {
   Qatar = 'QA',
   Reunion = 'RE',
   Romania = 'RO',
-  RussianFederation = 'RU',
+  Russia = 'RU',
   Rwanda = 'RW',
   SaintBarthelemy = 'BL',
   SaintHelena = 'SH',
