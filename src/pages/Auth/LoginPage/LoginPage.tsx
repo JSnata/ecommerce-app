@@ -71,7 +71,7 @@ function LoginForm() {
           password: '',
         }}
       >
-        {({ handleSubmit, handleChange, values, touched, errors }) => (
+        {({ setFieldTouched, handleSubmit, handleChange, values, touched, errors }) => (
           <Form className={styles.form} noValidate onSubmit={handleSubmit}>
             <Form.Group className="email">
               <Form.Label>Email address</Form.Label>
@@ -82,8 +82,11 @@ function LoginForm() {
                 value={values.email}
                 onChange={handleChange}
                 isInvalid={touched.email && !!errors.email}
+                onFocus={() => setFieldTouched('email', true)}
               />
-              <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+              {touched.email && errors.email && (
+                <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+              )}
             </Form.Group>
             <Form.Group className="password">
               <Form.Label>Password</Form.Label>
@@ -94,9 +97,12 @@ function LoginForm() {
                   value={values.password}
                   onChange={handleChange}
                   isInvalid={touched.password && !!errors.password}
+                  onFocus={() => setFieldTouched('password', true)}
                 />
-                <InputGroup.Text onClick={clickHandler}>{showPass ? <Eye /> : <EyeSlashFill />}</InputGroup.Text>´
-                <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                <InputGroup.Text onClick={clickHandler}>{showPass ? <Eye /> : <EyeSlashFill />}</InputGroup.Text>
+                {touched.password && errors.password && (
+                  <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                )}
               </InputGroup>
             </Form.Group>
             <Form.Group className="d-flex justify-content-between align-items-center">
