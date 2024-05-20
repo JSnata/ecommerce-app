@@ -3,7 +3,7 @@ import CardItem from '../../ui/Cards/CardItem/CardItem';
 import CardCategory from '../../ui/Cards/CardCategory/CardCategory';
 import styles from './CategoryBlock.module.css';
 
-type CategoryCardProps = {
+type CategoryCardType = {
   categoryDescription?: string;
   categoryName: string;
   buttonLabel: string;
@@ -12,8 +12,8 @@ type CategoryCardProps = {
   reverse?: boolean;
 };
 
-function CategoryBlock(props: CategoryCardProps) {
-  const { reverse, categoryName, buttonLabel, onClick, imageLink, categoryDescription } = props;
+function CategoryBlock(props: CategoryCardType) {
+  const { reverse = false, categoryName, buttonLabel, onClick, imageLink, categoryDescription = '' } = props;
   return (
     <div className={styles.categoryBlock}>
       {reverse ? (
@@ -49,8 +49,8 @@ function CategoryBlock(props: CategoryCardProps) {
   );
 }
 
-CategoryBlock.defaultProps = {
-  reverse: false,
-  categoryDescription: '',
-};
+// CategoryBlock.defaultProps = {
+//   reverse: false,
+//   categoryDescription: '',
+// };
 export default CategoryBlock;

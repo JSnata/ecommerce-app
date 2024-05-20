@@ -14,7 +14,7 @@ import { userTokenCache } from './API/root/BuildCustomer';
 import './styles/App.css';
 
 function App() {
-  const { user, authIsReady, dispatch } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
 
   useEffect(() => {
     const tokenCurrentUser = userTokenCache.get()?.token;
@@ -26,7 +26,6 @@ function App() {
         .execute()
         .then((response) => {
           if (isMounted) {
-            console.log(response, 'response from sdk typesp');
             if (response?.body) {
               dispatch({ type: 'AUTH_IS_READY', payload: response.body });
             } else {
@@ -47,9 +46,9 @@ function App() {
     return undefined;
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log('authIsReady', authIsReady);
-  }, [authIsReady]);
+  // useEffect(() => {
+  //   console.log('authIsReady', authIsReady);
+  // }, [authIsReady]);
 
   return (
     <>

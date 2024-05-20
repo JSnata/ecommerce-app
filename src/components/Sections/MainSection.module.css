@@ -14,7 +14,8 @@
   }
 }
 
-.column1, .column2 {
+.column1,
+.column2 {
   width: 100%;
 }
 
