@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom'; // Импортируем useLocation
+import { useLocation, NavLink } from 'react-router-dom'; // Импортируем useLocation
 import { Container, Image, Navbar } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
@@ -20,9 +20,9 @@ function NavigationBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary" sticky="top">
       <Container>
-        <Navbar.Brand href={location.pathname === '/' ? '' : '/'}>
+        <NavLink to={location.pathname === '/' ? '' : '/'}>
           <Image src="./logo.png" className={`d-inline-block align-top ${styles.logo}`} alt="React Bootstrap logo" />
-        </Navbar.Brand>
+        </NavLink>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-center justify-content-lg-end">
           {!user && location.pathname !== '/register' && (
