@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Eye, EyeSlashFill } from 'react-bootstrap-icons';
@@ -18,7 +18,6 @@ interface FormValues {
 function LoginForm() {
   const [showPass, setShowPass] = useState(false);
   const { user, dispatch } = useAuthContext();
-  const history = useHistory();
 
   const clickHandler = () => {
     setShowPass((prev) => !prev);
@@ -55,7 +54,7 @@ function LoginForm() {
       })
       .then(() => {
         if (user) {
-          history.push('/');
+          <Redirect to="/" />;
         }
       });
   };
