@@ -9,8 +9,7 @@ interface CardCategoryProps {
   onClick: () => void;
 }
 
-function CardCategory(props: CardCategoryProps) {
-  const { label, buttonLabel, onClick, description } = props;
+function CardCategory({ label, buttonLabel, onClick, description = '' }: CardCategoryProps) {
   return (
     <div className={styles.container}>
       <h3 className="text-center">{label}</h3>
@@ -21,9 +20,5 @@ function CardCategory(props: CardCategoryProps) {
     </div>
   );
 }
-
-CardCategory.defaultProps = {
-  description: '',
-};
 
 export default CardCategory;

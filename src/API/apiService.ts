@@ -57,10 +57,12 @@ export default class ApiService {
    */
   static async register(data: ICustomerCreateData) {
     try {
-      await createCustomer({ ...data });
+      const response = await createCustomer({ ...data });
+      return response;
     } catch (err) {
       console.error(err);
       toast.error(`${err}`);
+      return null;
     }
   }
 }

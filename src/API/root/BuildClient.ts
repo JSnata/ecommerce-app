@@ -23,7 +23,6 @@ const client = new ClientBuilder()
   .withProjectKey(projectKey)
   .withClientCredentialsFlow(options)
   .withHttpMiddleware(httpMiddlewareOptions)
-  .withLoggerMiddleware()
   .build();
 
 const createApiRoot = () => {

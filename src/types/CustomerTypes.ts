@@ -1,5 +1,5 @@
 import { BaseAddress, CustomerDraft } from '@commercetools/platform-sdk';
-import { Country } from './enumCounty';
+import Country from './enumCounty';
 
 export interface ICustomerCreateData extends CustomerDraft {
   email: string;

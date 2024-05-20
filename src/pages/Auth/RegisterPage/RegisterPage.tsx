@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useCallback, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
@@ -11,7 +10,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import ApiService from '../../../API/apiService';
 import { ICustomerCreateData } from '../../../types/CustomerTypes';
-import { Country } from '../../../types/enumCounty';
+import Country from '../../../types/enumCounty';
 import styles from './RegisterPage.module.css';
 import useAuthContext from '../../../hooks/useAuthContext';
 
@@ -63,25 +62,27 @@ function RegisterPage() {
         registerValues.defaultBillingAddress = 1;
       }
 
-      ApiService.register(registerValues).then(() => {
-        ApiService.login(values.email, values.password)
-          .then((userApi) => {
-            if (userApi) {
-              userApi
-                .me()
-                .get()
-                .execute()
-                .then((response) => {
-                  dispatch({ type: 'LOGIN', payload: response.body });
-                  return response;
-                });
-            }
-          })
-          .then(() => {
-            if (user) {
-              history.push('/');
-            }
-          });
+      ApiService.register(registerValues).then((res) => {
+        if (res) {
+          ApiService.login(values.email, values.password)
+            .then((userApi) => {
+              if (userApi) {
+                userApi
+                  .me()
+                  .get()
+                  .execute()
+                  .then((response) => {
+                    dispatch({ type: 'LOGIN', payload: response.body });
+                    return response;
+                  });
+              }
+            })
+            .then(() => {
+              if (user) {
+                history.push('/');
+              }
+            });
+        }
       });
     },
     [sameAsBilling],

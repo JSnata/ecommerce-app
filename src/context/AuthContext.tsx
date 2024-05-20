@@ -39,7 +39,6 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
     user: null,
     authIsReady: false,
   });
-  console.log('AuthContext state:', state);
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
