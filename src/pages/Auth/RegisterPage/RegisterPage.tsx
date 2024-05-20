@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Col from 'react-bootstrap/Col';
@@ -18,7 +18,6 @@ function RegisterPage() {
   const [showPass, setShowPass] = useState(false);
   const { user, dispatch } = useAuthContext();
   const [sameAsBilling, setSameAsBilling] = useState(0);
-  const history = useHistory();
 
   const clickHandler = () => {
     setShowPass((prev) => !prev);
@@ -79,7 +78,7 @@ function RegisterPage() {
             })
             .then(() => {
               if (user) {
-                history.push('/');
+                <Redirect to="/" />;
               }
             });
         }
