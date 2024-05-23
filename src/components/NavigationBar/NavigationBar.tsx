@@ -1,21 +1,21 @@
 import React from 'react';
 import { useLocation, NavLink } from 'react-router-dom'; // Импортируем useLocation
-import { Container, Image, Navbar } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
+import { Badge, Container, Image, Nav, Navbar } from 'react-bootstrap';
+import { Cart3 } from 'react-bootstrap-icons';
 import styles from './NavigationBar.module.css';
 import useAuthContext from '../../hooks/useAuthContext';
 import SecondaryButton from '../../ui/Buttons/SecondaryButton/SecondaryButton';
+import NavBarProfile from '../NavBarProfile/NavBarProfile';
 
 function NavigationBar() {
-  const { user, dispatch } = useAuthContext();
+  const { user } = useAuthContext();
   const location = useLocation();
 
-  const handleLogout = () => {
-    dispatch({ type: 'LOGOUT', payload: null });
-    localStorage.removeItem('token');
-    toast('Logged out');
-  };
+  // const handleLogout = () => {
+  //   dispatch({ type: 'LOGOUT', payload: null });
+  //   localStorage.removeItem('token');
+  //   toast('Logged out');
+  // };
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary" sticky="top">
@@ -36,9 +36,16 @@ function NavigationBar() {
             </SecondaryButton>
           )}
           {user && (
-            <Button variant="dark" onClick={handleLogout}>
-              Logout
-            </Button>
+            <>
+              <Nav.Link href="#">
+                <Cart3 size={25} />
+                <Badge bg="secondary">0</Badge>
+              </Nav.Link>
+              <NavBarProfile />
+              {/* <Button variant="dark" onClick={handleLogout}> */}
+              {/*  Logout */}
+              {/* </Button> */}
+            </>
           )}
         </Navbar.Collapse>
       </Container>
