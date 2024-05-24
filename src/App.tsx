@@ -12,6 +12,7 @@ import useAuthContext from './hooks/useAuthContext';
 import ApiService from './API/apiService';
 import { userTokenCache } from './API/root/BuildCustomer';
 import './styles/App.css';
+import ProfilePage from './pages/UserProfilePage/ProfilePage';
 
 function App() {
   const { user, dispatch } = useAuthContext();
@@ -59,6 +60,7 @@ function App() {
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <LoginPage />}</Route>
         <Route path="/register">{user ? <Redirect to="/" /> : <RegisterPage />}</Route>
+        <Route path="/profile">{user ? <ProfilePage /> : <Redirect to="/login" />}</Route>
         <Route component={NotFoundPage} />
       </Switch>
       <ToastContainer position="bottom-right" />
