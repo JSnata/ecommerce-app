@@ -11,9 +11,9 @@ function SecondaryNavigation() {
       <Nav.Link as={NavLink} to="/about">
         About page
       </Nav.Link>
-      {/* <Nav.Link as={NavLink} to="/shoppingcart">
-        Shopping cart
-      </Nav.Link> */}
+      <Nav.Link as={NavLink} to="/product">
+        Product
+      </Nav.Link>
     </Nav>
   );
 }
