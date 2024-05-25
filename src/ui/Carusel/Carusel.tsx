@@ -3,16 +3,21 @@ import { Carousel, Image } from 'react-bootstrap';
 import style from './Carousel.module.css';
 
 interface CarouselData {
-  src: string | undefined;
+  srcArray: Array<string | undefined>;
+  interval: null | number;
+  id: undefined | string;
 }
 
 function CarouselComponent(props: CarouselData) {
-  const { src } = props;
+  const { srcArray, interval, id } = props;
+  const getKeyByIndex = (index: number) => (id ? `${id}-${index}` : index);
   return (
-    <Carousel>
-      <Carousel.Item>
-        <Image src={src} className={style.img} alt="Product photo" />
-      </Carousel.Item>
+    <Carousel interval={interval} data-bs-theme="dark">
+      {srcArray.map((src, index) => (
+        <Carousel.Item key={getKeyByIndex(index)}>
+          <Image src={src} className={style.img} alt="Product photo" />
+        </Carousel.Item>
+      ))}
     </Carousel>
   );
 }
