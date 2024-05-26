@@ -10,7 +10,7 @@ interface CarouselData {
 
 function CarouselComponent(props: CarouselData) {
   const { srcArray, interval, id } = props;
-  const getKeyByIndex = (index: number) => (id ? `${id}-${index}` : index);
+  const getKeyByIndex = (index: number) => `${id}-${index}`;
   return (
     <Carousel interval={interval} data-bs-theme="dark">
       {srcArray.map((src, index) => (
