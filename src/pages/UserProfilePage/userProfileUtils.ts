@@ -83,14 +83,14 @@ export async function updateCustomerData(data: { name: string; value: string }) 
       actions: [getAction(data.name, data.value)],
     });
     if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
-      toast.success(`Данные успешно обновлены`);
+      toast.success(`Data updated successfully`);
     } else {
-      console.error('Ошибка при обновлении данных:', response?.statusCode, response?.body);
-      toast.error('Произошла ошибка при обновлении данных');
+      console.error('Error when updating data:', response?.statusCode, response?.body);
+      toast.error('An error occurred while updating data');
     }
   } catch (error) {
-    console.error('Ошибка при обновлении данных клиента:', error);
-    toast.error('Произошла ошибка при обновлении данных');
+    console.error('Error when updating data:', error);
+    toast.error('An error occurred while updating data');
     throw error;
   }
 }
