@@ -1,4 +1,6 @@
 import * as yup from 'yup';
+import { ObjectSchema } from 'yup';
+import { IProfileValuesValidation } from '../types/CustomerTypes';
 
 const emailSchema = yup
   .string()
@@ -56,7 +58,7 @@ const postalCodeSchema = (country: string) =>
       }
     });
 
-const profileValidationSchema = yup.object().shape({
+const profileValidationSchema: ObjectSchema<IProfileValuesValidation> = yup.object().shape({
   email: emailSchema,
   password: passwordSchema,
   firstName: nameSchema,
