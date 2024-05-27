@@ -13,16 +13,7 @@ interface ICustomTextInput {
   handleSave?: (data: { name: string; value: string }) => Promise<void>;
 }
 
-// eslint-disable-next-line react/function-component-definition
-const CustomTextInput: React.FC<ICustomTextInput> = ({
-  label,
-  name,
-  type,
-  placeholder,
-  id,
-  isEditable = false,
-  handleSave,
-}) => {
+function CustomTextInput({ label, name, type, placeholder, id, isEditable = false, handleSave }: ICustomTextInput) {
   const [field, meta] = useField(name);
   const [editMode, setEditMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,16 +34,13 @@ const CustomTextInput: React.FC<ICustomTextInput> = ({
     };
     if (!meta.error && handleSave) {
       try {
-        const response = await handleSave(data);
-        console.log(response);
+        await handleSave(data);
         edit();
       } catch (error) {
-        console.error('Ошибка при сохранении:', error);
+        console.error('Save Error:', error);
       }
     }
     edit();
-    console.log('meta errrors', meta.error);
-    console.log('meta', field.name, field.value);
   };
 
   return (
@@ -92,6 +80,6 @@ const CustomTextInput: React.FC<ICustomTextInput> = ({
       )}
     </InputGroup>
   );
-};
+}
 
 export default CustomTextInput;
