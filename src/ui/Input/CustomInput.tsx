@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form, InputGroup } from 'react-bootstrap';
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { useField } from 'formik';
 import { CheckCircleFill, PencilSquare } from 'react-bootstrap-icons';
 
@@ -28,6 +28,9 @@ function CustomTextInput({ label, name, type, placeholder, id, isEditable = fals
   };
 
   const save = async () => {
+    if (meta.error) {
+      return;
+    }
     const data = {
       name: field.name,
       value: field.value,
@@ -44,41 +47,51 @@ function CustomTextInput({ label, name, type, placeholder, id, isEditable = fals
   };
 
   return (
-    <InputGroup>
-      <InputGroup.Text>{label}</InputGroup.Text>
-      {editMode ? (
-        <>
-          <Form.Control
-            id={id || name}
-            name={field.name}
-            type={type}
-            value={field.value || ''}
-            onChange={field.onChange}
-            onBlur={field.onBlur}
-            placeholder={placeholder}
-            isInvalid={meta.touched && !!meta.error}
-            ref={inputRef}
-          />
-          {meta.touched && meta.error && <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>}
-        </>
-      ) : (
-        <>
-          <Form.Control
-            readOnly={isEditable}
-            value={field.value || ''}
-            isInvalid={meta.touched && !!meta.error}
-            type={type}
-            ref={inputRef}
-          />
-          {meta.touched && meta.error && <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>}
-        </>
-      )}
-      {isEditable && (
-        <Button variant={editMode ? 'success' : 'dark'} onClick={editMode ? save : edit}>
-          {editMode ? <CheckCircleFill /> : <PencilSquare />}
-        </Button>
-      )}
-    </InputGroup>
+    <Row>
+      <Col>
+        <InputGroup>
+          <InputGroup.Text>{label}</InputGroup.Text>
+          {editMode ? (
+            <>
+              <Form.Control
+                id={id || name}
+                name={field.name}
+                type={type}
+                value={field.value || ''}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                placeholder={placeholder}
+                isInvalid={meta.touched && !!meta.error}
+                ref={inputRef}
+              />
+              <Form.Control.Feedback type="invalid" className="d-block">
+                {meta.touched && meta.error ? meta.error : '\u200B'}
+              </Form.Control.Feedback>
+            </>
+          ) : (
+            <>
+              <Form.Control
+                readOnly={isEditable}
+                value={field.value || ''}
+                isInvalid={meta.touched && !!meta.error}
+                type={type}
+                ref={inputRef}
+              />
+              <Form.Control.Feedback type="invalid" className="d-block">
+                {meta.touched && meta.error ? meta.error : '\u200B'}
+              </Form.Control.Feedback>
+            </>
+          )}
+        </InputGroup>
+      </Col>
+      <Col xs={1} sm={1}>
+        {isEditable && (
+          <Button variant={editMode ? 'secondary' : 'dark'} onClick={editMode ? save : edit}>
+            {editMode ? <CheckCircleFill /> : <PencilSquare />}
+          </Button>
+        )}
+      </Col>
+    </Row>
   );
 }
 
