@@ -61,6 +61,7 @@ const postalCodeSchema = (country: string) =>
 const profileValidationSchema: ObjectSchema<IProfileValuesValidation> = yup.object().shape({
   email: emailSchema,
   password: passwordSchema,
+  oldPassword: passwordSchema,
   firstName: nameSchema,
   lastName: nameSchema,
   dateOfBirth: dateOfBirthSchema,
