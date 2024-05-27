@@ -4,6 +4,7 @@ import useAuthContext from '../../hooks/useAuthContext';
 import profileValidationSchema from '../../utils/validation';
 import { getCustomerMainProfileData } from './userProfileUtils';
 import ProfileMainData from './ProfileMainData';
+import ProfilePasswordData from './ProfilePasswordData';
 
 function ProfilePage() {
   const { user } = useAuthContext();
@@ -18,7 +19,9 @@ function ProfilePage() {
         <Col>
           <ProfileMainData data={userData} validationSchema={profileValidationSchema} />
         </Col>
-        <Col>123</Col>
+        <Col>
+          <ProfilePasswordData validationSchema={profileValidationSchema} />
+        </Col>
       </Row>
     </Container>
   );
