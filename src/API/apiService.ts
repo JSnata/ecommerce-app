@@ -1,6 +1,7 @@
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
+import { MyCustomerUpdate } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
 import signingCustomer from './helpers/CustomerAPI';
 import { ICustomerCreateData } from '../types/CustomerTypes';
 import { createCustomer } from './helpers/ClientAPI';
@@ -63,6 +64,16 @@ export default class ApiService {
       console.error(err);
       toast.error(`${err}`);
       return null;
+    }
+  }
+
+  static async updateCustomer(update: MyCustomerUpdate) {
+    try {
+      await this.userApi?.me().post({
+        body: update,
+      });
+    } catch (err) {
+      toast.error(`${err}`);
     }
   }
 }
