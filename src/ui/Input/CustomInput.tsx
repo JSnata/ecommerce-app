@@ -10,7 +10,7 @@ interface ICustomTextInput {
   placeholder?: string;
   id?: string;
   isEditable?: boolean;
-  handleSave?: () => void;
+  handleSave?: (data: { name: string; value: string }) => Promise<void>;
 }
 
 // eslint-disable-next-line react/function-component-definition
@@ -37,9 +37,14 @@ const CustomTextInput: React.FC<ICustomTextInput> = ({
   };
 
   const save = async () => {
+    const data = {
+      name: field.name,
+      value: field.value,
+    };
     if (!meta.error && handleSave) {
       try {
-        await handleSave();
+        const response = await handleSave(data);
+        console.log(response);
         edit();
       } catch (error) {
         console.error('Ошибка при сохранении:', error);
@@ -80,7 +85,6 @@ const CustomTextInput: React.FC<ICustomTextInput> = ({
           {meta.touched && meta.error && <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>}
         </>
       )}
-
       {isEditable && (
         <Button variant={editMode ? 'success' : 'dark'} onClick={editMode ? save : edit}>
           {editMode ? <CheckCircleFill /> : <PencilSquare />}
