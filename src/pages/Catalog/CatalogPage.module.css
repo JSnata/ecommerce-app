@@ -28,6 +28,31 @@
 }
 
 .catalogGrid {
-  border-bottom: 1px solid rgb(18, 18, 18);
-  border-left: 1px solid rgb(18, 18, 18);
+  margin-top: 20px;
+  border-bottom: var(--border);
+  border-left: var(--border);
+}
+
+.searchWrapper {
+  padding: 20px;
+}
+
+.searchBar {
+  border: var(--border);
+}
+
+.filtersWrapper {
+  padding: 20px;
+  background-color: #f8f9fa;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: var(--border);
+}
+
+.sortDropdown {
+  margin-left: 10px;
+}
+
+.filtersForm {
+  border: var(--border);
 }
