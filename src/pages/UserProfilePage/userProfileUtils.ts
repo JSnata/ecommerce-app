@@ -64,6 +64,12 @@ function getAction(name: string, value: string) {
         lastName: value,
       };
       break;
+    case 'dateOfBirth':
+      action = {
+        action: 'setDateOfBirth',
+        dateOfBirth: value,
+      };
+      break;
     default:
       throw new Error(`Unknown action for input name: ${name}`);
   }
