@@ -58,7 +58,6 @@ function App() {
       <Switch>
         <Route exact path="/">
           <MainPage />
-          {/* <ProfilePage /> */}
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <LoginPage />}</Route>
         <Route path="/register">{user ? <Redirect to="/" /> : <RegisterPage />}</Route>
