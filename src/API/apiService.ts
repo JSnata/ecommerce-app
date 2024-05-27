@@ -69,13 +69,12 @@ export default class ApiService {
 
   static async updateCustomer(update: MyCustomerUpdate) {
     try {
-      const response = await this.userApi
+      return await this.userApi
         ?.me()
         .post({
           body: update,
         })
         .execute();
-      return response;
     } catch (err) {
       console.error(err);
       toast.error(`${err}`);
@@ -85,8 +84,7 @@ export default class ApiService {
 
   static async getCustomerData() {
     try {
-      const response = await this.userApi?.me().get().execute();
-      return response;
+      return await this.userApi?.me().get().execute();
     } catch (err) {
       console.error(err);
       toast.error(`${err}`);
