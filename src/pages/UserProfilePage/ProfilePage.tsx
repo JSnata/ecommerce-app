@@ -11,13 +11,7 @@ function ProfilePage() {
   // const addressesData = getCustomerAddressData(user!);
   console.log('user data', userData);
   // console.log('adresses data', addressesData);
-  return (
-    <ProfileMainData
-      data={userData}
-      validationSchema={profileValidationSchema}
-      version={user?.version ? user.version : 1}
-    />
-  );
+  return <ProfileMainData data={userData} validationSchema={profileValidationSchema} />;
 }
 
 export default ProfilePage;

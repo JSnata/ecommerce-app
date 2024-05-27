@@ -8,11 +8,10 @@ import { CustomerMainProfileSubset, IProfileValuesValidation } from '../../types
 
 type ProfileMainDataProps = {
   data: CustomerMainProfileSubset;
-  version: number;
   validationSchema: ObjectSchema<IProfileValuesValidation>;
 };
 
-function ProfileMainData({ data, validationSchema, version }: ProfileMainDataProps) {
+function ProfileMainData({ data, validationSchema }: ProfileMainDataProps) {
   return (
     <Container>
       <Formik initialValues={data} validationSchema={validationSchema} onSubmit={() => {}}>
@@ -27,7 +26,7 @@ function ProfileMainData({ data, validationSchema, version }: ProfileMainDataPro
                     type={getInputTypeByNameField(key)}
                     placeholder=""
                     isEditable
-                    handleSave={(formData) => updateCustomerData(formData, version)}
+                    handleSave={(formData) => updateCustomerData(formData)}
                   />
                 </Col>
               </Row>

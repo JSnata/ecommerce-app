@@ -67,12 +67,11 @@ function getAction(name: string, value: string) {
     default:
       throw new Error(`Unknown action for input name: ${name}`);
   }
-  console.log(action, 'CURRENT ACTION');
+  console.log(action, 'Current action');
   return action;
 }
 
-export async function updateCustomerData(data: { name: string; value: string }, version: number) {
-  console.log(version, 'Current version of Customer');
+export async function updateCustomerData(data: { name: string; value: string }) {
   let currentVersionOfCustomer: number = 0;
   try {
     const getCurrentVersion = await ApiService.getCustomerData();
