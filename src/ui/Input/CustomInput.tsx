@@ -15,7 +15,7 @@ interface ICustomTextInput {
 
 function CustomTextInput({ label, name, type, placeholder, id, isEditable = false, handleSave }: ICustomTextInput) {
   const [field, meta] = useField(name);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(!isEditable);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -71,9 +71,13 @@ function CustomTextInput({ label, name, type, placeholder, id, isEditable = fals
           ) : (
             <>
               <Form.Control
-                readOnly={isEditable}
+                id={id || name}
+                name={field.name}
+                readOnly={!editMode && isEditable}
                 value={field.value || ''}
                 isInvalid={meta.touched && !!meta.error}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
                 type={type}
                 ref={inputRef}
               />
