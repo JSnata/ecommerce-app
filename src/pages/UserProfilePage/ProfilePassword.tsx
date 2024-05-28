@@ -2,28 +2,36 @@ import React from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { ObjectSchema } from 'yup';
+import { useHistory } from 'react-router-dom';
 import CustomTextInput from '../../ui/Inputs/CustomInput';
 import { changeCustomerPassword } from './profileUtils';
 import { IPasswordValuesValidation } from '../../types/CustomerTypes';
+import handleLogout from '../../utils/auth';
+import useAuthContext from '../../hooks/useAuthContext';
 
 type ProfilePasswordProps = {
   validationSchema: ObjectSchema<IPasswordValuesValidation>;
 };
 
 function ProfilePassword({ validationSchema }: ProfilePasswordProps) {
-  const updatePassword = async (values: { currentPassword: string; newPassword: string }) => {
-    try {
-      await changeCustomerPassword(values.currentPassword, values.newPassword);
-    } catch (error) {
-      console.error(error);
-    }
+  const history = useHistory();
+  const { dispatch } = useAuthContext();
+  const updatePassword = (values: { currentPassword: string; newPassword: string }) => {
+    changeCustomerPassword(values.currentPassword, values.newPassword)
+      .then((response) => {
+        if (response?.statusCode === 200) {
+          handleLogout(dispatch);
+          history.push('/login');
+        }
+      })
+      .catch((error) => console.error(error));
   };
   return (
     <Formik
       initialValues={{ currentPassword: '', newPassword: '' }}
       validationSchema={validationSchema}
       validateOnChange
-      validateOnBlur
+      validateOnBlur={false}
       onSubmit={updatePassword}
     >
       {({ handleSubmit }) => (
@@ -32,7 +40,7 @@ function ProfilePassword({ validationSchema }: ProfilePasswordProps) {
             <CustomTextInput
               label="Current Password"
               name="currentPassword"
-              type="password"
+              type="text"
               placeholder="Please enter your old password"
             />
           </Row>
@@ -40,7 +48,7 @@ function ProfilePassword({ validationSchema }: ProfilePasswordProps) {
             <CustomTextInput
               label="New Password"
               name="newPassword"
-              type="password"
+              type="text"
               placeholder="Please enter your new password"
             />
           </Row>
