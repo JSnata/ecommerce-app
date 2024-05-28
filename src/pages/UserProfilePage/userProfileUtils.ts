@@ -42,6 +42,11 @@ export function getCustomerMainProfileData(user: Customer): CustomerMainProfileS
 //   };
 // }
 
+type UpdateCustomerDataPayload = {
+  name: string;
+  value: string;
+};
+
 function getAction(name: string, value: string) {
   let action: MyCustomerUpdateAction;
 
@@ -77,16 +82,44 @@ function getAction(name: string, value: string) {
   return action;
 }
 
-export async function updateCustomerData(data: { name: string; value: string }) {
-  let currentVersionOfCustomer: number = 0;
+const getCurrentCustomerVersion = async () => {
   try {
-    const getCurrentVersion = await ApiService.getCustomerData();
-    if (getCurrentVersion) {
-      currentVersionOfCustomer = getCurrentVersion?.body.version;
-    }
+    const response = await ApiService.getCustomerData();
+    return response?.body.version;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
+export async function updateCustomerData(data: UpdateCustomerDataPayload) {
+  const currentVersion = await getCurrentCustomerVersion();
+  try {
     const response = await ApiService.updateCustomer({
-      version: currentVersionOfCustomer,
+      version: currentVersion || 0,
       actions: [getAction(data.name, data.value)],
+    });
+    if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
+      toast.success(`Data updated successfully`);
+    } else {
+      console.error('Error when updating data:', response?.statusCode, response?.body);
+      toast.error('An error occurred while updating data');
+    }
+  } catch (error) {
+    console.error('Error when updating data:', error);
+    toast.error('An error occurred while updating data');
+    throw error;
+  }
+}
+
+export async function changeCustomerPassword(currentPassword: string, newPassword: string) {
+  console.log('Change Customer Password');
+  const currentVersion = await getCurrentCustomerVersion();
+  try {
+    const response = await ApiService.changePassword({
+      version: currentVersion || 0,
+      currentPassword,
+      newPassword,
     });
     if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
       toast.success(`Data updated successfully`);
