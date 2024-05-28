@@ -3,30 +3,35 @@ import { Button, Form, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { ObjectSchema } from 'yup';
 import CustomTextInput from '../../ui/Input/CustomInput';
-import { IProfileValuesValidation } from '../../types/CustomerTypes';
+import { changeCustomerPassword } from './profileUtils';
+import { IPasswordValuesValidation } from '../../types/CustomerTypes';
 
-type ProfileMainDataProps = {
-  validationSchema: ObjectSchema<IProfileValuesValidation>;
+type ProfilePasswordProps = {
+  validationSchema: ObjectSchema<IPasswordValuesValidation>;
 };
 
-function ProfilePasswordData({ validationSchema }: ProfileMainDataProps) {
+function ProfilePassword({ validationSchema }: ProfilePasswordProps) {
+  const updatePassword = async (values: { currentPassword: string; newPassword: string }) => {
+    try {
+      await changeCustomerPassword(values.currentPassword, values.newPassword);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <Formik
-      initialValues={{ oldPassword: 'FFFFFFfffff123', newPassword: 'FFFFFFfffff123' }}
+      initialValues={{ currentPassword: '', newPassword: '' }}
       validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        console.log('Submitted values:', values);
-        setSubmitting(false);
-      }}
       validateOnChange
-      validateOnBlur={false}
+      validateOnBlur
+      onSubmit={updatePassword}
     >
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
           <Row className="my-2">
             <CustomTextInput
-              label="Old Password"
-              name="oldPassword"
+              label="Current Password"
+              name="currentPassword"
               type="password"
               placeholder="Please enter your old password"
             />
@@ -39,7 +44,7 @@ function ProfilePasswordData({ validationSchema }: ProfileMainDataProps) {
               placeholder="Please enter your new password"
             />
           </Row>
-          <Button type="submit" variant="secondary" size="sm">
+          <Button type="submit" variant="dark" size="sm">
             Update password
           </Button>
         </Form>
@@ -48,4 +53,4 @@ function ProfilePasswordData({ validationSchema }: ProfileMainDataProps) {
   );
 }
 
-export default ProfilePasswordData;
+export default ProfilePassword;
