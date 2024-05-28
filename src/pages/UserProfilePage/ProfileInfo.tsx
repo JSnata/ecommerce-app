@@ -3,15 +3,15 @@ import { Formik } from 'formik';
 import { Form, Row } from 'react-bootstrap';
 import { ObjectSchema } from 'yup';
 import CustomTextInput from '../../ui/Input/CustomInput';
-import { getInputTypeByNameField, updateCustomerData } from './userProfileUtils';
-import { CustomerMainProfileSubset, IProfileValuesValidation } from '../../types/CustomerTypes';
+import { getInputTypeByNameField, updateCustomerData } from './profileUtils';
+import { CustomerProfileSubset, IProfileValuesValidation } from '../../types/CustomerTypes';
 
-type ProfileMainDataProps = {
-  data: CustomerMainProfileSubset;
+type ProfileInfoProps = {
+  data: CustomerProfileSubset;
   validationSchema: ObjectSchema<IProfileValuesValidation>;
 };
 
-function ProfileMainData({ data, validationSchema }: ProfileMainDataProps) {
+function ProfileInfo({ data, validationSchema }: ProfileInfoProps) {
   return (
     <Formik initialValues={data} validationSchema={validationSchema} onSubmit={() => {}}>
       {() => (
@@ -34,4 +34,4 @@ function ProfileMainData({ data, validationSchema }: ProfileMainDataProps) {
   );
 }
 
-export default ProfileMainData;
+export default ProfileInfo;
