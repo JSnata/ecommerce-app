@@ -1,16 +1,11 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import useAuthContext from '../../hooks/useAuthContext';
+import handleLogout from '../../utils/auth';
 
 function NavBarProfile() {
   const { user, dispatch } = useAuthContext();
-  const handleLogout = () => {
-    dispatch({ type: 'LOGOUT', payload: null });
-    localStorage.removeItem('token');
-    toast('Logged out');
-  };
   return (
     <Dropdown className="mx-3" id="user-profile-doropdown">
       <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
@@ -22,7 +17,7 @@ function NavBarProfile() {
         </Dropdown.Item>
         <Dropdown.Item href="">Shopping List</Dropdown.Item>
         <Dropdown.Divider />
-        <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
+        <Dropdown.Item onClick={() => handleLogout(dispatch)}>Sign out</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );
