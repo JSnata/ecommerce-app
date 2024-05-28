@@ -12,7 +12,7 @@ function CarouselComponent(props: CarouselData) {
   const { srcArray, interval, id } = props;
   const getKeyByIndex = (index: number) => `${id}-${index}`;
   return (
-    <Carousel interval={interval} data-bs-theme="dark">
+    <Carousel interval={interval} data-bs-theme="dark" controls={srcArray.length > 1} indicators={srcArray.length > 1}>
       {srcArray.map((src, index) => (
         <Carousel.Item key={getKeyByIndex(index)}>
           <Image src={src} className={style.img} alt="Product photo" />
