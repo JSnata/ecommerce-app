@@ -14,7 +14,7 @@ function SecondaryButton({ children, link, clickHandler = undefined, ...rest }: 
   const isActive = location.pathname === link;
 
   return (
-    <Button variant="dark" className="m-1">
+    <Button variant="dark">
       <NavLink to={rest.to} className={`${s.navLink} ${isActive ? s.active : ''}`} onClick={clickHandler}>
         {children}
       </NavLink>
