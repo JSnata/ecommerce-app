@@ -78,7 +78,7 @@ export default class ApiService {
         .execute();
     } catch (err) {
       console.error(err);
-      // toast.error(`${err}`);
+      toast.error(`${err}`);
       return null;
     }
   }
@@ -94,7 +94,7 @@ export default class ApiService {
         .execute();
     } catch (err) {
       console.error(err);
-      // toast.error(`${err}`);
+      toast.error(`${err}`);
       return null;
     }
   }
@@ -104,7 +104,7 @@ export default class ApiService {
       return await this.userApi?.me().get().execute();
     } catch (err) {
       console.error(err);
-      // toast.error(`${err}`);
+      toast.error(`${err}`);
       return null;
     }
   }
