@@ -62,6 +62,7 @@ const profileValidationSchema: ObjectSchema<IProfileValuesValidation> = yup.obje
   email: emailSchema,
   password: passwordSchema,
   oldPassword: passwordSchema,
+  newPassword: passwordSchema,
   firstName: nameSchema,
   lastName: nameSchema,
   dateOfBirth: dateOfBirthSchema,
