@@ -20,23 +20,30 @@ export interface ICustomerAddress extends BaseAddress {
   country: Country;
 }
 
-export interface IProfileValuesValidation {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: Date;
-  country_billing: string;
-  city_billing: string;
-  street_billing: string;
-  code_billing: string | undefined;
-}
-
-export type CustomerMainProfileSubset = Pick<Customer, 'email' | 'firstName' | 'lastName' | 'dateOfBirth'>;
+// Subset of customer --------------------------------
+export type CustomerProfileSubset = Pick<Customer, 'email' | 'firstName' | 'lastName' | 'dateOfBirth'>;
 
 export type CustomerAddressSubset = Pick<
   Customer,
   'addresses' | 'shippingAddressIds' | 'billingAddressIds' | 'defaultBillingAddressId' | 'defaultShippingAddressId'
 >;
 
-export type CustomerPasswordSubset = Pick<Customer, 'password'>;
+// Validation --------------------------------
+export interface IProfileValuesValidation {
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: Date;
+}
+
+export interface IPasswordValuesValidation {
+  currentPassword?: string;
+  newPassword?: string;
+}
+
+export interface IAddressValuesValidation {
+  country_billing: string;
+  city_billing: string;
+  street_billing: string;
+  code_billing: string | undefined;
+}
