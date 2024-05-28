@@ -2,7 +2,12 @@ import { MyCustomerUpdateAction } from '@commercetools/platform-sdk/dist/declara
 import { toast } from 'react-toastify';
 import { Customer } from '@commercetools/platform-sdk';
 import ApiService from '../../API/apiService';
-import { CustomerMainProfileSubset } from '../../types/CustomerTypes';
+import { CustomerProfileSubset } from '../../types/CustomerTypes';
+
+type UpdateCustomerPayload = {
+  name: string;
+  value: string;
+};
 
 export const getInputTypeByNameField = (key: string): string => {
   switch (key) {
@@ -15,7 +20,7 @@ export const getInputTypeByNameField = (key: string): string => {
   }
 };
 
-export function getCustomerMainProfileData(user: Customer): CustomerMainProfileSubset {
+export function getCustomerMainProfileData(user: Customer): CustomerProfileSubset {
   return {
     email: user.email,
     firstName: user.firstName,
@@ -23,29 +28,6 @@ export function getCustomerMainProfileData(user: Customer): CustomerMainProfileS
     dateOfBirth: user.dateOfBirth,
   };
 }
-
-// export function getCustomerPasswordData(user: Customer) {
-//   return {
-//     email: user.email,
-//     password: user.password,
-//   };
-// }
-//
-// export function getCustomerAddressData(user: Customer) {
-//   return {
-//     email: user.email,
-//     addresses: user.addresses,
-//     shippingAddresses: user.shippingAddresses,
-//     billingAddresses: user.billingAddresses,
-//     defaultBillingAddress: user.defaultBillingAddress,
-//     defaultShippingAddress: user.defaultShippingAddress,
-//   };
-// }
-
-type UpdateCustomerDataPayload = {
-  name: string;
-  value: string;
-};
 
 function getAction(name: string, value: string) {
   let action: MyCustomerUpdateAction;
@@ -92,7 +74,7 @@ const getCurrentCustomerVersion = async () => {
   }
 };
 
-export async function updateCustomerData(data: UpdateCustomerDataPayload) {
+export async function updateCustomerData(data: UpdateCustomerPayload) {
   const currentVersion = await getCurrentCustomerVersion();
   try {
     const response = await ApiService.updateCustomer({
@@ -101,19 +83,13 @@ export async function updateCustomerData(data: UpdateCustomerDataPayload) {
     });
     if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
       toast.success(`Data updated successfully`);
-    } else {
-      console.error('Error when updating data:', response?.statusCode, response?.body);
-      toast.error('An error occurred while updating data');
     }
   } catch (error) {
     console.error('Error when updating data:', error);
-    toast.error('An error occurred while updating data');
-    throw error;
   }
 }
 
 export async function changeCustomerPassword(currentPassword: string, newPassword: string) {
-  console.log('Change Customer Password');
   const currentVersion = await getCurrentCustomerVersion();
   try {
     const response = await ApiService.changePassword({
@@ -121,15 +97,11 @@ export async function changeCustomerPassword(currentPassword: string, newPasswor
       currentPassword,
       newPassword,
     });
+    console.log(response, 'Success changing password');
     if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
       toast.success(`Data updated successfully`);
-    } else {
-      console.error('Error when updating data:', response?.statusCode, response?.body);
-      toast.error('An error occurred while updating data');
     }
   } catch (error) {
     console.error('Error when updating data:', error);
-    toast.error('An error occurred while updating data');
-    throw error;
   }
 }
