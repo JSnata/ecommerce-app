@@ -2,6 +2,7 @@ import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk';
 import { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 import { MyCustomerUpdate } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
+import { MyCustomerChangePassword } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/customer';
 import signingCustomer from './helpers/CustomerAPI';
 import { ICustomerCreateData } from '../types/CustomerTypes';
 import { createCustomer } from './helpers/ClientAPI';
@@ -77,7 +78,23 @@ export default class ApiService {
         .execute();
     } catch (err) {
       console.error(err);
-      toast.error(`${err}`);
+      // toast.error(`${err}`);
+      return null;
+    }
+  }
+
+  static async changePassword(passwordChange: MyCustomerChangePassword) {
+    try {
+      return await this.userApi
+        ?.me()
+        .password()
+        .post({
+          body: passwordChange,
+        })
+        .execute();
+    } catch (err) {
+      console.error(err);
+      // toast.error(`${err}`);
       return null;
     }
   }
@@ -87,7 +104,7 @@ export default class ApiService {
       return await this.userApi?.me().get().execute();
     } catch (err) {
       console.error(err);
-      toast.error(`${err}`);
+      // toast.error(`${err}`);
       return null;
     }
   }
