@@ -3,7 +3,7 @@ import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { useField } from 'formik';
 import { CheckCircleFill, PencilSquare } from 'react-bootstrap-icons';
 
-interface ICustomTextInput {
+type CustomTextInputProps = {
   label: string;
   name: string;
   type: string;
@@ -11,9 +11,9 @@ interface ICustomTextInput {
   id?: string;
   isEditable?: boolean;
   handleSave?: (data: { name: string; value: string }) => Promise<void>;
-}
+};
 
-function CustomTextInput({ label, name, type, placeholder, id, isEditable = false, handleSave }: ICustomTextInput) {
+function CustomTextInput({ label, name, type, placeholder, id, isEditable = false, handleSave }: CustomTextInputProps) {
   const [field, meta] = useField(name);
   const [editMode, setEditMode] = useState(!isEditable);
   const inputRef = useRef<HTMLInputElement>(null);
