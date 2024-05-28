@@ -58,18 +58,21 @@ const postalCodeSchema = (country: string) =>
       }
     });
 
-const profileValidationSchema: ObjectSchema<IProfileValuesValidation> = yup.object().shape({
+export const profileValidationSchema: ObjectSchema<IProfileValuesValidation> = yup.object().shape({
   email: emailSchema,
-  password: passwordSchema,
-  oldPassword: passwordSchema,
-  newPassword: passwordSchema,
   firstName: nameSchema,
   lastName: nameSchema,
   dateOfBirth: dateOfBirthSchema,
   country_billing: yup.string().required('This field is required!'),
+});
+
+export const passwordValidationSchema = yup.object().shape({
+  currentPassword: passwordSchema,
+  newPassword: passwordSchema,
+});
+
+export const addressesValidationSchema = yup.object().shape({
   city_billing: citySchema,
   street_billing: addressSchema,
   code_billing: yup.string().when('country_billing', (country) => postalCodeSchema(country as unknown as string)),
 });
-
-export default profileValidationSchema;
