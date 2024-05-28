@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik } from 'formik';
 import { Form, Row } from 'react-bootstrap';
 import { ObjectSchema } from 'yup';
-import CustomTextInput from '../../ui/Input/CustomInput';
+import CustomTextInput from '../../ui/Inputs/CustomInput';
 import { getInputTypeByNameField, updateCustomerData } from './profileUtils';
 import { CustomerProfileSubset, IProfileValuesValidation } from '../../types/CustomerTypes';
 
