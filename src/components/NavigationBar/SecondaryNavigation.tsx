@@ -4,7 +4,7 @@ import { Nav } from 'react-bootstrap';
 
 function SecondaryNavigation() {
   return (
-    <Nav className="mr-auto">
+    <Nav className="justify-content-end flex-grow-1 pe-3">
       <Nav.Link as={NavLink} to="/catalog">
         Catalog
       </Nav.Link>

@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, Button, InputGroup, FormControl, Collapse, Dropdown, DropdownButton } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Form,
+  Button,
+  InputGroup,
+  FormControl,
+  Collapse,
+  Dropdown,
+  DropdownButton,
+  Container,
+  Breadcrumb,
+} from 'react-bootstrap';
 import useCategory from '../../hooks/useCategory';
 import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
@@ -41,6 +53,10 @@ export default function CatalogPage() {
     console.log(option);
   };
 
+  const handleCategoryDropDown = (option: string | null) => {
+    console.log(option);
+  };
+
   // const getSortedProducts = (products: any, sortOption: string | null) => {
   //   switch (sortOption) {
   //     case 'price-asc':
@@ -66,142 +82,186 @@ export default function CatalogPage() {
 
   return (
     <Row>
-      <Col md={6} className={styles.imageCol}>
-        <div
-          className={styles.imageContainer}
-          style={{ backgroundImage: `url(${products[3]?.product?.masterVariant?.images?.[0]?.url ?? ''})` }}
-        >
-          <div className={styles.content}>
-            <h2>Catalog</h2>
-          </div>
-        </div>
-      </Col>
-      <Col md={6}>
+      <Col>
         <Row>
-          <Col md={9}>
-            <Row>
-              <Col>
-                <div className={styles.searchWrapper}>
-                  <InputGroup className={styles.searchBar}>
-                    <FormControl
-                      placeholder="Search for products..."
-                      value={searchInput}
-                      onChange={handleSearchInputChange}
-                    />
-                  </InputGroup>
-                </div>
-              </Col>
-              <Col>
-                <Row>
-                  <Col>
-                    <Button variant="dark" onClick={() => setShowFilters(!showFilters)}>
-                      {showFilters ? 'Hide Filters' : 'Show Filters'}
-                    </Button>
-                  </Col>
-                  <Col>
-                    <DropdownButton
-                      id="dropdown-basic-button"
-                      title="Sort By"
-                      variant="dark"
-                      onSelect={handleSortChange}
-                      className={styles.sortDropdown}
-                    >
-                      <Dropdown.Item eventKey="price-asc">Price: Low to High</Dropdown.Item>
-                      <Dropdown.Item eventKey="price-desc">Price: High to Low</Dropdown.Item>
-                      <Dropdown.Item eventKey="name-asc">Name: A to Z</Dropdown.Item>
-                      <Dropdown.Item eventKey="name-desc">Name: Z to A</Dropdown.Item>
-                    </DropdownButton>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            <Collapse in={showFilters}>
-              <Row className={styles.filtersWrapper}>
-                <Col>
-                  <h4>Filters</h4>
-                  <Form>
-                    <Form.Group controlId="formPriceRange">
-                      <Form.Label>Price Range</Form.Label>
-                      <Form.Control
-                        type="range"
-                        min="0"
-                        max="1000"
-                        value={filters.priceRange[0]}
-                        onChange={(e) => handleFilterChange('priceRange', [0, Number(e.target.value)])}
+          <Col className={styles.subHeader}>
+            <Container>
+              <Row className="gap-3 gap-lg-0">
+                <Col lg={6}>
+                  <div className={styles.searchWrapper}>
+                    <InputGroup>
+                      <FormControl
+                        placeholder="Search for products..."
+                        value={searchInput}
+                        className={styles.searchBar}
+                        onChange={handleSearchInputChange}
                       />
-                    </Form.Group>
-                    <Form.Group controlId="formBrand">
-                      <Form.Label>Brand</Form.Label>
-                      <Form.Control
-                        as="select"
-                        value={filters.brand}
-                        onChange={(e) => handleFilterChange('brand', e.target.value)}
-                      >
-                        <option value="">All</option>
-                        {attributes.brands.map((brand) => (
-                          <option key={brand} value={brand}>
-                            {brand}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Form.Group>
+                    </InputGroup>
+                  </div>
+                </Col>
 
-                    <Form.Group controlId="formColor">
-                      <Form.Label>Color</Form.Label>
-                      <Form.Control
-                        as="select"
-                        value={filters.color}
-                        onChange={(e) => handleFilterChange('color', e.target.value)}
+                <Col lg={6}>
+                  <section className={styles.filtersSection}>
+                    <div>
+                      <Button variant="dark" onClick={() => setShowFilters(!showFilters)}>
+                        {showFilters ? 'Hide Filters' : 'Show Filters'}
+                      </Button>
+                    </div>
+                    <div>
+                      <DropdownButton
+                        id="dropdown-basic-button"
+                        title="Sort By"
+                        variant="dark"
+                        onSelect={handleSortChange}
                       >
-                        <option value="">All</option>
-                        {attributes.colors.map((color) => (
-                          <option key={color} value={color}>
-                            {color}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Form.Group>
-
-                    <Form.Group controlId="formSize">
-                      <Form.Label>Size</Form.Label>
-                      <Form.Control
-                        as="select"
-                        value={filters.size}
-                        onChange={(e) => handleFilterChange('size', e.target.value)}
+                        <Dropdown.Item eventKey="price-asc">Price: Low to High</Dropdown.Item>
+                        <Dropdown.Item eventKey="price-desc">Price: High to Low</Dropdown.Item>
+                        <Dropdown.Item eventKey="name-asc">Name: A to Z</Dropdown.Item>
+                        <Dropdown.Item eventKey="name-desc">Name: Z to A</Dropdown.Item>
+                      </DropdownButton>
+                    </div>
+                    <div>
+                      <DropdownButton
+                        id="categories-dd"
+                        title="Categories"
+                        variant="dark"
+                        onSelect={handleCategoryDropDown}
                       >
-                        <option value="">All</option>
-                        {attributes.sizes.map((size) => (
-                          <option key={size} value={size}>
-                            {size}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Form.Group>
-
-                    <Button variant="dark" onClick={handleResetFilters}>
-                      Reset Filters
-                    </Button>
-                  </Form>
+                        <Dropdown.Item eventKey="test-category-name">Test Category Name</Dropdown.Item>
+                      </DropdownButton>
+                    </div>
+                  </section>
                 </Col>
               </Row>
-            </Collapse>
-            <Row className={styles.catalogGrid}>
-              {products.map((product) => {
-                const imageLink = product.product?.masterVariant?.images?.[0]?.url ?? '';
-                const description = truncateToSentence(product.product?.description?.['en-GB'] ?? '');
-                const name = product.product?.name?.['en-GB'] ?? '';
-                return (
-                  <ProductCard
-                    key={product.product?.id}
-                    name={name}
-                    imageLink={imageLink}
-                    description={description}
-                    id={product.product?.id}
-                    price="100 EUR"
-                    discountPrice="150 EUR"
-                  />
-                );
-              })}
+              <Row>
+                <Col>
+                  <Collapse in={showFilters}>
+                    <Row>
+                      <Col>
+                        <div className={styles.filtersItemsFormBlock}>
+                          <h4>Filters</h4>
+                          <Form className={styles.filtersItemsForm}>
+                            <Form.Group controlId="formPriceRange">
+                              <Form.Label>Price Range</Form.Label>
+                              <Form.Control
+                                type="range"
+                                min="0"
+                                max="1000"
+                                value={filters.priceRange[0]}
+                                onChange={(e) => handleFilterChange('priceRange', [0, Number(e.target.value)])}
+                              />
+                            </Form.Group>
+                            <Form.Group controlId="formBrand">
+                              <Form.Label>Brand</Form.Label>
+                              <Form.Control
+                                as="select"
+                                value={filters.brand}
+                                onChange={(e) => handleFilterChange('brand', e.target.value)}
+                              >
+                                <option value="">All</option>
+                                {attributes.brands.map((brand) => (
+                                  <option key={brand} value={brand}>
+                                    {brand}
+                                  </option>
+                                ))}
+                              </Form.Control>
+                            </Form.Group>
+
+                            <Form.Group controlId="formColor">
+                              <Form.Label>Color</Form.Label>
+                              <Form.Control
+                                as="select"
+                                value={filters.color}
+                                onChange={(e) => handleFilterChange('color', e.target.value)}
+                              >
+                                <option value="">All</option>
+                                {attributes.colors.map((color) => (
+                                  <option key={color} value={color}>
+                                    {color}
+                                  </option>
+                                ))}
+                              </Form.Control>
+                            </Form.Group>
+
+                            <Form.Group controlId="formSize">
+                              <Form.Label>Size</Form.Label>
+                              <Form.Control
+                                as="select"
+                                value={filters.size}
+                                onChange={(e) => handleFilterChange('size', e.target.value)}
+                              >
+                                <option value="">All</option>
+                                {attributes.sizes.map((size) => (
+                                  <option key={size} value={size}>
+                                    {size}
+                                  </option>
+                                ))}
+                              </Form.Control>
+                            </Form.Group>
+
+                            <Button variant="dark" onClick={handleResetFilters}>
+                              Reset Filters
+                            </Button>
+                          </Form>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Collapse>
+                </Col>
+              </Row>
+            </Container>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Container className="mt-3">
+              <Row>
+                <Container>
+                  <Breadcrumb className={styles.breadcrumbs}>
+                    <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+                    <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
+                      Library
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item active>Data</Breadcrumb.Item>
+                  </Breadcrumb>
+                </Container>
+              </Row>
+            </Container>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={6} className={styles.imageCol}>
+            <div
+              className={styles.imageContainer}
+              style={{ backgroundImage: `url(${products[3]?.product?.masterVariant?.images?.[0]?.url ?? ''})` }}
+            >
+              <div className={styles.content}>
+                <h2>Catalog</h2>
+              </div>
+            </div>
+          </Col>
+          <Col lg={6}>
+            <Row>
+              <Col lg={12}>
+                <Row className={styles.catalogGrid}>
+                  {products.map((product) => {
+                    const imageLink = product.product?.masterVariant?.images?.[0]?.url ?? '';
+                    const description = truncateToSentence(product.product?.description?.['en-GB'] ?? '');
+                    const name = product.product?.name?.['en-GB'] ?? '';
+                    return (
+                      <ProductCard
+                        key={product.product?.id}
+                        name={name}
+                        imageLink={imageLink}
+                        description={description}
+                        id={product.product?.id}
+                        price="100 EUR"
+                        discountPrice="150 EUR"
+                      />
+                    );
+                  })}
+                </Row>
+              </Col>
             </Row>
           </Col>
         </Row>

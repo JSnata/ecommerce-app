@@ -1,58 +1,92 @@
 .imageCol {
   position: relative;
+  padding: 0;
 }
 
 .imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid rgb(18, 18, 18);
-  border-left: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
+  /* border-left: 0; */
+  /* position: absolute; */
+  /* top: 0; */
+  /* left: 0; */
   width: 100%;
-  height: 720px;
+  min-height: 720px;
   background-size: cover;
   background-position: center;
 }
 
-.content {
+@media (max-width: 900px) {
+  .imageContainer {
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 450px) {
+    .imageContainer {
+      min-height: 420px;
+    }
+  }
+
+/* .content {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
   text-align: center;
-}
+} */
 
 .content h2 {
+  color: #fff;
   font-size: 52px;
 }
 
 .catalogGrid {
-  margin-top: 20px;
   border-bottom: var(--border);
   border-left: var(--border);
 }
 
-.searchWrapper {
-  padding: 20px;
+.subHeader {
+  padding: 10px 0;
 }
 
 .searchBar {
   border: var(--border);
+  border-radius: 0;
 }
 
-.filtersWrapper {
+.filtersSection {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.filtersItemsFormBlock {
   padding: 20px;
   background-color: #f8f9fa;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 8px;
   border: var(--border);
 }
 
-.sortDropdown {
-  margin-left: 10px;
+.filtersItemsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .filtersForm {
   border: var(--border);
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+  color: black;
+}
+
+.breadcrumbs a:active {
+  color: rgb(130, 129, 129);
 }
