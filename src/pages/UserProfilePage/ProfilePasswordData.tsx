@@ -12,7 +12,7 @@ type ProfileMainDataProps = {
 function ProfilePasswordData({ validationSchema }: ProfileMainDataProps) {
   return (
     <Formik
-      initialValues={{ 'old-password': '', 'new-password': '' }}
+      initialValues={{ oldPassword: 'FFFFFFfffff123', newPassword: 'FFFFFFfffff123' }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
         console.log('Submitted values:', values);
@@ -21,8 +21,8 @@ function ProfilePasswordData({ validationSchema }: ProfileMainDataProps) {
       validateOnChange
       validateOnBlur={false}
     >
-      {() => (
-        <Form>
+      {({ handleSubmit }) => (
+        <Form onSubmit={handleSubmit}>
           <Row className="my-2">
             <CustomTextInput
               label="Old Password"
@@ -34,12 +34,11 @@ function ProfilePasswordData({ validationSchema }: ProfileMainDataProps) {
           <Row className="my-2">
             <CustomTextInput
               label="New Password"
-              name="password"
+              name="newPassword"
               type="password"
               placeholder="Please enter your new password"
             />
           </Row>
-          {/* Example submit button */}
           <Button type="submit" variant="secondary" size="sm">
             Update password
           </Button>
