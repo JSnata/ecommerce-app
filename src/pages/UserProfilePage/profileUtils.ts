@@ -97,11 +97,12 @@ export async function changeCustomerPassword(currentPassword: string, newPasswor
       currentPassword,
       newPassword,
     });
-    console.log(response, 'Success changing password');
     if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
       toast.success(`Data updated successfully`);
     }
+    return response;
   } catch (error) {
     console.error('Error when updating data:', error);
+    return null;
   }
 }
