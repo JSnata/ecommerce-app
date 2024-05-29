@@ -28,12 +28,12 @@ function ProductPage() {
   };
   const handleClose = () => setShowModal(false);
 
-  console.log(productSrcArray);
+  console.log(product);
   return (
     <div>
       <Row>
         <Col sm={12} md={6} className={`${style.col} ${style.left}`} onClick={openModal}>
-          <CarouselComponent srcArray={productSrcArray} interval={null} id={productId} />
+          <CarouselComponent srcArray={productSrcArray} interval={null} id={productId} imgClassName={style.imgPage} />
         </Col>
         <Col sm={12} md={6} className={`${style.col} ${style.right}`}>
           <Row>
@@ -60,7 +60,7 @@ function ProductPage() {
       </Row>
       {showModal && (
         <ModalWindow show={showModal} handleClose={handleClose} modalSize="lg">
-          <CarouselComponent srcArray={productSrcArray} interval={null} id={productId} />
+          <CarouselComponent srcArray={productSrcArray} interval={null} id={productId} imgClassName={style.imgModal} />
         </ModalWindow>
       )}
     </div>
