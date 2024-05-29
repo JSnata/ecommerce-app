@@ -1,6 +1,5 @@
 import React from 'react';
 import { Carousel, Image } from 'react-bootstrap';
-// import style from './Carousel.module.css';
 
 interface CarouselData {
   srcArray: Array<string | undefined>;
