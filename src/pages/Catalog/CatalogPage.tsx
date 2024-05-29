@@ -15,6 +15,7 @@ import {
 import useCategory from '../../hooks/useCategory';
 import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
+import useProductsByCategory from '../../hooks/useProductsByCategory';
 
 function truncateToSentence(text: string) {
   const match = text.match(/(.*?\.)(\s|$)/);
@@ -25,9 +26,11 @@ export default function CatalogPage() {
   const [searchInput, setSearchInput] = useState('');
   const [filters, setFilters] = useState({ priceRange: [0, 1000], brand: '', color: '', size: '' });
   const [attributes, setAttributes] = useState({ brands: [], colors: [], sizes: [] });
-  const [showFilters, setShowFilters] = useState(false); // Состояние для управления видимостью фильтров
-  // const [sortOption, setSortOption] = useState(''); // Состояние для текущего метода сортировки
-  const products = useCategory();
+  const [showFilters, setShowFilters] = useState(false);
+  const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
+
+  const categories = useCategory();
+  const { products, loading, error } = useProductsByCategory(currentCategoryId);
 
   useEffect(() => {
     async function getAttributes() {
@@ -41,7 +44,7 @@ export default function CatalogPage() {
     setSearchInput(e.target.value);
   };
 
-  const handleFilterChange = (filterName: string, value: string | number | number[]) => {
+  const handleFilterChange = (filterName: string, value: string) => {
     setFilters({ ...filters, [filterName]: value });
   };
 
@@ -53,32 +56,9 @@ export default function CatalogPage() {
     console.log(option);
   };
 
-  const handleCategoryDropDown = (option: string | null) => {
-    console.log(option);
+  const handleCategoryDropDown = (categoryId: string | null) => {
+    setCurrentCategoryId(categoryId);
   };
-
-  // const getSortedProducts = (products: any, sortOption: string | null) => {
-  //   switch (sortOption) {
-  //     case 'price-asc':
-  //       return [...products].sort(
-  //         (a, b) =>
-  //           a.product.masterVariant.prices[0].value.centAmount - b.product.masterVariant.prices[0].value.centAmount,
-  //       );
-  //     case 'price-desc':
-  //       return [...products].sort(
-  //         (a, b) =>
-  //           b.product.masterVariant.prices[0].value.centAmount - a.product.masterVariant.prices[0].value.centAmount,
-  //       );
-  //     case 'name-asc':
-  //       return [...products].sort((a, b) => a.product.name['en-GB'].localeCompare(b.product.name['en-GB']));
-  //     case 'name-desc':
-  //       return [...products].sort((a, b) => b.product.name['en-GB'].localeCompare(a.product.name['en-GB']));
-  //     default:
-  //       return products;
-  //   }
-  // };
-
-  // const sortedProducts = getSortedProducts(products, sortOption);
 
   return (
     <Row>
@@ -127,7 +107,12 @@ export default function CatalogPage() {
                         variant="dark"
                         onSelect={handleCategoryDropDown}
                       >
-                        <Dropdown.Item eventKey="test-category-name">Test Category Name</Dropdown.Item>
+                        {categories &&
+                          categories.map((category) => (
+                            <Dropdown.Item key={category.category.id} eventKey={category.category.id}>
+                              {category.category.name['en-GB']}
+                            </Dropdown.Item>
+                          ))}
                       </DropdownButton>
                     </div>
                   </section>
@@ -148,7 +133,7 @@ export default function CatalogPage() {
                                 min="0"
                                 max="1000"
                                 value={filters.priceRange[0]}
-                                onChange={(e) => handleFilterChange('priceRange', [0, Number(e.target.value)])}
+                                // onChange={(e) => handleFilterChange('priceRange', [0, Number(e.target.value)])}
                               />
                             </Form.Group>
                             <Form.Group controlId="formBrand">
@@ -233,10 +218,14 @@ export default function CatalogPage() {
           <Col lg={6} className={styles.imageCol}>
             <div
               className={styles.imageContainer}
-              style={{ backgroundImage: `url(${products[3]?.product?.masterVariant?.images?.[0]?.url ?? ''})` }}
+              style={{
+                backgroundImage: `url(${products[0]?.masterVariant?.images?.[0]?.url || categories?.[3]?.product?.masterVariant?.images?.[0]?.url || ''})`,
+              }}
             >
               <div className={styles.content}>
-                <h2>Catalog</h2>
+                <h2>
+                  {categories.find((cat) => cat.category.id === currentCategoryId)?.category.name['en-GB'] || 'Catalog'}
+                </h2>
               </div>
             </div>
           </Col>
@@ -244,22 +233,40 @@ export default function CatalogPage() {
             <Row>
               <Col lg={12}>
                 <Row className={styles.catalogGrid}>
-                  {products.map((product) => {
-                    const imageLink = product.product?.masterVariant?.images?.[0]?.url ?? '';
-                    const description = truncateToSentence(product.product?.description?.['en-GB'] ?? '');
-                    const name = product.product?.name?.['en-GB'] ?? '';
-                    return (
-                      <ProductCard
-                        key={product.product?.id}
-                        name={name}
-                        imageLink={imageLink}
-                        description={description}
-                        id={product.product?.id}
-                        price="100 EUR"
-                        discountPrice="150 EUR"
-                      />
-                    );
-                  })}
+                  {error && <div>{error}</div>}
+                  {!loading && !error && products.length > 0
+                    ? products.map((product) => {
+                        const imageLink = product.masterVariant?.images?.[0]?.url ?? '';
+                        const description = truncateToSentence(product.description?.['en-GB'] ?? '');
+                        const name = product.name?.['en-GB'] ?? '';
+                        return (
+                          <ProductCard
+                            key={product.id}
+                            name={name}
+                            imageLink={imageLink}
+                            description={description}
+                            id={product.id}
+                            price="100 EUR"
+                            discountPrice="150 EUR"
+                          />
+                        );
+                      })
+                    : categories.map((category) => {
+                        const imageLink = category?.product?.masterVariant?.images?.[0]?.url ?? '';
+                        const description = truncateToSentence(category?.product?.description?.['en-GB'] ?? '');
+                        const name = category?.product?.name?.['en-GB'] ?? '';
+                        return (
+                          <ProductCard
+                            key={category.product?.id}
+                            name={name}
+                            imageLink={imageLink}
+                            description={description}
+                            id={category.product?.id}
+                            price="100 EUR"
+                            discountPrice="150 EUR"
+                          />
+                        );
+                      })}
                 </Row>
               </Col>
             </Row>
