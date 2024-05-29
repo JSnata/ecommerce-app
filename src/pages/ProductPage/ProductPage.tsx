@@ -32,10 +32,10 @@ function ProductPage() {
   return (
     <div>
       <Row>
-        <Col sm={12} md={6} className={`${style.col} ${style.left}`} onClick={openModal}>
+        <Col sm={12} md={6} className={style.left} onClick={openModal}>
           <CarouselComponent srcArray={productSrcArray} interval={null} id={productId} imgClassName={style.imgPage} />
         </Col>
-        <Col sm={12} md={6} className={`${style.col} ${style.right}`}>
+        <Col sm={12} md={6} className={style.right}>
           <Row>
             <Col>
               <h2 className={style.name}>{productName}</h2>
