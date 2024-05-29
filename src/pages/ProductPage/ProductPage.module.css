@@ -22,3 +22,16 @@
     padding: 10%;
 }
 
+.row {
+    --bs-gutter-x: 0;
+}
+
+@media screen and (max-width: 768px){
+    .left {
+        border-bottom: none;
+    }
+    .right {
+        border-left: 1px solid var(--bs-gray-900);
+    }
+}
+
