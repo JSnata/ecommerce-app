@@ -31,30 +31,22 @@ function ProductPage() {
   console.log(product);
   return (
     <div>
-      <Row>
+      <Row className={style.row}>
         <Col sm={12} md={6} className={style.left} onClick={openModal}>
           <CarouselComponent srcArray={productSrcArray} interval={null} id={productId} imgClassName={style.imgPage} />
         </Col>
-        <Col sm={12} md={6} className={`${style.right} d-flex flex-column justify-content-center`}>
+        <Col sm={12} md={6} className={`${style.right} d-flex flex-column justify-content-center p-2`}>
           <Row>
-            <Col>
-              <h2 className={style.name}>{productName}</h2>
-            </Col>
+            <h2 className={style.name}>{productName}</h2>
           </Row>
           <Row>
-            <Col>
-              <p>{productDescription}</p>
-            </Col>
+            <p>{productDescription}</p>
           </Row>
           <Row>
-            <Col>
-              <h2>{productPriceCurr?.toLocaleString()}$</h2>
-            </Col>
+            <h2>{productPriceCurr?.toLocaleString()}$</h2>
           </Row>
           <Row>
-            <Col>
-              <h3 className={style.oldPrice}>{productPriceStaged?.toLocaleString()}$</h3>
-            </Col>
+            <h3 className={style.oldPrice}>{productPriceStaged?.toLocaleString()}$</h3>
           </Row>
         </Col>
       </Row>
