@@ -14,7 +14,7 @@ import {
   Breadcrumb,
 } from 'react-bootstrap';
 import { Category, ProductProjection } from '@commercetools/platform-sdk';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useHistory, useParams } from 'react-router-dom';
 import useCategory from '../../hooks/useCategory';
 import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
@@ -35,7 +35,7 @@ const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCatego
 
   path.push({
     category: {
-      id: 'catalog',
+      id: '',
       name: { 'en-GB': 'Catalog' },
       version: 0,
       createdAt: '',
@@ -53,7 +53,6 @@ const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCatego
     path.push(category);
     category = categories.find((cat) => cat.category.id === category?.category.parent?.id);
   }
-
   return path;
 };
 
@@ -63,7 +62,8 @@ export default function CatalogPage() {
   const [attributes, setAttributes] = useState({ brands: [], colors: [], sizes: [] });
   const [showFilters, setShowFilters] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
-
+  const { id } = useParams<{ id: string }>();
+  const history = useHistory();
   const categories = useCategory();
   const { products, loading, error } = useProductsByCategory(currentCategoryId);
 
@@ -74,6 +74,10 @@ export default function CatalogPage() {
     }
     getAttributes();
   }, []);
+
+  const handleBreadcrumbClick = (categoryId: string | null) => {
+    setCurrentCategoryId(categoryId);
+  };
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -93,6 +97,7 @@ export default function CatalogPage() {
 
   const handleCategoryDropDown = (categoryId: string | null) => {
     setCurrentCategoryId(categoryId);
+    history.push(categoryId ? `/category/${categoryId}` : '/catalog');
   };
 
   const breadcrumbPath = generateBreadcrumbPath(categories, currentCategoryId);
@@ -236,16 +241,20 @@ export default function CatalogPage() {
                     <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/' }}>
                       Home
                     </Breadcrumb.Item>
-                    {breadcrumbPath.map((category, index) => (
-                      <Breadcrumb.Item
-                        key={category.category.id}
-                        linkAs={Link}
-                        linkProps={{ to: `/category/${category.category.id}` }}
-                        active={index === breadcrumbPath.length - 1}
-                      >
-                        {category.category.name['en-GB']}
-                      </Breadcrumb.Item>
-                    ))}
+                    {breadcrumbPath.map((category, index) => {
+                      const link = category.category.id ? `/category/${category.category.id}` : '/catalog/';
+                      return (
+                        <Breadcrumb.Item
+                          key={category.category.id}
+                          linkAs={NavLink}
+                          linkProps={{ to: link }}
+                          onClick={() => handleBreadcrumbClick(category.category.id)}
+                          active={index === breadcrumbPath.length - 1}
+                        >
+                          {category.category.name['en-GB']}
+                        </Breadcrumb.Item>
+                      );
+                    })}
                   </Breadcrumb>
                 </Container>
               </Row>
@@ -257,7 +266,7 @@ export default function CatalogPage() {
             <div
               className={styles.imageContainer}
               style={{
-                backgroundImage: `url(${products[0]?.masterVariant?.images?.[0]?.url || categories?.[3]?.product?.masterVariant?.images?.[0]?.url || ''})`,
+                backgroundImage: `url(${categories[3]?.product?.masterVariant?.images?.[0]?.url || categories?.[3]?.product?.masterVariant?.images?.[0]?.url || ''})`,
               }}
             >
               <div className={styles.content}>
