@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import {
   Row,
@@ -12,6 +13,8 @@ import {
   Container,
   Breadcrumb,
 } from 'react-bootstrap';
+import { Category, ProductProjection } from '@commercetools/platform-sdk';
+import { Link } from 'react-router-dom';
 import useCategory from '../../hooks/useCategory';
 import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
@@ -21,6 +24,38 @@ function truncateToSentence(text: string) {
   const match = text.match(/(.*?\.)(\s|$)/);
   return match ? match[1] : text;
 }
+
+export type CategoryWithProduct = {
+  category: Category;
+  product: ProductProjection | null;
+};
+
+const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCategoryId: string | null) => {
+  const path: CategoryWithProduct[] = [];
+
+  path.push({
+    category: {
+      id: 'catalog',
+      name: { 'en-GB': 'Catalog' },
+      version: 0,
+      createdAt: '',
+      lastModifiedAt: '',
+      slug: { 'en-GB': '' },
+      ancestors: [],
+      orderHint: '',
+    },
+    product: null,
+  });
+
+  let category = categories.find((cat) => cat.category.id === currentCategoryId);
+
+  while (category) {
+    path.push(category);
+    category = categories.find((cat) => cat.category.id === category?.category.parent?.id);
+  }
+
+  return path;
+};
 
 export default function CatalogPage() {
   const [searchInput, setSearchInput] = useState('');
@@ -60,6 +95,8 @@ export default function CatalogPage() {
     setCurrentCategoryId(categoryId);
   };
 
+  const breadcrumbPath = generateBreadcrumbPath(categories, currentCategoryId);
+
   return (
     <Row>
       <Col>
@@ -90,23 +127,16 @@ export default function CatalogPage() {
                     <div>
                       <DropdownButton
                         id="dropdown-basic-button"
-                        title="Sort By"
-                        variant="dark"
-                        onSelect={handleSortChange}
-                      >
-                        <Dropdown.Item eventKey="price-asc">Price: Low to High</Dropdown.Item>
-                        <Dropdown.Item eventKey="price-desc">Price: High to Low</Dropdown.Item>
-                        <Dropdown.Item eventKey="name-asc">Name: A to Z</Dropdown.Item>
-                        <Dropdown.Item eventKey="name-desc">Name: Z to A</Dropdown.Item>
-                      </DropdownButton>
-                    </div>
-                    <div>
-                      <DropdownButton
-                        id="categories-dd"
-                        title="Categories"
+                        title={
+                          currentCategoryId
+                            ? categories.find((cat) => cat.category.id === currentCategoryId)?.category.name['en-GB'] ||
+                              'Categories'
+                            : 'Categories'
+                        }
                         variant="dark"
                         onSelect={handleCategoryDropDown}
                       >
+                        <Dropdown.Item eventKey={undefined}>All Categories</Dropdown.Item>
                         {categories &&
                           categories.map((category) => (
                             <Dropdown.Item key={category.category.id} eventKey={category.category.id}>
@@ -203,11 +233,19 @@ export default function CatalogPage() {
               <Row>
                 <Container>
                   <Breadcrumb className={styles.breadcrumbs}>
-                    <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-                    <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                      Library
+                    <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/' }}>
+                      Home
                     </Breadcrumb.Item>
-                    <Breadcrumb.Item active>Data</Breadcrumb.Item>
+                    {breadcrumbPath.map((category, index) => (
+                      <Breadcrumb.Item
+                        key={category.category.id}
+                        linkAs={Link}
+                        linkProps={{ to: `/category/${category.category.id}` }}
+                        active={index === breadcrumbPath.length - 1}
+                      >
+                        {category.category.name['en-GB']}
+                      </Breadcrumb.Item>
+                    ))}
                   </Breadcrumb>
                 </Container>
               </Row>

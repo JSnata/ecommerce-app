@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Category, ProductProjection } from '@commercetools/platform-sdk';
 import { apiRoot } from '../API/helpers/ClientAPI';
 
-type CategoryWithProduct = {
+export type CategoryWithProduct = {
   category: Category;
   product: ProductProjection | null;
 };

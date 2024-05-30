@@ -7,32 +7,24 @@ const useProductsByCategory = (categoryId: string | null) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const fetchProductsByCategory = async (catId: string): Promise<void> => {
+  const fetchProducts = async (filter: string | undefined) => {
     setLoading(true);
     setFetchError(null);
     try {
-      const response = await apiRoot
-        .productProjections()
-        .search()
-        .get({
-          queryArgs: {
-            filter: [`categories.id:"${catId}"`],
-          },
-        })
-        .execute();
+      const queryArgs = filter ? { filter: [filter] } : {};
+      const response = await apiRoot.productProjections().search().get({ queryArgs }).execute();
       setProducts(response.body.results);
     } catch (err) {
-      console.error(`Error fetching products for category ${catId}:`, err);
-      setFetchError(`Error fetching products for category ${catId}`);
+      console.error('Error fetching products:', err);
+      setFetchError('Error fetching products');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (categoryId) {
-      fetchProductsByCategory(categoryId);
-    }
+    const filter = categoryId ? `categories.id:"${categoryId}"` : undefined;
+    fetchProducts(filter);
   }, [categoryId]);
 
   return { products, loading, error: fetchError };
