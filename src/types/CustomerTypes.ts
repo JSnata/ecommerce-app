@@ -42,8 +42,8 @@ export interface IPasswordValuesValidation {
 }
 
 export interface IAddressValuesValidation {
-  country_billing: string;
-  city_billing: string;
-  street_billing: string;
-  code_billing: string | undefined;
+  city: string;
+  // street: string;
+  country: string;
+  postalCode: string | undefined;
 }
