@@ -16,6 +16,7 @@ function ProfileInfo({ data, validationSchema }: ProfileInfoProps) {
     <Formik initialValues={data} validationSchema={validationSchema} onSubmit={() => {}}>
       {() => (
         <Form>
+          <h4>My main info</h4>
           {Object.entries(data).map(([key]) => (
             <Row key={key} className="my-2">
               <CustomTextInput
