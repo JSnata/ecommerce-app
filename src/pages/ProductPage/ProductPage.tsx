@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 import CarouselComponent from '../../ui/Carusel/Carusel';
 import style from './ProductPage.module.css';
 import useProducts from '../../hooks/useProducts';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
 
+interface ProductParam {
+  id: string;
+}
+
 function ProductPage() {
+  const productId: ProductParam = useParams();
   const products = useProducts();
-  const product = products[0];
-  const productId = product?.id;
-  const images = product?.masterData?.current?.masterVariant?.images;
+  const product = products.find((prod) => prod.id === productId.id);
+  const productImages = product?.masterData?.current?.masterVariant?.images;
   const productSrcArray: (string | undefined)[] = [];
-  images?.forEach((img) => {
+  productImages?.forEach((img) => {
     productSrcArray.push(img?.url);
   });
   const productName = product?.masterData?.current?.name?.['en-GB'];
@@ -33,7 +38,12 @@ function ProductPage() {
     <div>
       <Row className={style.row}>
         <Col sm={12} md={6} className={style.left} onClick={openModal}>
-          <CarouselComponent srcArray={productSrcArray} interval={null} id={productId} imgClassName={style.imgPage} />
+          <CarouselComponent
+            srcArray={productSrcArray}
+            interval={null}
+            id={productId.id}
+            imgClassName={style.imgPage}
+          />
         </Col>
         <Col sm={12} md={6} className={`${style.right} d-flex flex-column justify-content-center p-2`}>
           <Row>
@@ -52,7 +62,12 @@ function ProductPage() {
       </Row>
       {showModal && (
         <ModalWindow show={showModal} handleClose={handleClose} title={productName} modalSize="lg">
-          <CarouselComponent srcArray={productSrcArray} interval={null} id={productId} imgClassName={style.imgModal} />
+          <CarouselComponent
+            srcArray={productSrcArray}
+            interval={null}
+            id={productId.id}
+            imgClassName={style.imgModal}
+          />
         </ModalWindow>
       )}
     </div>
