@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { ObjectSchema } from 'yup';
-import { IProfileValuesValidation } from '../types/CustomerTypes';
+import { IAddressValuesValidation, IProfileValuesValidation } from '../types/CustomerTypes';
 
 const emailSchema = yup
   .string()
@@ -32,21 +32,39 @@ const dateOfBirthSchema = yup
     return new Date(value) <= cutoffDate;
   });
 
-const addressSchema = yup.string().required('This field is required!').min(1, 'Must contain at least 1 character');
+export const profileValidationSchema: ObjectSchema<IProfileValuesValidation> = yup.object().shape({
+  email: emailSchema,
+  firstName: nameSchema,
+  lastName: nameSchema,
+  dateOfBirth: dateOfBirthSchema,
+});
+
+export const passwordValidationSchema = yup.object().shape({
+  currentPassword: passwordSchema,
+  newPassword: passwordSchema,
+});
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const addressSchema = yup
+  .string()
+  .required('Address is required!')
+  .min(1, 'Must contain at least 1 character')
+  .matches(/^[^!@#$%^&*()_+=[\]{};':"\\|,.<>/?]*$/, 'Address must not contain special characters');
 
 const citySchema = yup
   .string()
-  .required('This field is required!')
+  .required('City is required!')
   .min(1, 'Must contain at least 1 character')
-  .matches(/^[^0-9]*$/, 'Field must not contain numbers')
-  .matches(/^[^!@#$%^&-+=№;:")(]*$/, 'Field must not contain special characters');
+  .matches(/^[^0-9]*$/, 'City must not contain numbers')
+  .matches(/^[^!@#$%^&*()_+=[\]{};':"\\|,.<>/?-]*$/, 'City must not contain special characters');
 
-const postalCodeSchema = (country: string) =>
+const postalCodeSchema = (country: string | unknown) =>
   yup
     .string()
-    .required('This field is required!')
+    .required('Postal code is required!')
     .test('custom-validation', 'Wrong format', (value) => {
-      switch (country) {
+      const countryString = country as string;
+      switch (countryString) {
         case 'Russia':
           return /^([1-6]{1}[0-9]{5})$/.test(value);
         case 'Belarus':
@@ -58,21 +76,14 @@ const postalCodeSchema = (country: string) =>
       }
     });
 
-export const profileValidationSchema: ObjectSchema<IProfileValuesValidation> = yup.object().shape({
-  email: emailSchema,
-  firstName: nameSchema,
-  lastName: nameSchema,
-  dateOfBirth: dateOfBirthSchema,
-  country_billing: yup.string().required('This field is required!'),
-});
+const countrySchema = yup.string().required('Country is required!');
 
-export const passwordValidationSchema = yup.object().shape({
-  currentPassword: passwordSchema,
-  newPassword: passwordSchema,
-});
-
-export const addressesValidationSchema = yup.object().shape({
-  city_billing: citySchema,
-  street_billing: addressSchema,
-  code_billing: yup.string().when('country_billing', (country) => postalCodeSchema(country as unknown as string)),
-});
+export const addressValidationSchema: ObjectSchema<IAddressValuesValidation> = yup
+  .object()
+  .shape({
+    city: citySchema,
+    // street: addressSchema,
+    country: countrySchema,
+    postalCode: yup.string().when('country', (country) => postalCodeSchema(country)),
+  })
+  .noUnknown();
