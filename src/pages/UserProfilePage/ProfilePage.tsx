@@ -1,22 +1,30 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import useAuthContext from '../../hooks/useAuthContext';
-import { getCustomerMainProfileData } from './profileUtils';
+import { getCustomerAddressData, getCustomerMainProfileData } from './profileUtils';
 import ProfileInfo from './ProfileInfo';
 import ProfilePassword from './ProfilePassword';
-import { passwordValidationSchema, profileValidationSchema } from '../../utils/validation';
+import { addressValidationSchema, passwordValidationSchema, profileValidationSchema } from '../../utils/validation';
+import ProfileAddress from './ProfileAddress';
 
 function ProfilePage() {
   const { user } = useAuthContext();
-  const userData = getCustomerMainProfileData(user!);
+  const userProfileData = getCustomerMainProfileData(user!);
+  const userAddressData = getCustomerAddressData(user!);
+  console.log(userAddressData, 'address data');
   return (
     <Container>
       <Row>
-        <Col>
-          <ProfileInfo data={userData} validationSchema={profileValidationSchema} />
+        <Col xs={12} sm={12} md={6}>
+          <ProfileInfo data={userProfileData} validationSchema={profileValidationSchema} />
         </Col>
-        <Col>
+        <Col xs={12} sm={12} md={6}>
           <ProfilePassword validationSchema={passwordValidationSchema} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ProfileAddress data={userAddressData} validationSchema={addressValidationSchema} />
         </Col>
       </Row>
     </Container>
