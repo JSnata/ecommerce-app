@@ -13,7 +13,7 @@ function ProfilePage() {
   const userAddressData = getCustomerAddressData(user!);
   console.log(userAddressData, 'address data');
   return (
-    <Container>
+    <Container className="my-4">
       <Row>
         <Col xs={12} sm={12} md={6}>
           <ProfileInfo data={userProfileData} validationSchema={profileValidationSchema} />
