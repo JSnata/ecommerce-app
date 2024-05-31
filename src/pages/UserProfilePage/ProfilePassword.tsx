@@ -36,6 +36,7 @@ function ProfilePassword({ validationSchema }: ProfilePasswordProps) {
     >
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
+          <h4>My password</h4>
           <Row className="my-2">
             <CustomTextInput
               label="Current Password"
