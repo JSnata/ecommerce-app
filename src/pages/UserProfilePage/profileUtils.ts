@@ -1,8 +1,10 @@
 import { MyCustomerUpdateAction } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/me';
 import { toast } from 'react-toastify';
 import { Customer } from '@commercetools/platform-sdk';
+import { BaseAddress } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
+import { find } from 'lodash';
 import ApiService from '../../API/apiService';
-import { CustomerProfileSubset } from '../../types/CustomerTypes';
+import { CustomerAddressSubset, CustomerProfileSubset } from '../../types/CustomerTypes';
 
 type UpdateCustomerPayload = {
   name: string;
@@ -29,7 +31,22 @@ export function getCustomerMainProfileData(user: Customer): CustomerProfileSubse
   };
 }
 
-function getAction(name: string, value: string) {
+export function getCustomerAddressData(user: Customer): CustomerAddressSubset {
+  return {
+    addresses: user.addresses,
+    shippingAddressIds: user.shippingAddressIds,
+    billingAddressIds: user.billingAddressIds,
+    defaultBillingAddressId: user.defaultBillingAddressId,
+    defaultShippingAddressId: user.defaultShippingAddressId,
+  };
+}
+
+export function getAddressById(id: string | undefined, addresses: BaseAddress[]) {
+  return find(addresses, { id });
+}
+
+function getProfileAction(name: string, value: string) {
+  console.log(name, value, 'value in action');
   let action: MyCustomerUpdateAction;
 
   switch (name) {
@@ -79,7 +96,7 @@ export async function updateCustomerData(data: UpdateCustomerPayload) {
   try {
     const response = await ApiService.updateCustomer({
       version: currentVersion || 0,
-      actions: [getAction(data.name, data.value)],
+      actions: [getProfileAction(data.name, data.value)],
     });
     if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
       toast.success(`Data updated successfully`);
@@ -87,6 +104,55 @@ export async function updateCustomerData(data: UpdateCustomerPayload) {
   } catch (error) {
     console.error('Error when updating data:', error);
   }
+}
+
+export async function updateCustomerAddress(data: BaseAddress) {
+  console.log(data, 'updated address api');
+  const currentVersion = await getCurrentCustomerVersion();
+  try {
+    const response = await ApiService.updateCustomer({
+      version: currentVersion || 0,
+      actions: [
+        {
+          action: 'changeAddress',
+          addressId: data.id,
+          address: {
+            ...data,
+          },
+        },
+      ],
+    });
+    if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
+      toast.success(`Data updated successfully`);
+    }
+  } catch (error) {
+    console.error('Error when updating data:', error);
+  }
+}
+
+export async function manageAddressById(
+  id: string,
+  actionType: 'setDefaultBillingAddress' | 'setDefaultShippingAddress' | 'removeAddress',
+) {
+  const currentVersion = await getCurrentCustomerVersion();
+  try {
+    const response = await ApiService.updateCustomer({
+      version: currentVersion || 0,
+      actions: [
+        {
+          action: actionType,
+          addressId: id,
+        },
+      ],
+    });
+    if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
+      toast.success(`Data updated successfully`);
+    }
+    return response;
+  } catch (error) {
+    console.error('Error when updating data:', error);
+  }
+  return null;
 }
 
 export async function changeCustomerPassword(currentPassword: string, newPassword: string) {
