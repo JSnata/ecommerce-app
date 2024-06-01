@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { ObjectSchema } from 'yup';
+import postalCodes from 'postal-codes-js';
 import { IAddressValuesValidation, IProfileValuesValidation } from '../types/CustomerTypes';
 
 const emailSchema = yup
@@ -58,22 +59,34 @@ const citySchema = yup
   .matches(/^[^0-9]*$/, 'City must not contain numbers')
   .matches(/^[^!@#$%^&*()_+=[\]{};':"\\|,.<>/?-]*$/, 'City must not contain special characters');
 
-const postalCodeSchema = (country: string | unknown) =>
+// const postalCodeSchema = (country: string | unknown) =>
+//   yup
+//     .string()
+//     .required('Postal code is required!')
+//     .test('custom-validation', 'Wrong format', (value) => {
+//       const countryString = country as string;
+//       switch (countryString) {
+//         case 'Russia':
+//           return /^([1-6]{1}[0-9]{5})$/.test(value);
+//         case 'Belarus':
+//           return /^(2[1-4]{1}[0-7]{1}[0-9]{3})$/.test(value);
+//         case 'Poland':
+//           return /^([0-9]{2}-[0-9]{3})$/.test(value);
+//         default:
+//           return false;
+//       }
+//     });
+
+const postalCodeSchema = (countryCode: string | unknown) =>
   yup
     .string()
     .required('Postal code is required!')
-    .test('custom-validation', 'Wrong format', (value) => {
-      const countryString = country as string;
-      switch (countryString) {
-        case 'Russia':
-          return /^([1-6]{1}[0-9]{5})$/.test(value);
-        case 'Belarus':
-          return /^(2[1-4]{1}[0-7]{1}[0-9]{3})$/.test(value);
-        case 'Poland':
-          return /^([0-9]{2}-[0-9]{3})$/.test(value);
-        default:
-          return false;
-      }
+    .test('postal-code-validation', 'Wrong format', (value) => {
+      const countryString = typeof countryCode === 'string' ? countryCode.trim() : '';
+      console.log(countryCode, `current country: ${countryString}`, value, 'value');
+      if (!countryString) return false;
+      const validationResult = postalCodes.validate(countryString, value);
+      return validationResult === true;
     });
 
 const countrySchema = yup.string().required('Country is required!');
@@ -82,8 +95,8 @@ export const addressValidationSchema: ObjectSchema<IAddressValuesValidation> = y
   .object()
   .shape({
     city: citySchema,
-    // street: addressSchema,
+    streetName: addressSchema,
     country: countrySchema,
-    postalCode: yup.string().when('country', (country) => postalCodeSchema(country)),
+    postalCode: yup.string().when('country', (country) => postalCodeSchema(country[0])),
   })
   .noUnknown();
