@@ -174,3 +174,25 @@ export async function changeCustomerPassword(currentPassword: string, newPasswor
     return null;
   }
 }
+
+export async function addNewAddress(data: BaseAddress) {
+  const currentVersion = await getCurrentCustomerVersion();
+  try {
+    const response = await ApiService.updateCustomer({
+      version: currentVersion || 0,
+      actions: [
+        {
+          action: 'addAddress',
+          address: data,
+        },
+      ],
+    });
+    if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
+      toast.success(`Data updated successfully`);
+    }
+    return response;
+  } catch (error) {
+    console.error('Error when updating data:', error);
+  }
+  return null;
+}
