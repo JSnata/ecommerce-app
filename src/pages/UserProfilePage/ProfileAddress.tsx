@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ObjectSchema } from 'yup';
 import { Col, Row, Alert } from 'react-bootstrap';
 import { BaseAddress } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
@@ -17,6 +17,10 @@ function ProfileAddress({ data, validationSchema }: ProfileAddressesProps) {
   const [defaultShippingAddressId, setDefaultShippingAddressId] = useState<string | null>(
     data.defaultShippingAddressId || null,
   );
+  useEffect(() => {
+    setDefaultBillingAddressId(data.defaultBillingAddressId || null);
+    setDefaultShippingAddressId(data.defaultShippingAddressId || null);
+  }, [data.defaultBillingAddressId, data.defaultShippingAddressId]);
 
   const handleSetDefaultBilling = (id: string) => {
     setDefaultBillingAddressId(id);

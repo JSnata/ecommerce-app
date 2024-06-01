@@ -125,9 +125,11 @@ export async function updateCustomerAddress(data: BaseAddress) {
     if (response && response.statusCode && response.statusCode >= 200 && response.statusCode < 300) {
       toast.success(`Data updated successfully`);
     }
+    return response;
   } catch (error) {
     console.error('Error when updating data:', error);
   }
+  return null;
 }
 
 export async function manageAddressById(
