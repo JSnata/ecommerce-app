@@ -1,4 +1,5 @@
 import React from 'react';
+import { ObjectSchema } from 'yup';
 import { Badge, Button, Card, Col, Form, Stack } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { BaseAddress } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
@@ -6,32 +7,36 @@ import { Trash3Fill } from 'react-bootstrap-icons';
 import CustomTextInput from '../../ui/Inputs/CustomInput';
 import SelectFieldCountry from './SelectFieldCountry';
 import { manageAddressById, updateCustomerAddress } from './profileUtils';
+import { IAddressValuesValidation } from '../../types/CustomerTypes';
+import useAuthContext from '../../hooks/useAuthContext';
 
 type ProfileAddressesProps = {
   index: number;
   data: BaseAddress;
   isDefaultBilling: boolean;
   isDefaultShipping: boolean;
-  // validationSchema: ObjectSchema<IAddressValuesValidation>;
+  validationSchema: ObjectSchema<IAddressValuesValidation>;
   setDefaultBilling: (id: string) => void;
   setDefaultShipping: (id: string) => void;
 };
 
 function Address({
   data,
-  // validationSchema,
+  validationSchema,
   index,
   isDefaultShipping,
   isDefaultBilling,
   setDefaultBilling,
   setDefaultShipping,
 }: ProfileAddressesProps) {
+  const { dispatch } = useAuthContext();
   const handleManageAddress = async (
     id: string,
     actionType: 'setDefaultBillingAddress' | 'setDefaultShippingAddress' | 'removeAddress',
   ) => {
     const response = await manageAddressById(id, actionType);
     if (response) {
+      dispatch({ type: 'LOGIN', payload: response.body });
       if (actionType === 'setDefaultBillingAddress' && response.body.defaultBillingAddressId) {
         setDefaultBilling(response.body.defaultBillingAddressId[0]);
       } else if (actionType === 'setDefaultShippingAddress' && response.body.defaultShippingAddressId) {
@@ -41,11 +46,21 @@ function Address({
   };
 
   const handleChangeAddress = async (values: BaseAddress) => {
-    await updateCustomerAddress(values);
+    await updateCustomerAddress(values).then((response) => {
+      if (response) {
+        dispatch({ type: 'LOGIN', payload: response.body });
+      }
+    });
   };
 
   return (
-    <Formik initialValues={data} validateOnChange validateOnBlur onSubmit={handleChangeAddress}>
+    <Formik
+      initialValues={data}
+      validateOnChange
+      validateOnBlur
+      onSubmit={handleChangeAddress}
+      validationSchema={validationSchema}
+    >
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
           <Card className="p-3 mb-2" key={data.id}>
