@@ -43,7 +43,7 @@ export interface IPasswordValuesValidation {
 
 export interface IAddressValuesValidation {
   city: string;
-  // street: string;
+  streetName: string;
   country: string;
   postalCode: string | undefined;
 }
