@@ -59,31 +59,12 @@ const citySchema = yup
   .matches(/^[^0-9]*$/, 'City must not contain numbers')
   .matches(/^[^!@#$%^&*()_+=[\]{};':"\\|,.<>/?-]*$/, 'City must not contain special characters');
 
-// const postalCodeSchema = (country: string | unknown) =>
-//   yup
-//     .string()
-//     .required('Postal code is required!')
-//     .test('custom-validation', 'Wrong format', (value) => {
-//       const countryString = country as string;
-//       switch (countryString) {
-//         case 'Russia':
-//           return /^([1-6]{1}[0-9]{5})$/.test(value);
-//         case 'Belarus':
-//           return /^(2[1-4]{1}[0-7]{1}[0-9]{3})$/.test(value);
-//         case 'Poland':
-//           return /^([0-9]{2}-[0-9]{3})$/.test(value);
-//         default:
-//           return false;
-//       }
-//     });
-
 const postalCodeSchema = (countryCode: string | unknown) =>
   yup
     .string()
     .required('Postal code is required!')
     .test('postal-code-validation', 'Wrong format', (value) => {
       const countryString = typeof countryCode === 'string' ? countryCode.trim() : '';
-      console.log(countryCode, `current country: ${countryString}`, value, 'value');
       if (!countryString) return false;
       const validationResult = postalCodes.validate(countryString, value);
       return validationResult === true;
