@@ -18,7 +18,6 @@ function ProfilePage() {
     setUserAddressData(getCustomerAddressData(user!));
   }, [user]);
 
-  console.log(userAddressData, 'address data');
   return (
     <Container className="my-4">
       <h1>Profile Page</h1>

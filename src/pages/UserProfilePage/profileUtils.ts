@@ -46,7 +46,6 @@ export function getAddressById(id: string | undefined, addresses: BaseAddress[])
 }
 
 function getProfileAction(name: string, value: string) {
-  console.log(name, value, 'value in action');
   let action: MyCustomerUpdateAction;
 
   switch (name) {
@@ -77,7 +76,6 @@ function getProfileAction(name: string, value: string) {
     default:
       throw new Error(`Unknown action for input name: ${name}`);
   }
-  console.log(action, 'Current action');
   return action;
 }
 
@@ -107,7 +105,6 @@ export async function updateCustomerData(data: UpdateCustomerPayload) {
 }
 
 export async function updateCustomerAddress(data: BaseAddress) {
-  console.log(data, 'updated address api');
   const currentVersion = await getCurrentCustomerVersion();
   try {
     const response = await ApiService.updateCustomer({

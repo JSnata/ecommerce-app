@@ -22,7 +22,6 @@ function ProfileNewAddress({ validationSchema }: ProfileNewAddressProps) {
   };
 
   const handleSave = async (values: IAddressValuesValidation, actions: FormikHelpers<IAddressValuesValidation>) => {
-    console.log('Form values:', values);
     await addNewAddress(values).then((response) => {
       if (response) {
         dispatch({ type: 'LOGIN', payload: response.body });
