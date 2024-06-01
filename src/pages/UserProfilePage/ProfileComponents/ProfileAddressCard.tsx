@@ -1,14 +1,14 @@
 import React from 'react';
 import { ObjectSchema } from 'yup';
-import { Badge, Button, Card, Col, Form, Stack } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { BaseAddress } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
 import { Trash3Fill } from 'react-bootstrap-icons';
-import CustomTextInput from '../../ui/Inputs/CustomInput';
-import SelectFieldCountry from './SelectFieldCountry';
-import { manageAddressById, updateCustomerAddress } from './profileUtils';
-import { IAddressValuesValidation } from '../../types/CustomerTypes';
-import useAuthContext from '../../hooks/useAuthContext';
+import CustomTextInput from '../../../ui/Inputs/CustomInput';
+import SelectFieldCountry from '../../../ui/Inputs/SelectFieldCountry';
+import { manageAddressById, updateCustomerAddress } from '../profileUtils';
+import { IAddressValuesValidation } from '../../../types/CustomerTypes';
+import useAuthContext from '../../../hooks/useAuthContext';
 
 type ProfileAddressesProps = {
   index: number;
@@ -20,7 +20,7 @@ type ProfileAddressesProps = {
   setDefaultShipping: (id: string) => void;
 };
 
-function Address({
+function ProfileAddressCard({
   data,
   validationSchema,
   index,
@@ -86,8 +86,8 @@ function Address({
                 )),
             )}
             <Card.Footer>
-              <Col>
-                <Stack direction="horizontal" gap={2}>
+              <Row>
+                <Col>
                   <Button
                     size="sm"
                     type="button"
@@ -104,10 +104,10 @@ function Address({
                   >
                     <Badge bg={isDefaultShipping ? 'info' : 'secondary'}>Default Shipping</Badge>
                   </Button>
-                  <Button type="submit" size="sm">
-                    Save changes
-                  </Button>
+                </Col>
+                <Col>
                   <Button
+                    className="mx-3 my-2"
                     type="button"
                     size="sm"
                     variant="danger"
@@ -115,8 +115,11 @@ function Address({
                   >
                     <Trash3Fill />
                   </Button>
-                </Stack>
-              </Col>
+                  <Button type="submit" size="sm">
+                    Save changes
+                  </Button>
+                </Col>
+              </Row>
             </Card.Footer>
           </Card>
         </Form>
@@ -125,4 +128,4 @@ function Address({
   );
 }
 
-export default Address;
+export default ProfileAddressCard;

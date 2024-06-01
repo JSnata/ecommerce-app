@@ -3,11 +3,11 @@ import { Button, Form, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { ObjectSchema } from 'yup';
 import { useHistory } from 'react-router-dom';
-import CustomTextInput from '../../ui/Inputs/CustomInput';
-import { changeCustomerPassword } from './profileUtils';
-import { IPasswordValuesValidation } from '../../types/CustomerTypes';
-import handleLogout from '../../utils/auth';
-import useAuthContext from '../../hooks/useAuthContext';
+import CustomTextInput from '../../../ui/Inputs/CustomInput';
+import { changeCustomerPassword } from '../profileUtils';
+import { IPasswordValuesValidation } from '../../../types/CustomerTypes';
+import handleLogout from '../../../utils/auth';
+import useAuthContext from '../../../hooks/useAuthContext';
 
 type ProfilePasswordProps = {
   validationSchema: ObjectSchema<IPasswordValuesValidation>;
