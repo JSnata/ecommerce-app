@@ -14,6 +14,8 @@ import { userTokenCache } from './API/root/BuildCustomer';
 import './styles/App.css';
 import ProfilePage from './pages/UserProfilePage/ProfilePage';
 import MainPage from './pages/MainPage/MainPage';
+import CatalogPage from './pages/Catalog/CatalogPage';
+import AboutPage from './pages/About/AboutPage';
 
 function App() {
   const { user, dispatch } = useAuthContext();
@@ -62,6 +64,12 @@ function App() {
         <Route path="/login">{user ? <Redirect to="/" /> : <LoginPage />}</Route>
         <Route path="/register">{user ? <Redirect to="/" /> : <RegisterPage />}</Route>
         <Route path="/profile">{user ? <ProfilePage /> : <Redirect to="/login" />}</Route>
+        <Route path="/catalog">
+          <CatalogPage />
+        </Route>
+        <Route path="/about">
+          <AboutPage />
+        </Route>
         <Route component={NotFoundPage} />
       </Switch>
       <ToastContainer position="bottom-right" />

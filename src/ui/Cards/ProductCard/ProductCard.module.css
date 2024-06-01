@@ -1,0 +1,30 @@
+.card {
+  margin-bottom: 1px;
+  border: 1px solid rgb(18, 18, 18);
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.cardImgContainer {
+  height: 350px;
+}
+
+.cardContent {
+  padding: 10px;
+  text-align: center;
+}
+
+.cardContent h3 {
+  font-size: 24px;
+}
+
+.disountPrice {
+  font-weight: 400;
+  text-decoration: line-through;
+  color: grey;
+}
+
+.price {
+  font-weight: 600;
+  color: black;
+}

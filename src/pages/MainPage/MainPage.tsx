@@ -8,7 +8,7 @@ function MainPage() {
   const { user, authIsReady } = useAuthContext();
 
   return (
-    <div>
+    <div className="main-container">
       <Container>
         <Row className="justify-content-center">
           <Col md={6} className="text-center">
