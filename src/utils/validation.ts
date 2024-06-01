@@ -48,9 +48,9 @@ export const passwordValidationSchema = yup.object().shape({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const addressSchema = yup
   .string()
-  .required('Address is required!')
+  .required('ProfileAddressCard is required!')
   .min(1, 'Must contain at least 1 character')
-  .matches(/^[^!@#$%^&*()_+=[\]{};':"\\|,.<>/?]*$/, 'Address must not contain special characters');
+  .matches(/^[^!@#$%^&*()_+=[\]{};':"\\|,.<>/?]*$/, 'ProfileAddressCard must not contain special characters');
 
 const citySchema = yup
   .string()
