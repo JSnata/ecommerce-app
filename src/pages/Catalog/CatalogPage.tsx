@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Row,
   Col,
@@ -14,10 +14,9 @@ import {
   Breadcrumb,
 } from 'react-bootstrap';
 import { Category, ProductProjection } from '@commercetools/platform-sdk';
-import { Link, NavLink, useHistory, useParams } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import useCategory from '../../hooks/useCategory';
 import useProductsByCategory from '../../hooks/useProductsByCategory';
-import useProductAttributes from '../../hooks/useProductAttributes';
 import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
 import Attributes from './attributes';
@@ -53,7 +52,6 @@ const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCatego
 
   while (category) {
     path.push(category);
-    // eslint-disable-next-line @typescript-eslint/no-loop-func
     category = categories.find((cat) => cat.category.id === category?.category.parent?.id);
   }
   return path;
@@ -61,18 +59,20 @@ const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCatego
 
 export default function CatalogPage() {
   const [searchInput, setSearchInput] = useState('');
-  const [filters, setFilters] = useState({ priceRange: [0, 1000], color: '', size: '' });
+  const [filters, setFilters] = useState({ color: '', size: '' });
   const [showFilters, setShowFilters] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
-  const { id } = useParams<{ id: string }>();
+  const [sortOption, setSortOption] = useState<string | null>(null);
   const history = useHistory();
   const categories = useCategory();
-  const { attributes, loading: attrLoading, error: attrError } = useProductAttributes();
   const { products, loading, error } = useProductsByCategory({
     categoryId: currentCategoryId,
     color: filters.color,
     size: filters.size,
+    sort: sortOption,
   });
+
+  useEffect(() => {}, [filters, sortOption]);
 
   const handleBreadcrumbClick = (categoryId: string | null) => {
     setCurrentCategoryId(categoryId);
@@ -87,11 +87,28 @@ export default function CatalogPage() {
   };
 
   const handleResetFilters = () => {
-    setFilters({ priceRange: [0, 1000], color: '', size: '' });
+    setFilters({ color: '', size: '' });
   };
 
   const handleSortChange = (option: string | null) => {
-    console.log(option);
+    let sortOption = null;
+    switch (option) {
+      case 'price-asc':
+        sortOption = 'price asc';
+        break;
+      case 'price-desc':
+        sortOption = 'price desc';
+        break;
+      case 'name-asc':
+        sortOption = 'name.en-gb asc';
+        break;
+      case 'name-desc':
+        sortOption = 'name.en-gb desc';
+        break;
+      default:
+        sortOption = null;
+    }
+    setSortOption(sortOption);
   };
 
   const handleCategoryDropDown = (categoryId: string | null) => {
@@ -99,22 +116,14 @@ export default function CatalogPage() {
     history.push(categoryId ? `/category/${categoryId}` : '/catalog');
   };
 
-  // console.log(attributes);
-
   const getCategoryName = (category: Category | undefined) => {
-    console.log(
-      'Cat name:',
-      category?.name['en-GB'] || category?.name['en-US'] || category?.name['de-DE'] || 'Unnamed Category',
-    );
-
-    return category?.name['en-GB'] || category?.name['en-US'] || category?.name['de-DE'] || 'Unnamed Category';
+    return category?.name['en-GB'] || category?.name['en-US'] || category?.name['de-DE'] || 'Catalog';
   };
 
   const breadcrumbPath = generateBreadcrumbPath(categories, currentCategoryId);
 
   return (
     <Row>
-      <Attributes />
       <Col>
         <Row>
           <Col className={styles.subHeader}>
@@ -185,49 +194,7 @@ export default function CatalogPage() {
                         <div className={styles.filtersItemsFormBlock}>
                           <h4>Filters</h4>
                           <Form className={styles.filtersItemsForm}>
-                            <Form.Group controlId="formPriceRange">
-                              <Form.Label>Price Range</Form.Label>
-                              <Form.Control type="range" min="0" max="1000" value={filters.priceRange[0]} />
-                            </Form.Group>
-
-                            <Form.Group controlId="formColor">
-                              <Form.Label>Color</Form.Label>
-                              <Form.Control
-                                as="select"
-                                value={filters.color}
-                                onChange={(e) => handleFilterChange('color', e.target.value)}
-                              >
-                                <option value="">All</option>
-                                {attributes.colors.map((color) => {
-                                  const firstValue = Object.values(color)[0];
-                                  return (
-                                    <option key={color} value={color} style={{ backgroundColor: firstValue }}>
-                                      {firstValue}
-                                    </option>
-                                  );
-                                })}
-                              </Form.Control>
-                            </Form.Group>
-
-                            <Form.Group controlId="formSize">
-                              <Form.Label>Size</Form.Label>
-                              <Form.Control
-                                as="select"
-                                value={filters.size}
-                                onChange={(e) => handleFilterChange('size', e.target.value)}
-                              >
-                                <option value="">All</option>
-                                {attributes.sizes.map((size) => {
-                                  console.log(size, 'SIZEs');
-                                  return (
-                                    <option key={size} value={size}>
-                                      {size}
-                                    </option>
-                                  );
-                                })}
-                              </Form.Control>
-                            </Form.Group>
-
+                            <Attributes onChange={handleFilterChange} />
                             <Button variant="dark" onClick={handleResetFilters}>
                               Reset Filters
                             </Button>
@@ -286,44 +253,36 @@ export default function CatalogPage() {
               </div>
             </div>
           </Col>
-          <Col lg={6}>
+          <Col lg={6} className={styles.catalogWrapper}>
             <Row>
-              <Col lg={12}>
-                <Row className={styles.catalogGrid}>
-                  {error && <div>{error}</div>}
-                  {!loading && !error && products.length > 0
-                    ? products.map((product) => {
-                        const imageLink = product.masterVariant?.images?.[0]?.url ?? '';
-                        const description = truncateToSentence(product.description?.['en-GB'] ?? '');
-                        const name = product.name?.['en-GB'] ?? '';
-                        return (
-                          <ProductCard
-                            key={product.id}
-                            name={name}
-                            imageLink={imageLink}
-                            description={description}
-                            id={product.id}
-                            price="100 EUR"
-                            discountPrice="150 EUR"
-                          />
-                        );
-                      })
-                    : categories.map((category) => {
-                        const imageLink = category?.product?.masterVariant?.images?.[0]?.url ?? '';
-                        const description = truncateToSentence(category?.product?.description?.['en-GB'] ?? '');
-                        const name = category?.product?.name?.['en-GB'] ?? '';
-                        return (
-                          <ProductCard
-                            key={category.product?.id}
-                            name={name}
-                            imageLink={imageLink}
-                            description={description}
-                            id={category.product?.id}
-                            price="100 EUR"
-                            discountPrice="150 EUR"
-                          />
-                        );
-                      })}
+              <Col className={styles.catalogItemsWrapper}>
+                <Row>
+                  {loading && <p>Loading products...</p>}
+                  {error && <p>Error loading products: {error}</p>}
+                  {!loading &&
+                    !error &&
+                    products.map((product) => {
+                      const currentCategory = categories.find((cat) =>
+                        product.categories.some((catRef) => catRef.id === cat.category.id),
+                      );
+
+                      const productDescription = product.description
+                        ? truncateToSentence(product.description['en-GB'] || '')
+                        : '';
+
+                      return (
+                        <ProductCard
+                          key={product.id}
+                          id={product.id}
+                          name={product.name['en-GB']}
+                          imageLink={product?.masterVariant?.images?.[0]?.url ?? ''}
+                          // productSlug={product.slug['en-GB']}
+                          // category={currentCategory?.category.name['en-GB'] || ''}
+                          description={productDescription}
+                          price="150 EUR"
+                        />
+                      );
+                    })}
                 </Row>
               </Col>
             </Row>

@@ -3,7 +3,11 @@ import { AttributeDefinition, LocalizedString } from '@commercetools/platform-sd
 import { Form } from 'react-bootstrap';
 import { apiRoot } from '../../API/helpers/ClientAPI';
 
-function Attributes() {
+interface AttributesProps {
+  onChange: (filterName: string, value: string) => void;
+}
+
+function Attributes({ onChange }: AttributesProps) {
   const [attr, setAttr] = useState<AttributeDefinition[]>([]);
 
   async function fetchAllAttributes() {
@@ -33,74 +37,8 @@ function Attributes() {
       });
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function getProductsByAttributeValue(attributeName: string, attributeValue: string) {
-    try {
-      const response = await apiRoot
-        .products()
-        .get({
-          queryArgs: {
-            where: `variants(attributes(name="${attributeName}", value="${attributeValue}"))`,
-          },
-        })
-        .execute();
-
-      return response.body.results;
-    } catch (error) {
-      throw new Error(`Could not fetch products: ${error}`);
-    }
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function searchProductsByPriceRange(minPrice: number, maxPrice: number, currencyCode: string) {
-    try {
-      const response = await apiRoot
-        .productProjections()
-        .search()
-        .get({
-          queryArgs: {
-            filter: [
-              `variants.price.centAmount:range (${minPrice} to ${maxPrice})`,
-              `variants.price.currencyCode:"${currencyCode}"`,
-            ],
-          },
-        })
-        .execute();
-
-      return response.body.results;
-    } catch (error) {
-      throw new Error(`Error during product search: ${error}`);
-    }
-  }
-
-  // Sort Parameters
-
-  // const sortByPriceAsc = 'variants.price.centAmount asc';
-
-  // const sortByPriceDesc = 'variants.price.centAmount desc';
-
-  // const sortByNameAsc = 'name.en asc';
-
-  // const sortByNameDesc = 'name.en desc';
-
-  // const sortParameter = sortByPriceAsc;
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function searchAndSortProducts(sortParameter: string) {
-    try {
-      const response = await apiRoot
-        .productProjections()
-        .search()
-        .get({
-          queryArgs: {
-            sort: sortParameter,
-          },
-        })
-        .execute();
-
-      return response.body.results;
-    } catch (error) {
-      throw new Error(`Error during product search and sort: ${error}`);
-    }
+  function handleAttributeChange(attributeName: string, value: string) {
+    onChange(attributeName, value);
   }
 
   function getLocalizedString(label: LocalizedString | string, locale: string): string {
@@ -117,7 +55,11 @@ function Attributes() {
           return (
             <Form.Group controlId={`attribute-${index}`} key={elem.name}>
               <Form.Label>{elem.label['en-GB']}</Form.Label>
-              <Form.Control as="select" defaultValue="" onChange={() => {}}>
+              <Form.Control
+                as="select"
+                defaultValue=""
+                onChange={(e) => handleAttributeChange(elem.name, e.target.value)}
+              >
                 <option value="">All</option>
                 {'elementType' in elem.type &&
                   'values' in elem.type.elementType &&

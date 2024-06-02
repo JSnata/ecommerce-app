@@ -6,18 +6,22 @@ type FilterOptions = {
   categoryId?: string | null;
   color?: string;
   size?: string;
+  sort?: string | null;
 };
 
-const useProductsByCategory = ({ categoryId, color, size }: FilterOptions) => {
+const useProductsByCategory = ({ categoryId, color, size, sort }: FilterOptions) => {
   const [products, setProducts] = useState<ProductProjection[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const fetchProducts = async (filters: string[]) => {
+  const fetchProducts = async (filters: string[], sortOption: string | null | undefined) => {
     setLoading(true);
     setFetchError(null);
     try {
-      const queryArgs = { filter: filters };
+      const queryArgs: { filter: string[]; sort?: string } = { filter: filters };
+      if (sortOption) {
+        queryArgs.sort = sortOption;
+      }
       const response = await apiRoot.productProjections().search().get({ queryArgs }).execute();
       setProducts(response.body.results);
     } catch (err) {
@@ -34,8 +38,8 @@ const useProductsByCategory = ({ categoryId, color, size }: FilterOptions) => {
     if (color) filters.push(`variants.attributes.color:"${color}"`);
     if (size) filters.push(`variants.attributes.size:"${size}"`);
 
-    fetchProducts(filters);
-  }, [categoryId, color, size]);
+    fetchProducts(filters, sort);
+  }, [categoryId, color, size, sort]);
 
   return { products, loading, error: fetchError };
 };
