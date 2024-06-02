@@ -11,7 +11,14 @@ const UseCategory = () => {
   const [categoryProductData, setCategoryProductData] = useState<CategoryWithProduct[]>([]);
   const fetchCategories = async (): Promise<Category[]> => {
     try {
-      const response = await apiRoot.categories().get().execute();
+      const response = await apiRoot
+        .categories()
+        .get({
+          queryArgs: {
+            where: 'parent is not defined',
+          },
+        })
+        .execute();
       return response.body.results;
     } catch (error) {
       console.error('Error fetching categories:', error);

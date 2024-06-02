@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useState } from 'react';
 import {
   Row,
@@ -21,6 +20,7 @@ import useProductsByCategory from '../../hooks/useProductsByCategory';
 import useProductAttributes from '../../hooks/useProductAttributes';
 import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
+import Attributes from './attributes';
 
 function truncateToSentence(text: string) {
   const match = text.match(/(.*?\.)(\s|$)/);
@@ -53,6 +53,7 @@ const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCatego
 
   while (category) {
     path.push(category);
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     category = categories.find((cat) => cat.category.id === category?.category.parent?.id);
   }
   return path;
@@ -98,7 +99,7 @@ export default function CatalogPage() {
     history.push(categoryId ? `/category/${categoryId}` : '/catalog');
   };
 
-  console.log(attributes);
+  // console.log(attributes);
 
   const getCategoryName = (category: Category | undefined) => {
     console.log(
@@ -113,6 +114,7 @@ export default function CatalogPage() {
 
   return (
     <Row>
+      <Attributes />
       <Col>
         <Row>
           <Col className={styles.subHeader}>
@@ -185,13 +187,7 @@ export default function CatalogPage() {
                           <Form className={styles.filtersItemsForm}>
                             <Form.Group controlId="formPriceRange">
                               <Form.Label>Price Range</Form.Label>
-                              <Form.Control
-                                type="range"
-                                min="0"
-                                max="1000"
-                                value={filters.priceRange[0]}
-                                // onChange={(e) => handleFilterChange('priceRange', [0, Number(e.target.value)])}
-                              />
+                              <Form.Control type="range" min="0" max="1000" value={filters.priceRange[0]} />
                             </Form.Group>
 
                             <Form.Group controlId="formColor">
@@ -205,7 +201,7 @@ export default function CatalogPage() {
                                 {attributes.colors.map((color) => {
                                   const firstValue = Object.values(color)[0];
                                   return (
-                                    <option key={color} value={color}>
+                                    <option key={color} value={color} style={{ backgroundColor: firstValue }}>
                                       {firstValue}
                                     </option>
                                   );
@@ -220,12 +216,15 @@ export default function CatalogPage() {
                                 value={filters.size}
                                 onChange={(e) => handleFilterChange('size', e.target.value)}
                               >
-                                {/* <option value="">All</option>
-                                {attributes.sizes.map((size) => (
-                                  <option key={size} value={size}>
-                                    {size}
-                                  </option>
-                                ))} */}
+                                <option value="">All</option>
+                                {attributes.sizes.map((size) => {
+                                  console.log(size, 'SIZEs');
+                                  return (
+                                    <option key={size} value={size}>
+                                      {size}
+                                    </option>
+                                  );
+                                })}
                               </Form.Control>
                             </Form.Group>
 
