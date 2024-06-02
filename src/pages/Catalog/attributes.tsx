@@ -72,6 +72,37 @@ function Attributes() {
     }
   }
 
+  // Sort Parameters
+
+  // const sortByPriceAsc = 'variants.price.centAmount asc';
+
+  // const sortByPriceDesc = 'variants.price.centAmount desc';
+
+  // const sortByNameAsc = 'name.en asc';
+
+  // const sortByNameDesc = 'name.en desc';
+
+  // const sortParameter = sortByPriceAsc;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function searchAndSortProducts(sortParameter: string) {
+    try {
+      const response = await apiRoot
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            sort: sortParameter,
+          },
+        })
+        .execute();
+
+      return response.body.results;
+    } catch (error) {
+      throw new Error(`Error during product search and sort: ${error}`);
+    }
+  }
+
   function getLocalizedString(label: LocalizedString | string, locale: string): string {
     if (typeof label === 'string') {
       return label;
