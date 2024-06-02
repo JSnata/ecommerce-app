@@ -1,5 +1,6 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import {
   Row,
   Col,
@@ -16,9 +17,10 @@ import {
 import { Category, ProductProjection } from '@commercetools/platform-sdk';
 import { Link, NavLink, useHistory, useParams } from 'react-router-dom';
 import useCategory from '../../hooks/useCategory';
+import useProductsByCategory from '../../hooks/useProductsByCategory';
+import useProductAttributes from '../../hooks/useProductAttributes';
 import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
-import useProductsByCategory from '../../hooks/useProductsByCategory';
 
 function truncateToSentence(text: string) {
   const match = text.match(/(.*?\.)(\s|$)/);
@@ -58,22 +60,18 @@ const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCatego
 
 export default function CatalogPage() {
   const [searchInput, setSearchInput] = useState('');
-  const [filters, setFilters] = useState({ priceRange: [0, 1000], brand: '', color: '', size: '' });
-  const [attributes, setAttributes] = useState({ brands: [], colors: [], sizes: [] });
+  const [filters, setFilters] = useState({ priceRange: [0, 1000], color: '', size: '' });
   const [showFilters, setShowFilters] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const categories = useCategory();
-  const { products, loading, error } = useProductsByCategory(currentCategoryId);
-
-  useEffect(() => {
-    async function getAttributes() {
-      const attrs = { brands: [], colors: [], sizes: [] };
-      setAttributes(attrs);
-    }
-    getAttributes();
-  }, []);
+  const { attributes, loading: attrLoading, error: attrError } = useProductAttributes();
+  const { products, loading, error } = useProductsByCategory({
+    categoryId: currentCategoryId,
+    color: filters.color,
+    size: filters.size,
+  });
 
   const handleBreadcrumbClick = (categoryId: string | null) => {
     setCurrentCategoryId(categoryId);
@@ -88,7 +86,7 @@ export default function CatalogPage() {
   };
 
   const handleResetFilters = () => {
-    setFilters({ priceRange: [0, 1000], brand: '', color: '', size: '' });
+    setFilters({ priceRange: [0, 1000], color: '', size: '' });
   };
 
   const handleSortChange = (option: string | null) => {
@@ -98,6 +96,17 @@ export default function CatalogPage() {
   const handleCategoryDropDown = (categoryId: string | null) => {
     setCurrentCategoryId(categoryId);
     history.push(categoryId ? `/category/${categoryId}` : '/catalog');
+  };
+
+  console.log(attributes);
+
+  const getCategoryName = (category: Category | undefined) => {
+    console.log(
+      'Cat name:',
+      category?.name['en-GB'] || category?.name['en-US'] || category?.name['de-DE'] || 'Unnamed Category',
+    );
+
+    return category?.name['en-GB'] || category?.name['en-US'] || category?.name['de-DE'] || 'Unnamed Category';
   };
 
   const breadcrumbPath = generateBreadcrumbPath(categories, currentCategoryId);
@@ -132,6 +141,19 @@ export default function CatalogPage() {
                     <div>
                       <DropdownButton
                         id="dropdown-basic-button"
+                        title="Sort By"
+                        variant="dark"
+                        onSelect={handleSortChange}
+                      >
+                        <Dropdown.Item eventKey="price-asc">Price: Low to High</Dropdown.Item>
+                        <Dropdown.Item eventKey="price-desc">Price: High to Low</Dropdown.Item>
+                        <Dropdown.Item eventKey="name-asc">Name: A to Z</Dropdown.Item>
+                        <Dropdown.Item eventKey="name-desc">Name: Z to A</Dropdown.Item>
+                      </DropdownButton>
+                    </div>
+                    <div>
+                      <DropdownButton
+                        id="dropdown-basic-button"
                         title={
                           currentCategoryId
                             ? categories.find((cat) => cat.category.id === currentCategoryId)?.category.name['en-GB'] ||
@@ -145,7 +167,7 @@ export default function CatalogPage() {
                         {categories &&
                           categories.map((category) => (
                             <Dropdown.Item key={category.category.id} eventKey={category.category.id}>
-                              {category.category.name['en-GB']}
+                              {getCategoryName(category.category)}
                             </Dropdown.Item>
                           ))}
                       </DropdownButton>
@@ -171,21 +193,6 @@ export default function CatalogPage() {
                                 // onChange={(e) => handleFilterChange('priceRange', [0, Number(e.target.value)])}
                               />
                             </Form.Group>
-                            <Form.Group controlId="formBrand">
-                              <Form.Label>Brand</Form.Label>
-                              <Form.Control
-                                as="select"
-                                value={filters.brand}
-                                onChange={(e) => handleFilterChange('brand', e.target.value)}
-                              >
-                                <option value="">All</option>
-                                {attributes.brands.map((brand) => (
-                                  <option key={brand} value={brand}>
-                                    {brand}
-                                  </option>
-                                ))}
-                              </Form.Control>
-                            </Form.Group>
 
                             <Form.Group controlId="formColor">
                               <Form.Label>Color</Form.Label>
@@ -195,11 +202,14 @@ export default function CatalogPage() {
                                 onChange={(e) => handleFilterChange('color', e.target.value)}
                               >
                                 <option value="">All</option>
-                                {attributes.colors.map((color) => (
-                                  <option key={color} value={color}>
-                                    {color}
-                                  </option>
-                                ))}
+                                {attributes.colors.map((color) => {
+                                  const firstValue = Object.values(color)[0];
+                                  return (
+                                    <option key={color} value={color}>
+                                      {firstValue}
+                                    </option>
+                                  );
+                                })}
                               </Form.Control>
                             </Form.Group>
 
@@ -210,12 +220,12 @@ export default function CatalogPage() {
                                 value={filters.size}
                                 onChange={(e) => handleFilterChange('size', e.target.value)}
                               >
-                                <option value="">All</option>
+                                {/* <option value="">All</option>
                                 {attributes.sizes.map((size) => (
                                   <option key={size} value={size}>
                                     {size}
                                   </option>
-                                ))}
+                                ))} */}
                               </Form.Control>
                             </Form.Group>
 
@@ -251,7 +261,7 @@ export default function CatalogPage() {
                           onClick={() => handleBreadcrumbClick(category.category.id)}
                           active={index === breadcrumbPath.length - 1}
                         >
-                          {category.category.name['en-GB']}
+                          {getCategoryName(category.category)}
                         </Breadcrumb.Item>
                       );
                     })}
@@ -271,7 +281,8 @@ export default function CatalogPage() {
             >
               <div className={styles.content}>
                 <h2>
-                  {categories.find((cat) => cat.category.id === currentCategoryId)?.category.name['en-GB'] || 'Catalog'}
+                  {getCategoryName(categories.find((cat) => cat.category.id === currentCategoryId)?.category) ||
+                    'Catalog'}
                 </h2>
               </div>
             </div>
