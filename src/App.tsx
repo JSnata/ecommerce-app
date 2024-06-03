@@ -4,7 +4,6 @@ import { ToastContainer } from 'react-toastify';
 import LoginPage from './pages/Auth/LoginPage/LoginPage';
 import RegisterPage from './pages/Auth/RegisterPage/RegisterPage';
 import NavigationBar from './components/NavigationBar/NavigationBar';
-// import MainPage from './pages/MainPage/MainPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NotFoundPage from './pages/NotFoundPage';
 import 'react-toastify/dist/ReactToastify.css';
@@ -67,6 +66,9 @@ function App() {
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <LoginPage />}</Route>
         <Route path="/register">{user ? <Redirect to="/" /> : <RegisterPage />}</Route>
+        <Route path="/category/:id">
+          <CatalogPage />
+        </Route>
         <Route path="/profile">{user ? <ProfilePage /> : <Redirect to="/login" />}</Route>
         <Route path="/catalog">
           <CatalogPage />
