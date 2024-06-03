@@ -12,7 +12,7 @@ type CardItemProps = {
   discountPrice?: string;
 };
 
-export default function ProductCard({
+function ProductCard({
   name = '',
   imageLink = '',
   description = '',
@@ -24,7 +24,7 @@ export default function ProductCard({
     <Col key={id} md={6} className={styles.card}>
       <div className={styles.cardContent}>
         <div className={styles.cardImgContainer}>
-          <CardItem description={description} imageLink={imageLink} showDescription={false} />
+          <CardItem description={description} imageLink={imageLink} showDescription={false} prodId={id} />
         </div>
         <h3>{name}</h3>
         <p>{description}</p>
@@ -35,3 +35,5 @@ export default function ProductCard({
     </Col>
   );
 }
+
+export default ProductCard;

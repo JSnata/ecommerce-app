@@ -8,6 +8,10 @@
   align-items: center;
   justify-content: center;
   border: 1px solid rgb(18, 18, 18);
+  /* border-left: 0; */
+   position: sticky;
+   top: 0;
+  /* left: 0; */
   width: 100%;
   min-height: 720px;
   background-size: cover;
