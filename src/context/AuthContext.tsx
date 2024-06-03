@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useMemo, useReducer } from 'react';
 import { Customer } from '@commercetools/platform-sdk';
 
 type User = Customer | null;
@@ -8,7 +8,7 @@ type State = {
   authIsReady: boolean;
 };
 
-type Action = {
+export type Action = {
   type: string;
   payload: User | null;
 };
@@ -39,9 +39,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
     user: null,
     authIsReady: false,
   });
+  const contextValue = useMemo(() => ({ ...state, dispatch }), [state, dispatch]);
 
-  return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <AuthContext.Provider value={{ ...state, dispatch }}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }
