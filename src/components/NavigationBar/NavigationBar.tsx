@@ -1,12 +1,7 @@
-import Offcanvas from 'react-bootstrap/Offcanvas';
 import React from 'react';
 import { useLocation } from 'react-router-dom'; // Импортируем useLocation
-import { Container, Image, Navbar } from 'react-bootstrap';
-import { useLocation, NavLink } from 'react-router-dom'; // Импортируем useLocation
 import { Cart3 } from 'react-bootstrap-icons';
-import { Col, Badge, Container, Image, Navbar, Row, Offcanvas, Nav } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
+import { Badge, Container, Image, Navbar, Offcanvas, Nav } from 'react-bootstrap';
 import styles from './NavigationBar.module.css';
 import useAuthContext from '../../hooks/useAuthContext';
 import SecondaryButton from '../../ui/Buttons/SecondaryButton/SecondaryButton';

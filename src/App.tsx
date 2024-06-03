@@ -4,7 +4,6 @@ import { ToastContainer } from 'react-toastify';
 import LoginPage from './pages/Auth/LoginPage/LoginPage';
 import RegisterPage from './pages/Auth/RegisterPage/RegisterPage';
 import NavigationBar from './components/NavigationBar/NavigationBar';
-// import MainPage from './pages/MainPage/MainPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NotFoundPage from './pages/NotFoundPage';
 import 'react-toastify/dist/ReactToastify.css';
