@@ -7,7 +7,10 @@ function useProducts() {
 
   const getProducts = async () => {
     try {
-      const productsData = await apiRoot.productProjections().get().execute();
+      const productsData = await apiRoot
+        .productProjections()
+        .get({ queryArgs: { limit: 100 } })
+        .execute();
       setProducts(productsData.body.results);
     } catch (e) {
       console.error(e);
