@@ -16,6 +16,7 @@ import ProfilePage from './pages/UserProfilePage/ProfilePage';
 import MainPage from './pages/MainPage/MainPage';
 import CatalogPage from './pages/Catalog/CatalogPage';
 import AboutPage from './pages/About/AboutPage';
+import ProductPage from './pages/ProductPage/ProductPage';
 
 function App() {
   const { user, dispatch } = useAuthContext();
@@ -60,6 +61,9 @@ function App() {
       <Switch>
         <Route exact path="/">
           <MainPage />
+        </Route>
+        <Route exact path="/product/:id">
+          <ProductPage />
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <LoginPage />}</Route>
         <Route path="/register">{user ? <Redirect to="/" /> : <RegisterPage />}</Route>
