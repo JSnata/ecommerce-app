@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import CarouselComponent from '../../ui/Carusel/Carusel';
 import style from './ProductPage.module.css';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
-import useCategory from '../../hooks/useCategory';
+import useProducts from '../../hooks/useProducts';
 
 interface ProductParam {
   id: string;
@@ -12,20 +12,21 @@ interface ProductParam {
 
 function ProductPage() {
   const productId: ProductParam = useParams();
-  const products = useCategory();
-  const product = products.find((prod) => prod.product?.id === productId.id);
-  const productImages = product?.product?.masterVariant?.images;
-  const productName = product?.product?.name?.['en-GB'];
-  const productDescription = product?.product?.description?.['en-GB'];
-  const productPriceCurr = product?.product?.priceMode;
-  const productPriceStaged = product?.product?.priceMode;
-  // const products = useProducts();
-  // const product = products.find((prod) => prod.id === productId.id);
-  // const productImages = product?.masterData?.current?.masterVariant?.images;
-  // const productName = product?.masterData?.current?.name?.['en-GB'];
-  // const productDescription = product?.masterData?.current?.description?.['en-GB'];
-  // const productPriceCurr = product?.masterData?.current?.masterVariant?.prices?.[1]?.value?.centAmount;
-  // const productPriceStaged = product?.masterData?.staged?.masterVariant?.prices?.[1]?.value?.centAmount;
+  const products = useProducts();
+  const product = products.find((prod) => prod.id === productId.id);
+  const productImages = product?.masterVariant?.images;
+  const productName = product?.name?.['en-GB'];
+  const productDescription = product?.description?.['en-GB'];
+  const productPriceCurr = product?.masterVariant?.prices?.[0]?.value?.centAmount;
+  const digit = product?.masterVariant?.prices?.[0]?.value?.fractionDigits;
+  const productCode = product?.masterVariant?.prices?.[0]?.value?.currencyCode;
+  let productPrice = null;
+  if (productPriceCurr && digit) {
+    productPrice = (productPriceCurr / 10 ** digit).toFixed(digit);
+  } else {
+    productPrice = 0;
+  }
+
   const productSrcArray: (string | undefined)[] = [];
   productImages?.forEach((img) => {
     productSrcArray.push(img?.url);
@@ -40,9 +41,6 @@ function ProductPage() {
   };
   const handleClose = () => setShowModal(false);
 
-  console.log('Id', productId);
-  console.log('all', products);
-  console.log(product);
   return (
     <div>
       <Row className={style.row}>
@@ -62,10 +60,9 @@ function ProductPage() {
             <p>{productDescription}</p>
           </Row>
           <Row>
-            <h2>{productPriceCurr?.toLocaleString()}$</h2>
-          </Row>
-          <Row>
-            <h3 className={style.oldPrice}>{productPriceStaged?.toLocaleString()}$</h3>
+            <h2>
+              {productPrice} {productCode}
+            </h2>
           </Row>
         </Col>
       </Row>
