@@ -8,10 +8,6 @@
   align-items: center;
   justify-content: center;
   border: 1px solid rgb(18, 18, 18);
-  /* border-left: 0; */
-  /* position: absolute; */
-  /* top: 0; */
-  /* left: 0; */
   width: 100%;
   min-height: 720px;
   background-size: cover;
@@ -25,19 +21,10 @@
 }
 
 @media (max-width: 450px) {
-    .imageContainer {
-      min-height: 420px;
-    }
+  .imageContainer {
+    min-height: 420px;
   }
-
-/* .content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  text-align: center;
-} */
+}
 
 .content h2 {
   color: #fff;

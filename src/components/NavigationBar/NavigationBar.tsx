@@ -1,4 +1,7 @@
+import Offcanvas from 'react-bootstrap/Offcanvas';
 import React from 'react';
+import { useLocation } from 'react-router-dom'; // Импортируем useLocation
+import { Container, Image, Navbar } from 'react-bootstrap';
 import { useLocation, NavLink } from 'react-router-dom'; // Импортируем useLocation
 import { Cart3 } from 'react-bootstrap-icons';
 import { Col, Badge, Container, Image, Navbar, Row, Offcanvas, Nav } from 'react-bootstrap';

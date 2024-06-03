@@ -63,6 +63,9 @@ function App() {
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <LoginPage />}</Route>
         <Route path="/register">{user ? <Redirect to="/" /> : <RegisterPage />}</Route>
+        <Route path="/category/:id">
+          <CatalogPage />
+        </Route>
         <Route path="/profile">{user ? <ProfilePage /> : <Redirect to="/login" />}</Route>
         <Route path="/catalog">
           <CatalogPage />
