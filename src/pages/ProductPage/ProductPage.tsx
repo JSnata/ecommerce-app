@@ -49,6 +49,7 @@ function ProductPage() {
             interval={null}
             id={productId.id}
             imgClassName={style.imgPage}
+            carouselClass={style.carousel}
           />
         </Col>
         <Col sm={12} md={6} className={`${style.right} d-flex flex-column justify-content-center p-2`}>
@@ -79,6 +80,7 @@ function ProductPage() {
             interval={null}
             id={productId.id}
             imgClassName={style.imgModal}
+            carouselClass={style.carouselModal}
           />
         </ModalWindow>
       )}
