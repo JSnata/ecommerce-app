@@ -1,12 +1,12 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom'; // Импортируем useLocation
+import { useLocation } from 'react-router-dom';
 import { Cart3 } from 'react-bootstrap-icons';
-import { Badge, Container, Image, Navbar, Offcanvas, Nav } from 'react-bootstrap';
-import styles from './NavigationBar.module.css';
+import { Badge, Container, Navbar, Offcanvas, Nav } from 'react-bootstrap';
 import useAuthContext from '../../hooks/useAuthContext';
 import SecondaryButton from '../../ui/Buttons/SecondaryButton/SecondaryButton';
 import NavBarProfile from '../NavBarProfile/NavBarProfile';
 import SecondaryNavigation from './SecondaryNavigation';
+import Logo from '../../ui/Logo/Logo';
 
 function NavigationBar() {
   const { user } = useAuthContext();
@@ -15,10 +15,7 @@ function NavigationBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary" sticky="top">
       <Container>
-        <Navbar.Brand href={location.pathname === '/' ? '' : '/'}>
-          <Image src="./logo.png" className={`d-inline-block align-top ${styles.logo}`} alt="React Bootstrap logo" />
-        </Navbar.Brand>
-
+        <Logo />
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-$"lg"`} />
 
         <Navbar.Offcanvas
