@@ -4,12 +4,12 @@ import { apiRoot } from '../API/helpers/ClientAPI';
 
 type FilterOptions = {
   categoryId?: string | null;
-  color?: string;
-  size?: string;
+  colorFlower?: string;
+  sizeFlower?: string;
   sort?: string | null;
 };
 
-const useProductsByCategory = ({ categoryId, color, size, sort }: FilterOptions) => {
+const useProductsByCategory = ({ categoryId, colorFlower, sizeFlower, sort }: FilterOptions) => {
   const [products, setProducts] = useState<ProductProjection[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -35,11 +35,11 @@ const useProductsByCategory = ({ categoryId, color, size, sort }: FilterOptions)
   useEffect(() => {
     const filters = [];
     if (categoryId) filters.push(`categories.id:"${categoryId}"`);
-    if (color) filters.push(`variants.attributes.color:"${color}"`);
-    if (size) filters.push(`variants.attributes.size:"${size}"`);
+    if (colorFlower) filters.push(`variants.attributes.color-flower.key:"${colorFlower}"`);
+    if (sizeFlower) filters.push(`variants.attributes.size-flower.key:"${sizeFlower}"`);
 
     fetchProducts(filters, sort);
-  }, [categoryId, color, size, sort]);
+  }, [categoryId, colorFlower, sizeFlower, sort]);
 
   return { products, loading, error: fetchError };
 };

@@ -25,10 +25,6 @@ function ProductCard({
   productDiscountPrice = 0,
   productCode = '',
 }: CardItemProps) {
-  console.log('productDiscount:', productDiscount);
-  console.log('productDiscountPrice:', productDiscountPrice);
-  console.log('productCode', productCode);
-  console.log('price', price);
   return (
     <Col key={id} md={6} className={styles.card}>
       <Link to={`/product/${id}`} className={styles.cardContent}>
