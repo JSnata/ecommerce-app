@@ -242,7 +242,7 @@ export default function CatalogPage() {
             <div
               className={styles.imageContainer}
               style={{
-                backgroundImage: `url(${categories[3]?.product?.masterVariant?.images?.[0]?.url || categories?.[3]?.product?.masterVariant?.images?.[0]?.url || ''})`,
+                backgroundImage: `url(${categories[1]?.product?.masterVariant?.images?.[1]?.url || categories?.[3]?.product?.masterVariant?.images?.[0]?.url || ''})`,
               }}
             >
               <div className={styles.content}>

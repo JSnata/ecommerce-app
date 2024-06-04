@@ -31,8 +31,11 @@
 }
 
 .content h2 {
+  background-color: rgb(219, 204, 186);
+  padding: 8px;
+  border-radius: 5px;
   color: #fff;
-  font-size: 52px;
+  font-size: 50px;
 }
 
 .catalogGrid {
