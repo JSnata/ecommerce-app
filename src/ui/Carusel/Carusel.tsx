@@ -6,13 +6,20 @@ interface CarouselData {
   interval: null | number;
   id: undefined | string;
   imgClassName?: string;
+  carouselClass?: string;
 }
 
 function CarouselComponent(props: CarouselData) {
-  const { srcArray, interval, id, imgClassName } = props;
+  const { srcArray, interval, id, imgClassName, carouselClass } = props;
   const getKeyByIndex = (index: number) => `${id}-${index}`;
   return (
-    <Carousel interval={interval} data-bs-theme="dark" controls={srcArray.length > 1} indicators={srcArray.length > 1}>
+    <Carousel
+      className={carouselClass}
+      interval={interval}
+      data-bs-theme="dark"
+      controls={srcArray.length > 1}
+      indicators={srcArray.length > 1}
+    >
       {srcArray.map((src, index) => (
         <Carousel.Item key={getKeyByIndex(index)}>
           <Image src={src} className={imgClassName} alt="Product photo" />
