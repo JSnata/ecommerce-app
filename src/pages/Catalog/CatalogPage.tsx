@@ -70,6 +70,7 @@ export default function CatalogPage() {
     colorFlower: filters['color-flower'],
     sizeFlower: filters['size-flower'],
     sort: sortOption,
+    search: searchInput,
   });
   useEffect(() => {}, [filters, sortOption]);
 

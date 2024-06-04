@@ -50,7 +50,7 @@ function Attributes({ onChange }: AttributesProps) {
 
   return (
     <div>
-      {attr.length > 0 &&
+      {attr.length &&
         attr.map((elem, index) => {
           return (
             <Form.Group controlId={`attribute-${index}`} key={elem.name}>
