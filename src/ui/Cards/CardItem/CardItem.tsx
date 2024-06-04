@@ -10,7 +10,7 @@ type CardItemProps = {
 
 function CardItem({ imageLink = '', description = '', showDescription = false }: CardItemProps) {
   return (
-    <div>
+    <div className={styles.container}>
       {imageLink && <Image src={imageLink} alt={description} rounded className={styles.cardImage} />}
       {showDescription && description && <p>{description}</p>}
     </div>

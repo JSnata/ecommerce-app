@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CardItem from '../CardItem/CardItem';
 import styles from './ProductCard.module.css';
@@ -9,8 +9,10 @@ type CardItemProps = {
   id?: string;
   description?: string;
   imageLink?: string;
-  price?: string;
-  discountPrice?: string;
+  price?: string | number;
+  productDiscount?: string | number;
+  productDiscountPrice?: number;
+  productCode?: string;
 };
 
 function ProductCard({
@@ -19,19 +21,31 @@ function ProductCard({
   description = '',
   id = '',
   price = '',
-  discountPrice = '',
+  productDiscount = '',
+  productDiscountPrice = 0,
+  productCode = '',
 }: CardItemProps) {
   return (
     <Col key={id} md={6} className={styles.card}>
       <Link to={`/product/${id}`} className={styles.cardContent}>
-        <div className={styles.cardImgContainer}>
-          <CardItem description={description} imageLink={imageLink} showDescription={false} />
-        </div>
-        <h3>{name}</h3>
-        <p>{description}</p>
-        <p className={styles.price}>
-          Price: <span className={styles.discountPrice}>{discountPrice}</span> {price}
-        </p>
+        <Row>
+          <div className={styles.cardImgContainer}>
+            <CardItem description={description} imageLink={imageLink} showDescription={false} />
+          </div>
+          <h3>{name}</h3>
+          <p>{description}</p>
+        </Row>
+        <Row>
+          {(productDiscountPrice && (
+            <h2>
+              {productDiscount} {productCode}
+            </h2>
+          )) ||
+            ''}
+          <h2 className={productDiscountPrice ? `${styles.oldPrice}` : ''}>
+            {price} {productCode}
+          </h2>
+        </Row>
       </Link>
     </Col>
   );

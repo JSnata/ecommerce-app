@@ -59,7 +59,7 @@ const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCatego
 
 export default function CatalogPage() {
   const [searchInput, setSearchInput] = useState('');
-  const [filters, setFilters] = useState({ color: '', size: '' });
+  const [filters, setFilters] = useState({ 'color-flower': '', 'size-flower': '' });
   const [showFilters, setShowFilters] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
   const [sortOption, setSortOption] = useState<string | null>(null);
@@ -67,11 +67,10 @@ export default function CatalogPage() {
   const categories = useCategory();
   const { products, loading, error } = useProductsByCategory({
     categoryId: currentCategoryId,
-    color: filters.color,
-    size: filters.size,
+    colorFlower: filters['color-flower'],
+    sizeFlower: filters['size-flower'],
     sort: sortOption,
   });
-
   useEffect(() => {}, [filters, sortOption]);
 
   const handleBreadcrumbClick = (categoryId: string | null) => {
@@ -87,7 +86,7 @@ export default function CatalogPage() {
   };
 
   const handleResetFilters = () => {
-    setFilters({ color: '', size: '' });
+    setFilters({ 'color-flower': '', 'size-flower': '' });
   };
 
   const handleSortChange = (option: string | null) => {
@@ -272,22 +271,23 @@ export default function CatalogPage() {
                       const productPriceCurr = product?.masterVariant?.prices?.[0]?.value?.centAmount;
                       const digit = product?.masterVariant?.prices?.[0]?.value?.fractionDigits;
                       const productCode = product?.masterVariant?.prices?.[0]?.value?.currencyCode;
-                      let productPrice = null;
-                      if (productPriceCurr && digit) {
-                        productPrice = (productPriceCurr / 10 ** digit).toFixed(digit);
-                      } else {
-                        productPrice = 0;
-                      }
+                      const productDiscountPrice = product?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount;
+                      const calculatePrice = (price: number | undefined, digits: number | undefined) => {
+                        return price && digits ? (price / 10 ** digits).toFixed(digits) : 0;
+                      };
+                      const productPrice = calculatePrice(productPriceCurr, digit);
+                      const productDiscount = calculatePrice(productDiscountPrice, digit);
                       return (
                         <ProductCard
                           key={product.id}
                           id={product.id}
                           name={product.name['en-GB']}
                           imageLink={product?.masterVariant?.images?.[0]?.url ?? ''}
-                          // productSlug={product.slug['en-GB']}
-                          // category={currentCategory?.category.name['en-GB'] || ''}
                           description={productDescription}
-                          price={`${productPrice} EUR`}
+                          price={productPrice}
+                          productCode={productCode}
+                          productDiscount={productDiscount}
+                          productDiscountPrice={productDiscountPrice}
                         />
                       );
                     })}
