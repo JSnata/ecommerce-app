@@ -32,7 +32,16 @@
   color: grey;
 }
 
+.cardContent h2 {
+  font-size: 24px;
+}
+
 .price {
   font-weight: 600;
   color: black;
+}
+
+.cardContent .oldPrice {
+  text-decoration: line-through;
+  opacity: 0.5;
 }

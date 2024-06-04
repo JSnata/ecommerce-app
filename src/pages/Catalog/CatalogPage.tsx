@@ -272,12 +272,12 @@ export default function CatalogPage() {
                       const productPriceCurr = product?.masterVariant?.prices?.[0]?.value?.centAmount;
                       const digit = product?.masterVariant?.prices?.[0]?.value?.fractionDigits;
                       const productCode = product?.masterVariant?.prices?.[0]?.value?.currencyCode;
-                      let productPrice = null;
-                      if (productPriceCurr && digit) {
-                        productPrice = (productPriceCurr / 10 ** digit).toFixed(digit);
-                      } else {
-                        productPrice = 0;
-                      }
+                      const productDiscountPrice = product?.masterVariant?.prices?.[0]?.discounted?.value?.centAmount;
+                      const calculatePrice = (price: number | undefined, digits: number | undefined) => {
+                        return price && digits ? (price / 10 ** digits).toFixed(digits) : 0;
+                      };
+                      const productPrice = calculatePrice(productPriceCurr, digit);
+                      const productDiscount = calculatePrice(productDiscountPrice, digit);
                       return (
                         <ProductCard
                           key={product.id}
@@ -287,7 +287,10 @@ export default function CatalogPage() {
                           // productSlug={product.slug['en-GB']}
                           // category={currentCategory?.category.name['en-GB'] || ''}
                           description={productDescription}
-                          price={`${productPrice} EUR`}
+                          price={productPrice}
+                          productCode={productCode}
+                          productDiscount={productDiscount}
+                          productDiscountPrice={productDiscountPrice}
                         />
                       );
                     })}
