@@ -269,7 +269,15 @@ export default function CatalogPage() {
                       const productDescription = product.description
                         ? truncateToSentence(product.description['en-GB'] || '')
                         : '';
-
+                      const productPriceCurr = product?.masterVariant?.prices?.[0]?.value?.centAmount;
+                      const digit = product?.masterVariant?.prices?.[0]?.value?.fractionDigits;
+                      const productCode = product?.masterVariant?.prices?.[0]?.value?.currencyCode;
+                      let productPrice = null;
+                      if (productPriceCurr && digit) {
+                        productPrice = (productPriceCurr / 10 ** digit).toFixed(digit);
+                      } else {
+                        productPrice = 0;
+                      }
                       return (
                         <ProductCard
                           key={product.id}
@@ -279,7 +287,7 @@ export default function CatalogPage() {
                           // productSlug={product.slug['en-GB']}
                           // category={currentCategory?.category.name['en-GB'] || ''}
                           description={productDescription}
-                          price="150 EUR"
+                          price={`${productPrice} EUR`}
                         />
                       );
                     })}

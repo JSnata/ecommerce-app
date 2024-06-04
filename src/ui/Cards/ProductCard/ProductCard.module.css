@@ -15,15 +15,17 @@
 }
 
 .cardContent {
+  display: block;
   padding: 10px;
   text-align: center;
+  color: black;
 }
 
 .cardContent h3 {
   font-size: 24px;
 }
 
-.disountPrice {
+.discountPrice {
   font-weight: 400;
   text-decoration: line-through;
   color: grey;
