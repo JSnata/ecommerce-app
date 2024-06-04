@@ -33,11 +33,11 @@ function MainSection() {
           <div className={styles.column2}>
             {categoryWithProduct.map(({ category, product }, index) => (
               <CategoryBlock
-                key={product?.id}
+                key={`${category.id}-${product?.id}`}
                 categoryDescription={category.description?.['en-GB'] ?? ''}
                 categoryName={category.name?.['en-GB'] ?? ''}
-                buttonLabel="Shop Now"
-                onClick={() => {}}
+                // buttonLabel="Shop Now"
+                // onClick={() => {}}
                 imageLink={product?.masterVariant?.images?.[0]?.url ?? ''}
                 reverse={index % 2 === 0}
               />
