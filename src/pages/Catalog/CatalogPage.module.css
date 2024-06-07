@@ -1,0 +1,83 @@
+.imageCol {
+  position: relative;
+  padding: 0;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(18, 18, 18);
+  /* border-left: 0; */
+  position: sticky;
+  top: 0;
+  /* left: 0; */
+  width: 100%;
+  min-height: 720px;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 900px) {
+  .imageContainer {
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 450px) {
+  .imageContainer {
+    min-height: 420px;
+  }
+}
+
+.content h2 {
+  color: #fff;
+  font-size: 52px;
+}
+
+.catalogGrid {
+  border-bottom: var(--border);
+  border-left: var(--border);
+}
+
+.subHeader {
+  padding: 10px 0;
+}
+
+.searchBar {
+  border: var(--border);
+  border-radius: 0;
+}
+
+.filtersSection {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.filtersItemsFormBlock {
+  padding: 20px;
+  background-color: #f8f9fa;
+  margin-top: 8px;
+  border: var(--border);
+}
+
+.filtersItemsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filtersForm {
+  border: var(--border);
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+  color: black;
+}
+
+.breadcrumbs a:active {
+  color: rgb(130, 129, 129);
+}
