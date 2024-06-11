@@ -3,6 +3,7 @@ import { Col, Row } from 'react-bootstrap';
 import { Github } from 'react-bootstrap-icons';
 
 interface PersonalData {
+  style: string;
   fio: string;
   post: string;
   bio: string;
@@ -10,11 +11,15 @@ interface PersonalData {
 }
 
 export default function InfoBlock(props: PersonalData) {
-  const { fio, post, bio, gitHub } = props;
+  const { style, fio, post, bio, gitHub } = props;
   return (
-    <Col className="d-flex flex-column justify-content-sm-around align-items-center" xs={12} md={6}>
+    <Col
+      className={`d-flex flex-column justify-content-sm-around align-items-center ${style} text-center`}
+      xs={12}
+      md={6}
+    >
       <Row>
-        <Row className="align-self-center">
+        <Row>
           <h3>{fio}</h3>
         </Row>
         <Row>
