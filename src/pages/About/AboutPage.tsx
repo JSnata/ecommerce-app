@@ -5,6 +5,7 @@ import Nata from '../../assets/img/Nata.jpg';
 import Ilya from '../../assets/img/Ilya.jpg';
 import Sofa from '../../assets/img/Sofia.jpg';
 import InfoBlock from '../../components/AboutCard/InfoBlock';
+import RSlogo from '../../ui/RSlogo/RSlogo';
 
 export default function AboutPage() {
   return (
@@ -59,6 +60,13 @@ export default function AboutPage() {
             bio="Text text text text text Text text text text text Text text text text text Text text text text text"
             gitHub="https://github.com/SPHsofi"
           />
+        </Row>
+        <Row className={style.title}>
+          <Col className="d-flex justify-content-center">
+            <a href="https://rs.school/" aria-label="RS School">
+              <RSlogo />
+            </a>
+          </Col>
         </Row>
       </Col>
     </Row>
