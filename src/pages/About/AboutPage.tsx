@@ -11,7 +11,7 @@ export default function AboutPage() {
   return (
     <Row className={style.row}>
       <Col>
-        <Row className={`${style.title} ${style.row}`}>
+        <Row className={`border border-1 border-dark ${style.row}`}>
           <Col>
             <Row className={style.row}>
               <Col className="d-flex justify-content-center">
@@ -61,7 +61,7 @@ export default function AboutPage() {
             gitHub="https://github.com/SPHsofi"
           />
         </Row>
-        <Row className={style.title}>
+        <Row className={`${style.title} ${style.row}`}>
           <Col className="d-flex justify-content-center">
             <a href="https://rs.school/" aria-label="RS School">
               <RSlogo />
