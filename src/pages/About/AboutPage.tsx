@@ -1,11 +1,14 @@
 import React from 'react';
 import { Row, Col, Image } from 'react-bootstrap';
 import style from './About.module.css';
-import Sofa from '../../assets/img/Sofia.jpeg';
+import Nata from '../../assets/img/Nata.jpg';
+import Ilya from '../../assets/img/Ilya.jpg';
+import Sofa from '../../assets/img/Sofia.jpg';
+import InfoBlock from '../../components/AboutCard/InfoBlock';
 
 export default function AboutPage() {
   return (
-    <Row>
+    <Row className={style.row}>
       <Col>
         <Row className={`${style.title} ${style.row}`}>
           <Col>
@@ -21,18 +24,41 @@ export default function AboutPage() {
             </Row>
           </Col>
         </Row>
-        <Row>
-          <Col>
+        <Row className={style.row}>
+          <Col xs={12} md={6} className={style.imgNata}>
+            <Image src={Nata} alt="Natallia Kulikouskaya" fluid />
+          </Col>
+          <InfoBlock
+            style={style.infoNata}
+            fio="Natallia Kulikouskaya"
+            post="Team Lead / Frontend developer"
+            bio="Text text text text text Text text text text text Text text text text text Text text text text text"
+            gitHub="https://github.com/jsnata"
+          />
+        </Row>
+        <Row className={style.row}>
+          <InfoBlock
+            style={style.infoIlya}
+            fio="Ilya Slepchenkov"
+            post="Frontend developer"
+            bio="Text text text text text Text text text text text Text text text text text Text text text text text"
+            gitHub="https://github.com/linderjk"
+          />
+          <Col xs={12} md={6} className={style.imgIlya}>
+            <Image src={Ilya} alt="Ilya Slepchenkov" fluid />
+          </Col>
+        </Row>
+        <Row className={style.row}>
+          <Col xs={12} md={6} className={style.imgSofa}>
             <Image src={Sofa} alt="Sofia Sharshunskaya" fluid />
           </Col>
-          <Col className="d-flex flex-column justify-content-center">
-            <Row>
-              <h3>Sofia Sharshunskaya</h3>
-            </Row>
-            <Row>
-              <p>Frontend developer</p>
-            </Row>
-          </Col>
+          <InfoBlock
+            style={style.infoSofa}
+            fio="Sofia Sharshunskaya"
+            post="Frontend developer"
+            bio="Text text text text text Text text text text text Text text text text text Text text text text text"
+            gitHub="https://github.com/SPHsofi"
+          />
         </Row>
       </Col>
     </Row>
