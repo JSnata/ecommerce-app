@@ -61,7 +61,7 @@ export default function AboutPage() {
             gitHub="https://github.com/SPHsofi"
           />
         </Row>
-        <Row className={`${style.title} ${style.row}`}>
+        <Row className={`border border-1 border-dark ${style.row}`}>
           <Col className="d-flex justify-content-center">
             <a href="https://rs.school/" aria-label="RS School">
               <RSlogo />
