@@ -63,6 +63,7 @@ export default function CatalogPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
   const [sortOption, setSortOption] = useState<string | null>(null);
+  const [cart, setCart] = useState<string[]>([]);
   const history = useHistory();
   const categories = useCategory();
   const { products, loading, error } = useProductsByCategory({
@@ -89,6 +90,12 @@ export default function CatalogPage() {
   const handleResetFilters = () => {
     setFilters({ 'color-flower': '', 'size-flower': '' });
   };
+
+  const handleAddToCart = (id: string) => {
+    setCart([...cart, id]);
+  };
+
+  const isProductInCart = (id: string) => cart.includes(id);
 
   const handleSortChange = (option: string | null) => {
     let sortOption = null;
@@ -289,6 +296,8 @@ export default function CatalogPage() {
                           productCode={productCode}
                           productDiscount={productDiscount}
                           productDiscountPrice={productDiscountPrice}
+                          isInCart={isProductInCart(product.id)}
+                          onAddToCart={handleAddToCart}
                         />
                       );
                     })}
