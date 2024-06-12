@@ -20,6 +20,8 @@ import useProductsByCategory from '../../hooks/useProductsByCategory';
 import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
 import Attributes from './attributes';
+import useCart from '../../hooks/useCart';
+import useAuthContext from '../../hooks/useAuthContext';
 
 function truncateToSentence(text: string) {
   const match = text.match(/(.*?\.)(\s|$)/);
@@ -63,7 +65,6 @@ export default function CatalogPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
   const [sortOption, setSortOption] = useState<string | null>(null);
-  const [cart, setCart] = useState<string[]>([]);
   const history = useHistory();
   const categories = useCategory();
   const { products, loading, error } = useProductsByCategory({
@@ -73,6 +74,11 @@ export default function CatalogPage() {
     sort: sortOption,
     search: searchInput,
   });
+  const { cartItems, addToCart, isInCart } = useCart();
+  const { user } = useAuthContext();
+
+  console.log('CARTITEMS', cartItems);
+
   useEffect(() => {}, [filters, sortOption]);
 
   const handleBreadcrumbClick = (categoryId: string | null) => {
@@ -91,11 +97,11 @@ export default function CatalogPage() {
     setFilters({ 'color-flower': '', 'size-flower': '' });
   };
 
-  const handleAddToCart = (id: string) => {
-    setCart([...cart, id]);
-  };
+  // const handleAddToCart = (id: string) => {
+  //   setCart([...cart, id]);
+  // };
 
-  const isProductInCart = (id: string) => cart.includes(id);
+  // const isProductInCart = (id: string) => cart.includes(id);
 
   const handleSortChange = (option: string | null) => {
     let sortOption = null;
@@ -296,8 +302,8 @@ export default function CatalogPage() {
                           productCode={productCode}
                           productDiscount={productDiscount}
                           productDiscountPrice={productDiscountPrice}
-                          isInCart={isProductInCart(product.id)}
-                          onAddToCart={handleAddToCart}
+                          isInCart={isInCart(product.id)}
+                          onAddToCart={addToCart}
                         />
                       );
                     })}
