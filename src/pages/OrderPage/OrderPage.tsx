@@ -1,51 +1,21 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
-import useAuthContext from '../../hooks/useAuthContext';
+import useCart from '../../hooks/useCart';
 
 function OrderPage() {
-  const { user } = useAuthContext();
-  const customerId = user?.id;
-  console.log('customerId', customerId);
-  // (async () => {
-  //   try {
-  //     const userdata = await apiService.getCustomerData();
-  //     const order = apiRoot
-  //       .orders()
-  //       .get()
-  //       .execute()
-  //       .then((response) => {
-  //         console.log(response, 'orders response');
-  //       });
-  //
-  //     const cards = await apiRoot
-  //       .carts()
-  //       .get()
-  //       .execute()
-  //       .then((response) => {
-  //         console.log(response, 'cards response');
-  //       });
-  //
-  //     const clientCard = apiService.userApi
-  //       ?.me()
-  //       .carts()
-  //       .get()
-  //       .execute()
-  //       .then((response) => {
-  //         console.log(response, 'client cards');
-  //       });
-  //
-  //     // const anonymousCart = await apiService.createAnonymousCart();
-  //     // console.log(anonymousCart, 'anonymous cart');
-  //
-  //     console.log(userdata);
-  //   } catch (error) {
-  //     console.error('Ошибка получения данных:', error);
-  //   }
-  // })();
+  // const { user } = useAuthContext();
+  const { cartItems } = useCart();
 
   return (
     <Container>
-      <h1>HI order!</h1>
+      {cartItems.map((item) => {
+        return (
+          <div>
+            <p>{item.name}</p>
+            <p>{item.id}</p>
+          </div>
+        );
+      })}
     </Container>
   );
 }
