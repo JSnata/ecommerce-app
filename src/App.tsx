@@ -17,13 +17,12 @@ import CatalogPage from './pages/Catalog/CatalogPage';
 import AboutPage from './pages/About/AboutPage';
 import ProductPage from './pages/ProductPage/ProductPage';
 import OrderPage from './pages/OrderPage/OrderPage';
-import ShippingCartService from './API/ShippingCartService';
+import CartService from './API/CartService';
 
 function App() {
   const { user, dispatch } = useAuthContext();
 
   useEffect(() => {
-    ShippingCartService.start();
     const tokenCurrentUser = userTokenCache.get()?.token;
     if (tokenCurrentUser) {
       let isMounted = true;
@@ -53,9 +52,11 @@ function App() {
     return undefined;
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   console.log('authIsReady', authIsReady);
-  // }, [authIsReady]);
+  useEffect(() => {
+    CartService.start();
+    ApiService.getAllCustomerCart();
+    // CartService.getCustomerActiveCart();
+  }, []);
 
   return (
     <>
