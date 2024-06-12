@@ -16,6 +16,7 @@ import MainPage from './pages/MainPage/MainPage';
 import CatalogPage from './pages/Catalog/CatalogPage';
 import AboutPage from './pages/About/AboutPage';
 import ProductPage from './pages/ProductPage/ProductPage';
+import OrderPage from './pages/OrderPage/OrderPage';
 
 function App() {
   const { user, dispatch } = useAuthContext();
@@ -75,6 +76,9 @@ function App() {
         </Route>
         <Route path="/about">
           <AboutPage />
+        </Route>
+        <Route path="/order">
+          <OrderPage />
         </Route>
         <Route component={NotFoundPage} />
       </Switch>
