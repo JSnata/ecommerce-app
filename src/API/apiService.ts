@@ -9,7 +9,7 @@ import { createCustomer } from './helpers/ClientAPI';
 import createAxiosInstance from './helpers/axiosInstance';
 import { userTokenCache } from './root/BuildCustomer';
 import { createApiCustomerWithKey } from './root/BuildCustomerWithKey';
-import ShippingCartService from './ShippingCartService';
+import CartService from './CartService';
 /**
  * ApiService is a class that provides methods for interacting with the CommerceTools API.
  */
@@ -75,16 +75,16 @@ export default class ApiService {
         .execute();
       if (cartResponse) {
         const { id, version } = cartResponse.body;
-        await ShippingCartService.mergeCart(id, version);
-        ShippingCartService.setCartIdToLocalStorage(id);
-        ShippingCartService.start();
+        await CartService.mergeCart(id, version);
+        CartService.setCartIdToLocalStorage(id);
+        CartService.start();
       }
       console.log(cartResponse);
     } else if (response) {
       const { id, version } = response.body.results[0];
-      await ShippingCartService.mergeCart(id, version);
-      ShippingCartService.setCartIdToLocalStorage(id);
-      ShippingCartService.start();
+      await CartService.mergeCart(id, version);
+      CartService.setCartIdToLocalStorage(id);
+      CartService.start();
     }
     console.log(response);
   }
