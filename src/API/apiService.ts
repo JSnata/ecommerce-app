@@ -19,6 +19,8 @@ export default class ApiService {
    */
   static userApi: ByProjectKeyRequestBuilder | undefined = undefined;
 
+  // static cartInstance: Cart | undefined = undefined;
+
   /**
    * A static property that holds an instance of AxiosInstance.
    * It is initialized after a successful login.
@@ -30,6 +32,7 @@ export default class ApiService {
     if (!token) {
       return;
     }
+    // const cartInstance = new Cart();
     this.axiosInstance = createAxiosInstance();
     this.userApi = createApiCustomerWithKey(token);
   }

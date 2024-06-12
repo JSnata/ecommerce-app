@@ -74,6 +74,11 @@ function RegisterPage() {
                     dispatch({ type: 'LOGIN', payload: response.body });
                     return response;
                   });
+                // .then((response) => {
+                //   // const userId = response.body.id;
+                //   // eslint-disable-next-line @typescript-eslint/no-shadow
+                //   // ShippingCartService.mergeAnonymousCart();
+                // });
               }
             })
             .then(() => {

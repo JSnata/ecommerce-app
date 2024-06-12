@@ -17,11 +17,13 @@ import CatalogPage from './pages/Catalog/CatalogPage';
 import AboutPage from './pages/About/AboutPage';
 import ProductPage from './pages/ProductPage/ProductPage';
 import OrderPage from './pages/OrderPage/OrderPage';
+import ShippingCartService from './API/ShippingCartService';
 
 function App() {
   const { user, dispatch } = useAuthContext();
 
   useEffect(() => {
+    ShippingCartService.start();
     const tokenCurrentUser = userTokenCache.get()?.token;
     if (tokenCurrentUser) {
       let isMounted = true;
