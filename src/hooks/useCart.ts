@@ -6,56 +6,40 @@ import CartService from '../API/CartService';
 
 export type CartItem = {
   id: string;
-  name: string;
   quantity: number;
   price: number;
+  totalPrice: number;
+  productId: string;
+  productName: string;
+  productImageLink: string;
 };
 
 const useCart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  // const [cartProducts, setCartProducts] = useState ([]);
   const [cartId] = useState<string | null>(CartService.getCartId());
 
   const fetchCartItems = async (): Promise<void> => {
     try {
       const cart = await CartService.getCartItems();
-      const items = cart!.lineItems.map((item: LineItem) => ({
-        id: item.id,
-        productId: item.productId,
-        name: item.name.en,
-        quantity: item.quantity,
-        price: item.totalPrice.centAmount / 100,
-      }));
+      console.log(cart, 'this cart with products');
+      const items = cart!.lineItems.map((item: LineItem) => {
+        console.log(item, 'item in cart');
+        return {
+          id: item.id,
+          quantity: item.quantity,
+          price: item.totalPrice.centAmount / 100,
+          totalPrice: item.totalPrice.centAmount / 100,
+          productId: item.productId,
+          productName: item.name['en-GB'],
+          productImageLink: item.variant?.images?.[0]?.url ?? '',
+        } as CartItem;
+      });
       setCartItems(items);
     } catch (error) {
       console.error('Error fetching cart items:', error);
     }
   };
-
-  // const createCart = async (): Promise<string> => {
-  //   try {
-  //     const response = await apiRoot
-  //       .carts()
-  //       .post({
-  //         body: {
-  //           currency: 'USD',
-  //         },
-  //       })
-  //       .execute();
-  //
-  //     if (response.statusCode === 201) {
-  //       const newCartId = response.body.id;
-  //       localStorage.setItem('cartId', newCartId);
-  //       setCartId(newCartId);
-  //       setCartVersion(response.body.version);
-  //       return newCartId;
-  //     } else {
-  //       throw new Error('Failed to create cart');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error creating cart:', error);
-  //     throw error;
-  //   }
-  // };
 
   const addToCart = async (productId: string): Promise<void> => {
     try {
@@ -75,7 +59,7 @@ const useCart = () => {
     }
   };
 
-  const isInCart = (productId: string): boolean => {
+  const isProductInCart = (productId: string): boolean => {
     return cartItems.some((item) => item.id === productId);
   };
 
@@ -85,7 +69,7 @@ const useCart = () => {
     }
   }, [cartId]);
 
-  return { cartItems, addToCart, removeFromCart, isInCart };
+  return { cartItems, addToCart, removeFromCart, isInCart: isProductInCart };
 };
 
 export default useCart;
