@@ -14,7 +14,8 @@ type CardItemProps = {
   productDiscountPrice?: number;
   productCode?: string;
   isInCart: boolean;
-  onAddToCart: (id: string) => void;
+  handleAddToCart: (id: string) => void;
+  handleDeleteFromCart: (id: string) => void;
 };
 
 function ProductCard({
@@ -27,8 +28,17 @@ function ProductCard({
   productDiscountPrice = 0,
   productCode = '',
   isInCart = false,
-  onAddToCart,
+  handleAddToCart,
+  handleDeleteFromCart,
 }: CardItemProps) {
+  const onAddToCart = () => {
+    handleAddToCart(id || '');
+  };
+
+  const onDeleteFromCart = () => {
+    handleDeleteFromCart(id || '');
+  };
+
   return (
     <Col key={id} md={6} className={styles.card}>
       <Link to={`/product/${id}`} className={styles.cardContent}>
@@ -52,17 +62,21 @@ function ProductCard({
       </Row>
       <div className={styles.buttonContainer}>
         <Button
-          variant="dark"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onAddToCart(id);
-          }}
+          className="mx-2"
+          variant={isInCart ? 'outline-secondary' : 'dark'}
+          onClick={onAddToCart}
           disabled={isInCart}
-          className={isInCart ? styles.buttonDisabled : ''}
         >
           {isInCart ? 'In Cart' : 'Add to Cart'}
         </Button>
+
+        {isInCart ? (
+          <Button variant="dark" onClick={onDeleteFromCart} className="mx-2">
+            Delete
+          </Button>
+        ) : (
+          ''
+        )}
       </div>
     </Col>
   );

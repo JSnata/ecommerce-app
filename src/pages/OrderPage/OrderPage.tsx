@@ -3,15 +3,16 @@ import { Container } from 'react-bootstrap';
 import useCart from '../../hooks/useCart';
 
 function OrderPage() {
-  // const { user } = useAuthContext();
   const { cartItems } = useCart();
+  console.log('CARTITEMS', cartItems);
 
   return (
     <Container>
       {cartItems.map((item) => {
         return (
           <div>
-            <p>{item.name}</p>
+            <h1>Hello cart</h1>
+            <p>{item.productName}</p>
             <p>{item.id}</p>
           </div>
         );

@@ -74,7 +74,7 @@ export default function CatalogPage() {
     sort: sortOption,
     search: searchInput,
   });
-  const { cartItems, addToCart, isInCart } = useCart();
+  const { cartItems, addToCart, removeFromCart, isInCart } = useCart();
   const { user } = useAuthContext();
 
   console.log('CARTITEMS', cartItems);
@@ -303,7 +303,8 @@ export default function CatalogPage() {
                           productDiscount={productDiscount}
                           productDiscountPrice={productDiscountPrice}
                           isInCart={isInCart(product.id)}
-                          onAddToCart={addToCart}
+                          handleAddToCart={addToCart}
+                          handleDeleteFromCart={removeFromCart}
                         />
                       );
                     })}

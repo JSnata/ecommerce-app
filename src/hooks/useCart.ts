@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Cart, LineItem } from '@commercetools/platform-sdk';
 import { apiRoot } from '../API/helpers/ClientAPI';
 import CartService from '../API/CartService';
+import { toast } from 'react-toastify';
 
 export type CartItem = {
   id: string;
@@ -45,22 +46,34 @@ const useCart = () => {
     try {
       await CartService.addToCart(productId);
       await fetchCartItems();
+      toast.success('Success add product');
     } catch (error) {
       console.error('Error adding item to cart:', error);
     }
   };
 
-  const removeFromCart = async (lineItemId: string): Promise<void> => {
+  const getCartItemIdByProductId = (productId: string): string | undefined => {
+    const cartItem = cartItems.find((item) => item.productId === productId);
+    return cartItem ? cartItem.id : undefined;
+  };
+
+  const removeFromCart = async (productId: string): Promise<void> => {
+    const lineItemId = getCartItemIdByProductId(productId);
+    if (!lineItemId) {
+      console.error('not find line item with id');
+      return;
+    }
     try {
       await CartService.removeFromCart(lineItemId);
       await fetchCartItems();
+      toast.success('Success delete product');
     } catch (error) {
       console.error('Error removing item from cart:', error);
     }
   };
 
   const isProductInCart = (productId: string): boolean => {
-    return cartItems.some((item) => item.id === productId);
+    return cartItems.some((item) => item.productId === productId);
   };
 
   useEffect(() => {
