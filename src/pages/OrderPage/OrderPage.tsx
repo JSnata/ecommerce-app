@@ -5,7 +5,6 @@ import useCart from '../../hooks/useCart';
 function OrderPage() {
   const { cartItems } = useCart();
   console.log('CARTITEMS', cartItems);
-
   return (
     <Container>
       {cartItems.map((item) => {

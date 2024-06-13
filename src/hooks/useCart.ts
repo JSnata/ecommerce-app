@@ -17,8 +17,6 @@ export type CartItem = {
 
 const useCart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  // const [cartProducts, setCartProducts] = useState ([]);
-  const [cartId] = useState<string | null>(CartService.getCartId());
 
   const fetchCartItems = async (): Promise<void> => {
     try {
@@ -77,10 +75,8 @@ const useCart = () => {
   };
 
   useEffect(() => {
-    if (cartId) {
-      fetchCartItems();
-    }
-  }, [cartId]);
+    fetchCartItems();
+  }, []);
 
   return { cartItems, addToCart, removeFromCart, isInCart: isProductInCart };
 };

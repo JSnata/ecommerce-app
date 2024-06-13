@@ -7,17 +7,18 @@ export default class CartService {
 
   static currentCartId: string;
 
-  static start() {
+  static async start() {
     const id = localStorage.getItem('cartId');
     if (id) {
-      this.initCartByID(id);
+      await this.initCartByID(id);
     } else {
-      this.initAnonymousCart();
+      await this.initAnonymousCart();
     }
   }
 
   static async initCartByID(id: string) {
     this.cartData = await CartService.getCartByID(id);
+    console.log('cart by id', this.cartData);
     if (this.cartData) {
       this.currentCartId = this.cartData?.id;
     }
@@ -98,19 +99,21 @@ export default class CartService {
     }
   }
 
-  static getCartId() {
+  static async getCartId() {
     if (!this.currentCartId) {
-      this.start();
+      await this.start();
+      return this.currentCartId;
     }
     return this.currentCartId;
   }
 
   static async getCartVersion() {
     if (!this.cartData) {
-      this.start();
+      await this.start();
+      return this.cartData!.version;
     }
     await this.updateCartData();
-    return this.cartData!.version;
+    return this.cartData.version;
   }
 
   static async updateCartData() {
@@ -139,9 +142,10 @@ export default class CartService {
 
   static async getCartItems() {
     try {
+      const cartId = await this.getCartId();
       const response = await apiRoot
         .carts()
-        .withId({ ID: this.getCartId() })
+        .withId({ ID: cartId })
         .get({
           queryArgs: {
             expand: 'lineItems[*].product',
@@ -166,9 +170,10 @@ export default class CartService {
       }
       console.log(product);
       const versionCart = await this.getCartVersion();
+      const cartId = await this.getCartId();
       return await apiRoot
         .carts()
-        .withId({ ID: this.getCartId() })
+        .withId({ ID: cartId })
         .post({
           body: {
             version: versionCart,

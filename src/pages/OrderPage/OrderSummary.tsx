@@ -1,3 +1,4 @@
+import React from 'react';
 // type OrderSummaryProps = {
 //   image: string;
 //   name: string;
@@ -6,8 +7,8 @@
 //   handleAdd: () => void;
 // };
 
-// function OrderSummary() {
-//   return <div>123</div>;
-// }
+function OrderSummary() {
+  return <div>123</div>;
+}
 
-// export default OrderSummary;
+export default OrderSummary;
