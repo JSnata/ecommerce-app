@@ -29,7 +29,7 @@ const useCart = () => {
         return {
           id: item.id,
           quantity: item.quantity,
-          price: item.totalPrice.centAmount / 100,
+          price: item.price.value.centAmount / 100,
           totalPrice: item.totalPrice.centAmount / 100,
           productId: item.productId,
           productName: item.name['en-GB'],

@@ -1,21 +1,34 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
-import useCart from '../../hooks/useCart';
+import { CardGroup, Col, Container, Row } from 'react-bootstrap';
+import useCart, { type CartItem } from '../../hooks/useCart';
+import OrderSummary from './OrderSummary';
 
 function OrderPage() {
   const { cartItems } = useCart();
-  console.log('CARTITEMS', cartItems);
+  // console.log('CARTITEMS', cartItems);
   return (
     <Container>
-      {cartItems.map((item) => {
-        return (
-          <div>
-            <h1>Hello cart</h1>
-            <p>{item.productName}</p>
-            <p>{item.id}</p>
-          </div>
-        );
-      })}
+      <Row>
+        <Col>
+          <h1>My Orders</h1>
+        </Col>
+        <Col>
+          <CardGroup>
+            {cartItems.map((item: CartItem) => (
+              <OrderSummary
+                key={item.id}
+                id={item.id}
+                quantity={item.quantity}
+                price={item.price}
+                totalPrice={item.totalPrice}
+                productId={item.productId}
+                productName={item.productName}
+                productImageLink={item.productImageLink}
+              />
+            ))}
+          </CardGroup>
+        </Col>
+      </Row>
     </Container>
   );
 }
