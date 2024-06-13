@@ -20,7 +20,6 @@ function NavBarProfile() {
         <Dropdown.Item as={Link} to="/profile">
           Profile
         </Dropdown.Item>
-        <Dropdown.Item href="">Shopping List</Dropdown.Item>
         <Dropdown.Divider />
         <Dropdown.Item onClick={() => handleLogout(dispatch)}>Sign out</Dropdown.Item>
       </Dropdown.Menu>

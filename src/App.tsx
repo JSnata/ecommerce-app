@@ -16,6 +16,8 @@ import MainPage from './pages/MainPage/MainPage';
 import CatalogPage from './pages/Catalog/CatalogPage';
 import AboutPage from './pages/About/AboutPage';
 import ProductPage from './pages/ProductPage/ProductPage';
+import OrderPage from './pages/OrderPage/OrderPage';
+import CartService from './API/CartService';
 
 function App() {
   const { user, dispatch } = useAuthContext();
@@ -50,9 +52,11 @@ function App() {
     return undefined;
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   console.log('authIsReady', authIsReady);
-  // }, [authIsReady]);
+  useEffect(() => {
+    CartService.start();
+    ApiService.getAllCustomerCart();
+    // CartService.getCustomerActiveCart();
+  }, []);
 
   return (
     <>
@@ -75,6 +79,9 @@ function App() {
         </Route>
         <Route path="/about">
           <AboutPage />
+        </Route>
+        <Route path="/order">
+          <OrderPage />
         </Route>
         <Route component={NotFoundPage} />
       </Switch>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Cart3 } from 'react-bootstrap-icons';
 import { Badge, Container, Navbar, Offcanvas, Nav } from 'react-bootstrap';
 import useAuthContext from '../../hooks/useAuthContext';
@@ -31,6 +31,10 @@ function NavigationBar() {
             <SecondaryNavigation />
 
             <div className="d-flex gap-2 justify-content-center justify-content-lg-end">
+              <Nav.Link as={Link} to="/order">
+                <Cart3 size={25} />
+                <Badge bg="secondary">0</Badge>
+              </Nav.Link>
               {!user && location.pathname !== '/register' && (
                 <SecondaryButton to="/register" link="/register">
                   Register
@@ -41,15 +45,8 @@ function NavigationBar() {
                   Login
                 </SecondaryButton>
               )}
-              {user && (
-                <>
-                  <Nav.Link href="#">
-                    <Cart3 size={25} />
-                    <Badge bg="secondary">0</Badge>
-                  </Nav.Link>
-                  <NavBarProfile />
-                </>
-              )}
+
+              {user && <NavBarProfile />}
             </div>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
