@@ -23,16 +23,31 @@ export default class CartService {
     }
   }
 
-  static setCartIdToLocalStorage(id: string) {
-    localStorage.setItem('cartId', id);
-  }
-
   static async initAnonymousCart() {
     const cart = await CartService.createAnonymousCart();
     if (cart) {
       this.cartData = cart;
       this.currentCartId = cart.id;
       localStorage.setItem('cartId', this.currentCartId);
+    }
+  }
+
+  static async createAnonymousCart() {
+    try {
+      const cart = await apiRoot
+        .carts()
+        .post({
+          body: {
+            currency: 'EUR',
+          },
+        })
+        .execute();
+      console.log('Анонимная корзина создана:', cart.body.id, cart.body);
+      return cart.body;
+    } catch (err) {
+      console.error(err);
+      toast.error(`${err}`);
+      return null;
     }
   }
 
@@ -46,6 +61,10 @@ export default class CartService {
       toast.error(`${err}`);
       return null;
     }
+  }
+
+  static setCartIdToLocalStorage(id: string) {
+    localStorage.setItem('cartId', id);
   }
 
   static async mergeCart(customerCartId: string, customerCartVersion: number) {
@@ -79,25 +98,6 @@ export default class CartService {
     }
   }
 
-  static async createAnonymousCart() {
-    try {
-      const cart = await apiRoot
-        .carts()
-        .post({
-          body: {
-            currency: 'EUR',
-          },
-        })
-        .execute();
-      console.log('Анонимная корзина создана:', cart.body.id, cart.body);
-      return cart.body;
-    } catch (err) {
-      console.error(err);
-      toast.error(`${err}`);
-      return null;
-    }
-  }
-
   static getCartId() {
     if (!this.currentCartId) {
       this.start();
@@ -106,10 +106,10 @@ export default class CartService {
   }
 
   static async getCartVersion() {
-    await this.updateCartData();
     if (!this.cartData) {
       this.start();
     }
+    await this.updateCartData();
     return this.cartData!.version;
   }
 
