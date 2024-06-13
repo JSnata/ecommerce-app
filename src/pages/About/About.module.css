@@ -1,0 +1,42 @@
+.row {
+    --bs-gutter-x: 0;
+}
+
+.infoSofa,
+.infoNata,
+.infoIlya {
+    padding: 15px;
+}
+
+@media screen and (max-width: 768px) {
+
+    .imgSofa {
+        order: 1;
+    }
+
+    .infoSofa {
+        order: 2;
+    }
+
+    .imgNata {
+        order: 3;
+    }
+
+    .infoNata {
+        order: 4;
+    }
+
+    .imgIlya {
+        order: 5;
+    }
+
+    .infoIlya {
+        order: 6;
+    }
+
+    .infoSofa,
+    .infoNata,
+    .infoIlya {
+        padding: 35px;
+    }
+}
