@@ -17,10 +17,12 @@ export type CartItem = {
 
 const useCart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<Cart | null>(null);
 
   const fetchCartItems = async (): Promise<void> => {
     try {
       const cart = await CartService.getCartItems();
+      setCart(cart);
       console.log(cart, 'this cart with products');
       const items = cart!.lineItems.map((item: LineItem) => {
         console.log(item, 'item in cart');
@@ -78,7 +80,7 @@ const useCart = () => {
     fetchCartItems();
   }, []);
 
-  return { cartItems, addToCart, removeFromCart, isInCart: isProductInCart };
+  return { cartItems, cart, addToCart, removeFromCart, isInCart: isProductInCart };
 };
 
 export default useCart;
