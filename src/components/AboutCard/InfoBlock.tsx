@@ -7,18 +7,19 @@ interface PersonalData {
   fio: string;
   post: string;
   bio: string;
+  did: string;
   gitHub: string;
 }
 
 export default function InfoBlock(props: PersonalData) {
-  const { style, fio, post, bio, gitHub } = props;
+  const { style, fio, post, bio, did, gitHub } = props;
   return (
     <Col
       className={`d-flex flex-column justify-content-sm-around align-items-center ${style} text-center`}
       xs={12}
       md={6}
     >
-      <Row>
+      <Row className="justify-content-center">
         <Row>
           <h3>{fio}</h3>
         </Row>
@@ -26,8 +27,15 @@ export default function InfoBlock(props: PersonalData) {
           <p>{post}</p>
         </Row>
       </Row>
+      <Row className="justify-content-center">
+        <Col sm={10}>
+          <p>{bio}</p>
+        </Col>
+      </Row>
       <Row>
-        <p>{bio}</p>
+        <p>
+          <b>I did</b>: {did}
+        </p>
       </Row>
       <Row>
         <a href={gitHub} aria-label="GitHub" target="_blank" rel="noopener noreferrer">
