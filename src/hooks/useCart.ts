@@ -72,6 +72,21 @@ const useCart = () => {
     }
   };
 
+  const changeQuantity = async (productId: string, quantity: number) => {
+    const lineItemId = getCartItemIdByProductId(productId);
+    if (!lineItemId) {
+      console.error('not find line item with id');
+      return;
+    }
+    try {
+      await CartService.changeLineItemQuantity(lineItemId, quantity);
+      await fetchCartItems();
+      toast.success('Success change quantity');
+    } catch (error) {
+      console.error('Error update quantity in cart:', error);
+    }
+  };
+
   const isProductInCart = (productId: string): boolean => {
     return cartItems.some((item) => item.productId === productId);
   };
@@ -80,7 +95,7 @@ const useCart = () => {
     fetchCartItems();
   }, []);
 
-  return { cartItems, cart, addToCart, removeFromCart, isInCart: isProductInCart };
+  return { cartItems, cart, addToCart, removeFromCart, changeQuantity, isInCart: isProductInCart };
 };
 
 export default useCart;
