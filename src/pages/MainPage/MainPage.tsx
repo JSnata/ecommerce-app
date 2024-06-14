@@ -2,7 +2,6 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import MainSection from '../../components/Sections/MainSection';
 import useAuthContext from '../../hooks/useAuthContext';
-import SecondaryButton from '../../ui/Buttons/SecondaryButton/SecondaryButton';
 
 function MainPage() {
   const { user, authIsReady } = useAuthContext();
@@ -20,7 +19,7 @@ function MainPage() {
             )}
           </Col>
         </Row>
-        <Row className="justify-content-center">
+        {/* <Row className="justify-content-center">
           <Col md={6} className="text-center">
             {authIsReady && user && (
               <>
@@ -33,7 +32,7 @@ function MainPage() {
               </>
             )}
           </Col>
-        </Row>
+        </Row> */}
       </Container>
       <MainSection />
     </div>
