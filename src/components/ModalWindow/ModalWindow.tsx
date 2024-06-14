@@ -4,13 +4,12 @@ import { Modal } from 'react-bootstrap';
 interface ModalProps {
   show: boolean;
   handleClose: () => void;
-  modalSize?: 'sm' | 'lg' | 'xl' | undefined;
-  title: string | undefined;
+  modalSize?: 'sm' | 'lg' | 'xl';
+  title: string;
   children: React.ReactNode;
 }
 
-function ModalWindow(props: ModalProps) {
-  const { show, handleClose, modalSize, title, children } = props;
+function ModalWindow({ show, handleClose, modalSize, title, children }: ModalProps) {
   return (
     <Modal show={show} onHide={handleClose} keyboard={false} size={modalSize}>
       <Modal.Header closeButton>

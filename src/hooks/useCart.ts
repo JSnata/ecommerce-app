@@ -87,6 +87,22 @@ const useCart = () => {
     }
   };
 
+  const clearCart = async () => {
+    console.log(cart, cart?.lineItems, 'DELETE CART');
+    try {
+      if (cart && cart.lineItems.length >= 1) {
+        await CartService.clearCart(cart);
+      } else {
+        toast.warn('Cart is empty');
+        return;
+      }
+      await fetchCartItems();
+      toast.success('Success clear Cart');
+    } catch (error) {
+      console.error('Error clear cart', error);
+    }
+  };
+
   const isProductInCart = (productId: string): boolean => {
     return cartItems.some((item) => item.productId === productId);
   };
@@ -95,7 +111,7 @@ const useCart = () => {
     fetchCartItems();
   }, []);
 
-  return { cartItems, cart, addToCart, removeFromCart, changeQuantity, isInCart: isProductInCart };
+  return { cartItems, cart, addToCart, clearCart, removeFromCart, changeQuantity, isInCart: isProductInCart };
 };
 
 export default useCart;

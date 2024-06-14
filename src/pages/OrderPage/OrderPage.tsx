@@ -1,11 +1,22 @@
-import React from 'react';
-import { Button, CardGroup, Col, Container, Row } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, CardGroup, Col, Container, Row, Stack } from 'react-bootstrap';
 import useCart, { type CartItem } from '../../hooks/useCart';
 import OrderSummary from './OrderSummary';
+import ModalWindow from '../../components/ModalWindow/ModalWindow';
 
 function OrderPage() {
-  const { cartItems, removeFromCart, changeQuantity, cart } = useCart();
+  const { cartItems, removeFromCart, changeQuantity, clearCart, cart } = useCart();
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
+  const handleConfirmation = () => {
+    clearCart().then(() => handleCloseModal());
+  };
+
   const totalPrice = cart && cart.totalPrice ? cart.totalPrice.centAmount / 100 : 0;
+
   return (
     <Container fluid>
       <h1>My Orders</h1>
@@ -14,7 +25,9 @@ function OrderPage() {
           <h5>Manage Orders</h5>
           <Row className="lead">Current Total Price : {totalPrice}</Row>
           <Row>
-            <Button variant="datk">Clear Cart</Button>
+            <Button variant="dark" onClick={handleShowModal}>
+              Clear Cart
+            </Button>
           </Row>
           <Row>1</Row>
           <Row>1</Row>
@@ -41,6 +54,21 @@ function OrderPage() {
           </CardGroup>
         </Col>
       </Row>
+      <ModalWindow show={showModal} handleClose={handleCloseModal} modalSize="sm" title="Clear Cart">
+        <Container>
+          <Row>
+            <p>Are you sure you want to empty your shopping cart?</p>
+          </Row>
+          <Stack direction="horizontal" gap={3}>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Cancel
+            </Button>
+            <Button variant="dark" onClick={handleConfirmation}>
+              Yes
+            </Button>
+          </Stack>
+        </Container>
+      </ModalWindow>
     </Container>
   );
 }
