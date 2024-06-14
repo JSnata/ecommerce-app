@@ -215,6 +215,27 @@ export default class CartService {
       return null;
     }
   }
+
+  static async changeLineItemQuantity(lineItemId: string, quantity: number) {
+    try {
+      const versionCart = await this.getCartVersion();
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: this.currentCartId! })
+        .post({
+          body: {
+            version: versionCart,
+            actions: [{ action: 'changeLineItemQuantity', lineItemId, quantity }],
+          },
+        })
+        .execute();
+      return response.body;
+    } catch (err) {
+      console.error('Error update quantity in cart:', err);
+      toast.error(`${err}`);
+      return null;
+    }
+  }
 }
 // CartService.start();
 // export default async function createShippingCart(id: string | undefined = undefined) {
