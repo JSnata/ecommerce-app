@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import MainSection from '../../components/Sections/MainSection';
 import useAuthContext from '../../hooks/useAuthContext';
+import OrderPromo from '../OrderPage/OrderPromoView';
 
 function MainPage() {
   const { user, authIsReady } = useAuthContext();
@@ -17,6 +18,7 @@ function MainPage() {
                 <p>Thank you for visiting our website.</p>
               </>
             )}
+            <OrderPromo />
           </Col>
         </Row>
         {/* <Row className="justify-content-center">

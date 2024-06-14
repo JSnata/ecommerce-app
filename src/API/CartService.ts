@@ -261,6 +261,20 @@ export default class CartService {
       return null;
     }
   }
+
+  static async getAllActivePromo() {
+    try {
+      const response = await apiRoot
+        .discountCodes()
+        .get({ queryArgs: { where: 'isActive=true' } })
+        .execute();
+      return response.body.results;
+    } catch (err) {
+      console.error('Error clear cart:', err);
+      toast.error(`${err}`);
+      return null;
+    }
+  }
 }
 // CartService.start();
 // export default async function createShippingCart(id: string | undefined = undefined) {
