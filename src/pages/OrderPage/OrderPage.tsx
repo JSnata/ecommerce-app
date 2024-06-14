@@ -32,10 +32,11 @@ function OrderPage() {
                   Clear Cart
                 </Button>
               </Row>
+
+              <Row />
             </Col>
             <Col sm={12} md={8}>
               <h5>Products</h5>
-
               <CardGroup>
                 {cartItems.map((item: CartItem) => (
                   <OrderSummary
