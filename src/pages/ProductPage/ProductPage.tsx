@@ -74,7 +74,7 @@ function ProductPage() {
         </Col>
       </Row>
       {showModal && (
-        <ModalWindow show={showModal} handleClose={handleClose} title={productName} modalSize="lg">
+        <ModalWindow show={showModal} handleClose={handleClose} title={productName ?? ''} modalSize="lg">
           <CarouselComponent
             srcArray={productSrcArray}
             interval={null}

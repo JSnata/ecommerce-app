@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { Cart, CartAddLineItemAction } from '@commercetools/platform-sdk';
+import { Cart, CartAddLineItemAction, type CartUpdateAction } from '@commercetools/platform-sdk';
 import { apiRoot } from './helpers/ClientAPI';
 
 export default class CartService {
@@ -7,17 +7,18 @@ export default class CartService {
 
   static currentCartId: string;
 
-  static start() {
+  static async start() {
     const id = localStorage.getItem('cartId');
     if (id) {
-      this.initCartByID(id);
+      await this.initCartByID(id);
     } else {
-      this.initAnonymousCart();
+      await this.initAnonymousCart();
     }
   }
 
   static async initCartByID(id: string) {
     this.cartData = await CartService.getCartByID(id);
+    console.log('cart by id', this.cartData);
     if (this.cartData) {
       this.currentCartId = this.cartData?.id;
     }
@@ -98,19 +99,21 @@ export default class CartService {
     }
   }
 
-  static getCartId() {
+  static async getCartId() {
     if (!this.currentCartId) {
-      this.start();
+      await this.start();
+      return this.currentCartId;
     }
     return this.currentCartId;
   }
 
   static async getCartVersion() {
     if (!this.cartData) {
-      this.start();
+      await this.start();
+      return this.cartData!.version;
     }
     await this.updateCartData();
-    return this.cartData!.version;
+    return this.cartData.version;
   }
 
   static async updateCartData() {
@@ -139,9 +142,10 @@ export default class CartService {
 
   static async getCartItems() {
     try {
+      const cartId = await this.getCartId();
       const response = await apiRoot
         .carts()
-        .withId({ ID: this.getCartId() })
+        .withId({ ID: cartId })
         .get({
           queryArgs: {
             expand: 'lineItems[*].product',
@@ -166,9 +170,10 @@ export default class CartService {
       }
       console.log(product);
       const versionCart = await this.getCartVersion();
+      const cartId = await this.getCartId();
       return await apiRoot
         .carts()
-        .withId({ ID: this.getCartId() })
+        .withId({ ID: cartId })
         .post({
           body: {
             version: versionCart,
@@ -206,6 +211,52 @@ export default class CartService {
       return response.body;
     } catch (err) {
       console.error('Error removing item from cart:', err);
+      toast.error(`${err}`);
+      return null;
+    }
+  }
+
+  static async changeLineItemQuantity(lineItemId: string, quantity: number) {
+    try {
+      const versionCart = await this.getCartVersion();
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: this.currentCartId! })
+        .post({
+          body: {
+            version: versionCart,
+            actions: [{ action: 'changeLineItemQuantity', lineItemId, quantity }],
+          },
+        })
+        .execute();
+      return response.body;
+    } catch (err) {
+      console.error('Error update quantity in cart:', err);
+      toast.error(`${err}`);
+      return null;
+    }
+  }
+
+  static async clearCart(cart: Cart) {
+    const updateActions: CartUpdateAction[] = cart.lineItems.map((lineItem) => ({
+      action: 'removeLineItem',
+      lineItemId: lineItem.id,
+    }));
+    try {
+      const versionCart = await this.getCartVersion();
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: this.currentCartId! })
+        .post({
+          body: {
+            version: versionCart,
+            actions: updateActions,
+          },
+        })
+        .execute();
+      return response.body;
+    } catch (err) {
+      console.error('Error clear cart:', err);
       toast.error(`${err}`);
       return null;
     }

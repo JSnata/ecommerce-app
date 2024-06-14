@@ -17,19 +17,19 @@ export type CartItem = {
 
 const useCart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  // const [cartProducts, setCartProducts] = useState ([]);
-  const [cartId] = useState<string | null>(CartService.getCartId());
+  const [cart, setCart] = useState<Cart | null>(null);
 
   const fetchCartItems = async (): Promise<void> => {
     try {
       const cart = await CartService.getCartItems();
+      setCart(cart);
       console.log(cart, 'this cart with products');
       const items = cart!.lineItems.map((item: LineItem) => {
         console.log(item, 'item in cart');
         return {
           id: item.id,
           quantity: item.quantity,
-          price: item.totalPrice.centAmount / 100,
+          price: item.price.value.centAmount / 100,
           totalPrice: item.totalPrice.centAmount / 100,
           productId: item.productId,
           productName: item.name['en-GB'],
@@ -72,17 +72,46 @@ const useCart = () => {
     }
   };
 
+  const changeQuantity = async (productId: string, quantity: number) => {
+    const lineItemId = getCartItemIdByProductId(productId);
+    if (!lineItemId) {
+      console.error('not find line item with id');
+      return;
+    }
+    try {
+      await CartService.changeLineItemQuantity(lineItemId, quantity);
+      await fetchCartItems();
+      toast.success('Success change quantity');
+    } catch (error) {
+      console.error('Error update quantity in cart:', error);
+    }
+  };
+
+  const clearCart = async () => {
+    console.log(cart, cart?.lineItems, 'DELETE CART');
+    try {
+      if (cart && cart.lineItems.length >= 1) {
+        await CartService.clearCart(cart);
+      } else {
+        toast.warn('Cart is empty');
+        return;
+      }
+      await fetchCartItems();
+      toast.success('Success clear Cart');
+    } catch (error) {
+      console.error('Error clear cart', error);
+    }
+  };
+
   const isProductInCart = (productId: string): boolean => {
     return cartItems.some((item) => item.productId === productId);
   };
 
   useEffect(() => {
-    if (cartId) {
-      fetchCartItems();
-    }
-  }, [cartId]);
+    fetchCartItems();
+  }, []);
 
-  return { cartItems, addToCart, removeFromCart, isInCart: isProductInCart };
+  return { cartItems, cart, addToCart, clearCart, removeFromCart, changeQuantity, isInCart: isProductInCart };
 };
 
 export default useCart;
