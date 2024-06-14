@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { Cart, CartAddLineItemAction } from '@commercetools/platform-sdk';
+import { Cart, CartAddLineItemAction, type CartUpdateAction } from '@commercetools/platform-sdk';
 import { apiRoot } from './helpers/ClientAPI';
 
 export default class CartService {
@@ -232,6 +232,31 @@ export default class CartService {
       return response.body;
     } catch (err) {
       console.error('Error update quantity in cart:', err);
+      toast.error(`${err}`);
+      return null;
+    }
+  }
+
+  static async clearCart(cart: Cart) {
+    const updateActions: CartUpdateAction[] = cart.lineItems.map((lineItem) => ({
+      action: 'removeLineItem',
+      lineItemId: lineItem.id,
+    }));
+    try {
+      const versionCart = await this.getCartVersion();
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: this.currentCartId! })
+        .post({
+          body: {
+            version: versionCart,
+            actions: updateActions,
+          },
+        })
+        .execute();
+      return response.body;
+    } catch (err) {
+      console.error('Error clear cart:', err);
       toast.error(`${err}`);
       return null;
     }
