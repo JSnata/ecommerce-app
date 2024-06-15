@@ -13,8 +13,9 @@ function OrderPage() {
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const handleConfirmation = () => {
-    clearCart().then(() => handleCloseModal());
+  const handleConfirmation = async () => {
+    await clearCart();
+    handleCloseModal();
   };
 
   const totalPrice = cart && cart.totalPrice ? cart.totalPrice.centAmount / 100 : 0;
