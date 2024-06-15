@@ -1,14 +1,15 @@
-// eslint-ignore
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import * as yup from 'yup';
 import React, { useCallback } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import usePromo from '../../hooks/usePromo';
 
 interface PromoFormValues {
   promo: string;
 }
 
 function OrderPromoInput() {
+  const { addPromo } = usePromo();
   const schema = yup.object().shape({
     promo: yup.string().min(2, 'Too Short').max(10, 'Too long').required('Cant be empty'),
   });
@@ -16,7 +17,10 @@ function OrderPromoInput() {
   const handleSubmitPromo = useCallback(
     (values: PromoFormValues, { setSubmitting }: FormikHelpers<PromoFormValues>) => {
       console.log('submit', values);
-      setSubmitting(false);
+      addPromo(values.promo).then((response) => {
+        console.log('response promo', response);
+        setSubmitting(false);
+      });
     },
     [],
   );
