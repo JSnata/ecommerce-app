@@ -1,31 +1,60 @@
 import { useEffect, useState } from 'react';
-import type { DiscountCode, DiscountCodeReference } from '@commercetools/platform-sdk';
+import type { DiscountCode, DiscountCodeInfo } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
 import CartService from '../API/CartService';
+import useCart from './useCart';
 
 const usePromo = () => {
   const [promos, setPromos] = useState<DiscountCode[] | null>(null);
-  const [appliedPromoCode, setAppliedPromoCode] = useState<DiscountCodeReference | undefined>(undefined);
-
+  const [appliedPromoCode, setAppliedPromoCode] = useState<DiscountCodeInfo | undefined>(undefined);
+  const { setCart } = useCart();
   const addPromo = async (codeName: string) => {
-    console.log('STATE 1 data!!!!', appliedPromoCode);
-    if (appliedPromoCode !== undefined && appliedPromoCode !== null) {
-      console.log('Cannot use more than one promo code');
-      toast.error('Cannot use more than one promo code');
-      return;
-    }
     try {
+      if (appliedPromoCode) {
+        console.log('Cannot use more than one promo code');
+        toast.error('Cannot use more than one promo code');
+        return;
+      }
       const response = await CartService.addDiscountCode(codeName);
 
-      if (response && response.discountCodes && response.discountCodes.length > 0) {
-        setAppliedPromoCode(response.discountCodes[0].discountCode);
+      console.log('CODE RESPOSE', response);
+      console.log(response);
+      setCart(response);
+      if (
+        response &&
+        response.discountCodes &&
+        response.discountCodes[0].state === 'MatchesCart' &&
+        response.discountCodes.length > 0
+      ) {
+        setAppliedPromoCode(response.discountCodes[0]);
         toast.success('Promo code applied successfully');
       } else {
-        toast.error('No promo code found in response');
+        toast.error('Promotion conditions not met');
       }
     } catch (err) {
       console.error('Error applying promo code:', err);
       toast.error('Error applying promo code');
+    }
+  };
+
+  const removePromo = async () => {
+    try {
+      if (!appliedPromoCode) {
+        toast.warn('No active promo code to remove');
+        return;
+      }
+      const response = await CartService.deleteDiscountCode(appliedPromoCode.discountCode.id);
+      console.log(response, 'resp 2');
+      setCart(response);
+      if (response) {
+        setAppliedPromoCode(undefined);
+        toast.success('Promo code removed successfully');
+      } else {
+        toast.error('Failed to remove promo code');
+      }
+    } catch (err) {
+      console.error('Error removing promo code:', err);
+      toast.error('Error removing promo code');
     }
   };
 
@@ -45,11 +74,15 @@ const usePromo = () => {
         await fetchAllPromo();
         const currentCart = await CartService.getCartItems();
 
-        if (currentCart && currentCart.discountCodes.length > 0) {
-          console.log('STATE1');
-          setAppliedPromoCode(currentCart.discountCodes[0].discountCode);
+        if (
+          currentCart &&
+          currentCart.discountCodes.length > 0 &&
+          currentCart.discountCodes[0].state === 'MatchesCart'
+        ) {
+          setCart(currentCart);
+          setAppliedPromoCode(currentCart.discountCodes[0]);
         } else {
-          console.log('STATE2');
+          setCart(currentCart);
           setAppliedPromoCode(undefined);
         }
       } catch (err) {
@@ -61,38 +94,7 @@ const usePromo = () => {
     fetchData();
   }, []);
 
-  // const removePromo = async () => {
-  //   console.log('STATE 1 data!!!!', appliedPromoCode);
-  //   try {
-  //     if (!appliedPromoCode) {
-  //       toast.warn('No active promo code to remove');
-  //       return;
-  //     }
-  //
-  //     const response = await CartService.deleteDiscountCode(appliedPromoCode.id);
-  //
-  //     if (response) {
-  //       setAppliedPromoCode(undefined);
-  //       toast.success('Promo code removed successfully');
-  //     } else {
-  //       toast.error('Failed to remove promo code');
-  //     }
-  //   } catch (err) {
-  //     console.error('Error removing promo code:', err);
-  //     toast.error('Error removing promo code');
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (appliedPromoCode) {
-  //     console.log('Applied promo code:', appliedPromoCode);
-  //   } else {
-  //     console.log('No promo code applied', appliedPromoCode);
-  //     console.log(appliedPromoCode === undefined);
-  //   }
-  // }, [appliedPromoCode]);
-
-  return { promos, addPromo, appliedPromoCode };
+  return { promos, addPromo, removePromo, appliedPromoCode };
 };
 
 export default usePromo;
