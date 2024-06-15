@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, FormControl, InputGroup, ListGroup } from 'react-bootstrap';
+import { Button, Card, Col, FormControl, InputGroup, ListGroup, Row } from 'react-bootstrap';
 import { Trash3Fill } from 'react-bootstrap-icons';
 
 type OrderSummaryProps = {
@@ -41,28 +41,35 @@ function OrderSummary({
     }
   };
   return (
-    <Card style={{ width: '100%' }}>
-      <Card.Img variant="top" src={productImageLink || ''} />
+    <Card className="d-flex flex-column h-100" style={{ width: '100%' }}>
+      <Card.Img variant="top" className="object-fit-cover h-50" src={productImageLink || ''} />
       <Card.Body>
-        <Card.Title>{productName}</Card.Title>
-        <ListGroup className="list-group-flush">
+        <Card.Title className="text-center">{productName}</Card.Title>
+        <ListGroup className="list-group-flush text-center">
           <ListGroup.Item>Single Price: {price} €</ListGroup.Item>
           <ListGroup.Item>Total Price: {totalPrice} €</ListGroup.Item>
         </ListGroup>
       </Card.Body>
       <Card.Footer>
-        <InputGroup style={{ width: '100%', margin: 'auto' }}>
-          <Button variant="dark" onClick={handleDecrement}>
-            -
-          </Button>
-          <FormControl aria-describedby="" value={quantity} style={{ textAlign: 'center' }} readOnly />
-          <Button variant="dark" onClick={handleIncrement}>
-            +
-          </Button>
-        </InputGroup>
-        <Button className="mx-3 my-2" type="button" size="sm" variant="danger" onClick={handleRemove}>
-          <Trash3Fill />
-        </Button>
+        <Row className="justify-content-center">
+          <Col sm={12} xl={6}>
+            <InputGroup style={{ width: '100%' }}>
+              <Button variant="dark" onClick={handleDecrement}>
+                -
+              </Button>
+              <FormControl aria-describedby="" value={quantity} style={{ textAlign: 'center' }} readOnly />
+              <Button variant="dark" onClick={handleIncrement}>
+                +
+              </Button>
+            </InputGroup>
+          </Col>
+          <Col sm={12} xl={6} className="d-flex justify-content-center">
+            <Button className="mx-2 my-1" type="button" size="sm" variant="danger" onClick={handleRemove}>
+              Delete
+              <Trash3Fill />
+            </Button>
+          </Col>
+        </Row>
       </Card.Footer>
     </Card>
   );

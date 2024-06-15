@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, CardGroup, Col, Container, Row, Stack } from 'react-bootstrap';
+import { Button, Col, Container, Row, Stack } from 'react-bootstrap';
 import useCart, { type CartItem } from '../../hooks/useCart';
 import OrderSummary from './OrderSummary';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
@@ -19,7 +19,7 @@ function OrderPage() {
   const totalPrice = cart && cart.totalPrice ? cart.totalPrice.centAmount / 100 : 0;
 
   return (
-    <Container fluid>
+    <Container>
       <h1>My Orders</h1>
       {cartItems && cartItems.length > 0 ? (
         <>
@@ -35,23 +35,25 @@ function OrderPage() {
 
               <Row />
             </Col>
-            <Col sm={12} md={8}>
+            <Col sm={12} lg={8}>
               <h5>Products</h5>
-              <CardGroup>
+              <Row>
                 {cartItems.map((item: CartItem) => (
-                  <OrderSummary
-                    key={item.id}
-                    quantity={item.quantity}
-                    price={item.price}
-                    totalPrice={item.totalPrice}
-                    productId={item.productId}
-                    productName={item.productName}
-                    productImageLink={item.productImageLink}
-                    onRemove={removeFromCart}
-                    onChange={changeQuantity}
-                  />
+                  <Col key={item.id} xs={12} sm={6} md={4} className="mb-4">
+                    <OrderSummary
+                      key={item.id}
+                      quantity={item.quantity}
+                      price={item.price}
+                      totalPrice={item.totalPrice}
+                      productId={item.productId}
+                      productName={item.productName}
+                      productImageLink={item.productImageLink}
+                      onRemove={removeFromCart}
+                      onChange={changeQuantity}
+                    />
+                  </Col>
                 ))}
-              </CardGroup>
+              </Row>
             </Col>
           </Row>
           <ModalWindow show={showModal} handleClose={handleCloseModal} modalSize="sm" title="Clear Cart">
