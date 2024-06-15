@@ -1,39 +1,61 @@
-// import { Formik } from 'formik';
-// import * as yup from 'yup';
-import React from 'react';
-// import { Col, Form } from 'react-bootstrap';
+// eslint-ignore
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import * as yup from 'yup';
+import React, { useCallback } from 'react';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+
+interface PromoFormValues {
+  promo: string;
+}
 
 function OrderPromoInput() {
-  // const schema = yup.object().shape({
-  //   promo: yup.string().min(2, 'Too Short').max(10, 'Too long').required('Input promo here'),
-  // });
+  const schema = yup.object().shape({
+    promo: yup.string().min(2, 'Too Short').max(10, 'Too long').required('Cant be empty'),
+  });
+
+  const handleSubmitPromo = useCallback(
+    (values: PromoFormValues, { setSubmitting }: FormikHelpers<PromoFormValues>) => {
+      console.log('submit', values);
+      setSubmitting(false);
+    },
+    [],
+  );
+
   return (
-    <>
-      <p>Input Promo</p>
-      {/* <Formik
+    <Container className="my-5">
+      <h5>Use promo code</h5>
+      <Formik
         initialValues={{
           promo: '',
         }}
         validationSchema={schema}
-        onSubmit={(value) => {
-        console.log(value, 'Value from pomo input');
-        }}
-        {({ handleSubmit, values, touched, errors }) => (
-         <Form noValidate onSubmit={handleSubmit}>
-            <Form.Group as={Col} md="4" controlId="validationFormik01">
-              <Form.Label>Use promocode</Form.Label>
-              <Form.Control
-                type="text"
-                name="promo"
-                value={values.promo}
-                isValid={touched.promo && !errors.promo}
-              />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+        onSubmit={handleSubmitPromo}
+      >
+        {({ handleSubmit, handleChange, values, touched, errors }: FormikProps<PromoFormValues>) => (
+          <Form noValidate onSubmit={handleSubmit}>
+            <Form.Group as={Row} controlId="">
+              <Col sm="8">
+                <Form.Control
+                  type="text"
+                  name="promo"
+                  value={values.promo}
+                  onChange={handleChange}
+                  isValid={touched.promo && !errors.promo}
+                  isInvalid={!!errors.promo}
+                />
+                <Form.Control.Feedback type="invalid">{errors.promo}</Form.Control.Feedback>
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              </Col>
+              <Col sm="2">
+                <Button variant="dark" type="submit">
+                  Add
+                </Button>
+              </Col>
             </Form.Group>
-         </Form>
-       )}
-      ></Formik> */}
-    </>
+          </Form>
+        )}
+      </Formik>
+    </Container>
   );
 }
 
