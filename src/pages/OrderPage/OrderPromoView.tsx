@@ -4,9 +4,9 @@ import type { DiscountCode } from '@commercetools/platform-sdk';
 import usePromo from '../../hooks/usePromo';
 
 function OrderPromo() {
-  const { promo } = usePromo();
+  const { promos } = usePromo();
 
-  console.log(promo, 'PROMO DATA');
+  console.log(promos, 'PROMO DATA');
 
   return (
     <Container>
@@ -17,9 +17,9 @@ function OrderPromo() {
         <small className="text-muted">Enter in Cart discount field</small>
       </Row>
       <Row>
-        {promo && promo.length > 0 ? (
+        {promos && promos.length > 0 ? (
           <CardGroup>
-            {promo.map((item: DiscountCode) => {
+            {promos.map((item: DiscountCode) => {
               const description = item?.description?.['en-GB'];
               const name = item.code;
               return (
