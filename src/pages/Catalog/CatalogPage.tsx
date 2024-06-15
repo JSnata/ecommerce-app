@@ -12,6 +12,7 @@ import {
   DropdownButton,
   Container,
   Breadcrumb,
+  Pagination,
 } from 'react-bootstrap';
 import { Category, ProductProjection } from '@commercetools/platform-sdk';
 import { Link, NavLink, useHistory } from 'react-router-dom';
@@ -65,36 +66,46 @@ export default function CatalogPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
   const [sortOption, setSortOption] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 4;
   const history = useHistory();
   const categories = useCategory();
-  const { products, loading, error } = useProductsByCategory({
+  const { products, loading, error, totalPages } = useProductsByCategory({
     categoryId: currentCategoryId,
     colorFlower: filters['color-flower'],
     sizeFlower: filters['size-flower'],
     sort: sortOption,
     search: searchInput,
+    page: currentPage,
+    pageSize,
   });
   const { cartItems, addToCart, removeFromCart, isInCart } = useCart();
   const { user } = useAuthContext();
 
-  console.log('CARTITEMS', cartItems);
-
   useEffect(() => {}, [filters, sortOption]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [products]);
 
   const handleBreadcrumbClick = (categoryId: string | null) => {
     setCurrentCategoryId(categoryId);
+    setCurrentPage(1);
   };
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleFilterChange = (filterName: string, value: string) => {
     setFilters({ ...filters, [filterName]: value });
+    setCurrentPage(1);
   };
 
   const handleResetFilters = () => {
     setFilters({ 'color-flower': '', 'size-flower': '' });
+    setCurrentPage(1);
   };
 
   // const handleAddToCart = (id: string) => {
@@ -122,6 +133,7 @@ export default function CatalogPage() {
         sortOption = null;
     }
     setSortOption(sortOption);
+    setCurrentPage(1);
   };
 
   const handleCategoryDropDown = (categoryId: string | null) => {
@@ -134,6 +146,10 @@ export default function CatalogPage() {
   };
 
   const breadcrumbPath = generateBreadcrumbPath(categories, currentCategoryId);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <Row>
@@ -311,6 +327,33 @@ export default function CatalogPage() {
                 </Row>
               </Col>
             </Row>
+            {totalPages > 1 && (
+              <Row className="justify-content-center my-3">
+                <Col md={12} className="d-flex justify-content-center">
+                  <Pagination>
+                    <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+                    <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                    {[...Array(totalPages)].map((_, pageIndex) => (
+                      <Pagination.Item
+                        key={pageIndex + 1}
+                        active={pageIndex + 1 === currentPage}
+                        onClick={() => handlePageChange(pageIndex + 1)}
+                      >
+                        {pageIndex + 1}
+                      </Pagination.Item>
+                    ))}
+                    <Pagination.Next
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    />
+                    <Pagination.Last
+                      onClick={() => handlePageChange(totalPages)}
+                      disabled={currentPage === totalPages}
+                    />
+                  </Pagination>
+                </Col>
+              </Row>
+            )}
           </Col>
         </Row>
       </Col>
