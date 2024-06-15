@@ -23,8 +23,8 @@ function OrderPromo() {
               const description = item?.description?.['en-GB'];
               const name = item.code;
               return (
-                <Col>
-                  <Card key={item.id}>
+                <Col key={item.id}>
+                  <Card>
                     <Card.Body>
                       <Card.Title>{name}</Card.Title>
                       <Card.Text>{description}</Card.Text>
