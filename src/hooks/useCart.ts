@@ -21,9 +21,10 @@ const useCart = () => {
     try {
       const currentCart = await CartService.getCartItems();
       setCart(currentCart);
-      console.log(currentCart, 'this cart with products');
+      // console.log(cart, currentCart, 'current promo cart info2');
+      // console.log(currentCart, 'this cart with products');
       const items = currentCart!.lineItems.map((item: LineItem) => {
-        console.log(item, 'item in cart');
+        // console.log(item, 'item in cart');
         return {
           id: item.id,
           quantity: item.quantity,
@@ -86,7 +87,7 @@ const useCart = () => {
   };
 
   const clearCart = async () => {
-    console.log(cart, cart?.lineItems, 'DELETE CART');
+    // console.log(cart, cart?.lineItems, 'DELETE CART');
     try {
       if (cart && cart.lineItems.length >= 1) {
         await CartService.clearCart(cart);
@@ -109,7 +110,16 @@ const useCart = () => {
     fetchCartItems();
   }, []);
 
-  return { cartItems, cart, addToCart, clearCart, removeFromCart, changeQuantity, isInCart: isProductInCart };
+  return {
+    cartItems,
+    cart,
+    addToCart,
+    clearCart,
+    removeFromCart,
+    changeQuantity,
+    isInCart: isProductInCart,
+    fetchCartItems,
+  };
 };
 
 export default useCart;
