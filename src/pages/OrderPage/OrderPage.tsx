@@ -4,6 +4,7 @@ import { Button, Col, Container, Row, Stack } from 'react-bootstrap';
 import useCart, { type CartItem } from '../../hooks/useCart';
 import OrderSummary from './OrderSummary';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
+import OrderPromoInput from './OrderPromoInput';
 
 function OrderPage() {
   const { cartItems, removeFromCart, changeQuantity, clearCart, cart } = useCart();
@@ -26,15 +27,18 @@ function OrderPage() {
           <Row>
             <Col sm={12} md={4}>
               <h5>Manage Orders</h5>
-              <Row className="lead">Current Total Price : {totalPrice}</Row>
-              <Row>
-                <Button variant="dark" onClick={handleShowModal}>
-                  Clear Cart
-                </Button>
-              </Row>
+              <p className="lead my-4">
+                Current Total Price : <b>{totalPrice} EUR</b>
+              </p>
+              <Button variant="dark" onClick={handleShowModal}>
+                Clear Cart
+              </Button>
 
-              <Row />
+              <Row>
+                <OrderPromoInput />
+              </Row>
             </Col>
+
             <Col sm={12} lg={8}>
               <h5>Products</h5>
               <Row>
