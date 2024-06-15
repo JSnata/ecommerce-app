@@ -67,7 +67,7 @@ export default function CatalogPage() {
   const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
   const [sortOption, setSortOption] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
+  const pageSize = 4;
   const history = useHistory();
   const categories = useCategory();
   const { products, loading, error, totalPages } = useProductsByCategory({
@@ -82,9 +82,11 @@ export default function CatalogPage() {
   const { cartItems, addToCart, removeFromCart, isInCart } = useCart();
   const { user } = useAuthContext();
 
-  console.log('CARTITEMS', cartItems);
-
   useEffect(() => {}, [filters, sortOption]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [products]);
 
   const handleBreadcrumbClick = (categoryId: string | null) => {
     setCurrentCategoryId(categoryId);
@@ -325,27 +327,34 @@ export default function CatalogPage() {
                 </Row>
               </Col>
             </Row>
+            {totalPages > 1 && (
+              <Row className="justify-content-center my-3">
+                <Col md={12} className="d-flex justify-content-center">
+                  <Pagination>
+                    <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+                    <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                    {[...Array(totalPages)].map((_, pageIndex) => (
+                      <Pagination.Item
+                        key={pageIndex + 1}
+                        active={pageIndex + 1 === currentPage}
+                        onClick={() => handlePageChange(pageIndex + 1)}
+                      >
+                        {pageIndex + 1}
+                      </Pagination.Item>
+                    ))}
+                    <Pagination.Next
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    />
+                    <Pagination.Last
+                      onClick={() => handlePageChange(totalPages)}
+                      disabled={currentPage === totalPages}
+                    />
+                  </Pagination>
+                </Col>
+              </Row>
+            )}
           </Col>
-          {totalPages > 1 && (
-            <Pagination>
-              <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-              <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-              {[...Array(totalPages)].map((_, pageIndex) => (
-                <Pagination.Item
-                  key={pageIndex + 1}
-                  active={pageIndex + 1 === currentPage}
-                  onClick={() => handlePageChange(pageIndex + 1)}
-                >
-                  {pageIndex + 1}
-                </Pagination.Item>
-              ))}
-              <Pagination.Next
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              />
-              <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
-            </Pagination>
-          )}
         </Row>
       </Col>
     </Row>

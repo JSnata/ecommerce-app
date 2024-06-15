@@ -21,7 +21,7 @@ const useProductsByCategory = ({
   search,
   language = 'en-GB',
   page = 1,
-  pageSize = 5,
+  pageSize = 4,
 }: FilterOptions) => {
   const [products, setProducts] = useState<ProductProjection[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
