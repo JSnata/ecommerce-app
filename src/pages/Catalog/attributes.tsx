@@ -17,8 +17,6 @@ function Attributes({ onChange }: AttributesProps) {
       const allAttributes = productTypes
         .filter((productType) => productType.name === 'Flower')
         .flatMap((type) => type.attributes || []);
-
-      console.log(allAttributes);
       return allAttributes;
     } catch (error) {
       console.error('Error fetching attributes:', error);
@@ -29,7 +27,6 @@ function Attributes({ onChange }: AttributesProps) {
   useEffect(() => {
     fetchAllAttributes()
       .then((allAttributes) => {
-        console.log('Attributes:', allAttributes);
         setAttr(allAttributes);
       })
       .catch((error) => {

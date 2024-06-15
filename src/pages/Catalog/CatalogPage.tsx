@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import {
   Row,
@@ -22,7 +21,6 @@ import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
 import Attributes from './attributes';
 import useCart from '../../hooks/useCart';
-import useAuthContext from '../../hooks/useAuthContext';
 
 function truncateToSentence(text: string) {
   const match = text.match(/(.*?\.)(\s|$)/);
@@ -51,12 +49,17 @@ const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCatego
     product: null,
   });
 
-  let category = categories.find((cat) => cat.category.id === currentCategoryId);
+  const findCategoryById = (id: string | null) => {
+    return categories.find((cat) => cat.category.id === id);
+  };
+
+  let category = findCategoryById(currentCategoryId);
 
   while (category) {
     path.push(category);
-    category = categories.find((cat) => cat.category.id === category?.category.parent?.id);
+    category = findCategoryById(category.category.parent?.id || null);
   }
+
   return path;
 };
 
@@ -79,8 +82,7 @@ export default function CatalogPage() {
     page: currentPage,
     pageSize,
   });
-  const { cartItems, addToCart, removeFromCart, isInCart } = useCart();
-  const { user } = useAuthContext();
+  const { addToCart, removeFromCart, isInCart } = useCart();
 
   useEffect(() => {}, [filters, sortOption]);
 
@@ -115,24 +117,24 @@ export default function CatalogPage() {
   // const isProductInCart = (id: string) => cart.includes(id);
 
   const handleSortChange = (option: string | null) => {
-    let sortOption = null;
+    let sortOpt = null;
     switch (option) {
       case 'price-asc':
-        sortOption = 'price asc';
+        sortOpt = 'price asc';
         break;
       case 'price-desc':
-        sortOption = 'price desc';
+        sortOpt = 'price desc';
         break;
       case 'name-asc':
-        sortOption = 'name.en-gb asc';
+        sortOpt = 'name.en-gb asc';
         break;
       case 'name-desc':
-        sortOption = 'name.en-gb desc';
+        sortOpt = 'name.en-gb desc';
         break;
       default:
-        sortOption = null;
+        sortOpt = null;
     }
-    setSortOption(sortOption);
+    setSortOption(sortOpt);
     setCurrentPage(1);
   };
 
@@ -291,10 +293,6 @@ export default function CatalogPage() {
                   {!loading &&
                     !error &&
                     products.map((product) => {
-                      const currentCategory = categories.find((cat) =>
-                        product.categories.some((catRef) => catRef.id === cat.category.id),
-                      );
-
                       const productDescription = product.description
                         ? truncateToSentence(product.description['en-GB'] || '')
                         : '';
@@ -333,15 +331,18 @@ export default function CatalogPage() {
                   <Pagination>
                     <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
                     <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-                    {[...Array(totalPages)].map((_, pageIndex) => (
-                      <Pagination.Item
-                        key={pageIndex + 1}
-                        active={pageIndex + 1 === currentPage}
-                        onClick={() => handlePageChange(pageIndex + 1)}
-                      >
-                        {pageIndex + 1}
-                      </Pagination.Item>
-                    ))}
+                    {[...Array(totalPages)].map((_, pageIndex) => {
+                      const pageNumber = pageIndex + 1;
+                      return (
+                        <Pagination.Item
+                          key={pageNumber}
+                          active={pageNumber === currentPage}
+                          onClick={() => handlePageChange(pageNumber)}
+                        >
+                          {pageNumber}
+                        </Pagination.Item>
+                      );
+                    })}
                     <Pagination.Next
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}

@@ -1,9 +1,7 @@
-/* eslint-disable */
 import { useEffect, useState } from 'react';
 import { Cart, LineItem } from '@commercetools/platform-sdk';
-import { apiRoot } from '../API/helpers/ClientAPI';
-import CartService from '../API/CartService';
 import { toast } from 'react-toastify';
+import CartService from '../API/CartService';
 
 export type CartItem = {
   id: string;
@@ -21,10 +19,10 @@ const useCart = () => {
 
   const fetchCartItems = async (): Promise<void> => {
     try {
-      const cart = await CartService.getCartItems();
-      setCart(cart);
-      console.log(cart, 'this cart with products');
-      const items = cart!.lineItems.map((item: LineItem) => {
+      const currentCart = await CartService.getCartItems();
+      setCart(currentCart);
+      console.log(currentCart, 'this cart with products');
+      const items = currentCart!.lineItems.map((item: LineItem) => {
         console.log(item, 'item in cart');
         return {
           id: item.id,
