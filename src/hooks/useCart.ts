@@ -17,34 +17,34 @@ const useCart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [cart, setCart] = useState<Cart | null>(null);
 
-  const fetchCartItems = async (): Promise<void> => {
+  const fetchCartItems = async (): Promise<Cart | null> => {
     try {
       const currentCart = await CartService.getCartItems();
-      setCart(currentCart);
-      // console.log(cart, currentCart, 'current promo cart info2');
-      // console.log(currentCart, 'this cart with products');
-      const items = currentCart!.lineItems.map((item: LineItem) => {
-        // console.log(item, 'item in cart');
-        return {
-          id: item.id,
-          quantity: item.quantity,
-          price: item.price.value.centAmount / 100,
-          totalPrice: item.totalPrice.centAmount / 100,
-          productId: item.productId,
-          productName: item.name['en-GB'],
-          productImageLink: item.variant?.images?.[0]?.url ?? '',
-        } as CartItem;
-      });
-      setCartItems(items);
+      const items = currentCart?.lineItems.map((item: LineItem) => ({
+        id: item.id,
+        quantity: item.quantity,
+        price: item.price.value.centAmount / 100,
+        totalPrice: item.totalPrice.centAmount / 100,
+        productId: item.productId,
+        productName: item.name['en-GB'],
+        productImageLink: item.variant?.images?.[0]?.url ?? '',
+      }));
+      setCartItems(items ?? []);
+      // setCart(currentCart);
+      return currentCart;
     } catch (error) {
       console.error('Error fetching cart items:', error);
     }
+    return null;
   };
 
   const addToCart = async (productId: string): Promise<void> => {
     try {
-      await CartService.addToCart(productId);
-      await fetchCartItems();
+      const newCart = await CartService.addToCart(productId);
+      if (newCart) {
+        setCart(newCart.body);
+      }
+      // await fetchCartItems();
       toast.success('Success add product');
     } catch (error) {
       console.error('Error adding item to cart:', error);
@@ -63,8 +63,11 @@ const useCart = () => {
       return;
     }
     try {
-      await CartService.removeFromCart(lineItemId);
-      await fetchCartItems();
+      const newCart = await CartService.removeFromCart(lineItemId);
+      if (newCart) {
+        setCart(newCart);
+      }
+      // await fetchCartItems();
       toast.success('Success delete product');
     } catch (error) {
       console.error('Error removing item from cart:', error);
@@ -78,8 +81,11 @@ const useCart = () => {
       return;
     }
     try {
-      await CartService.changeLineItemQuantity(lineItemId, quantity);
-      await fetchCartItems();
+      const newCart = await CartService.changeLineItemQuantity(lineItemId, quantity);
+      if (newCart) {
+        setCart(newCart);
+      }
+      // await fetchCartItems();
       toast.success('Success change quantity');
     } catch (error) {
       console.error('Error update quantity in cart:', error);
@@ -87,15 +93,17 @@ const useCart = () => {
   };
 
   const clearCart = async () => {
-    // console.log(cart, cart?.lineItems, 'DELETE CART');
     try {
       if (cart && cart.lineItems.length >= 1) {
-        await CartService.clearCart(cart);
+        const newCart = await CartService.clearCart(cart);
+        if (newCart) {
+          setCart(newCart);
+        }
       } else {
         toast.warn('Cart is empty');
         return;
       }
-      await fetchCartItems();
+      // await fetchCartItems();
       toast.success('Success clear Cart');
     } catch (error) {
       console.error('Error clear cart', error);
@@ -108,11 +116,18 @@ const useCart = () => {
 
   useEffect(() => {
     fetchCartItems();
+  }, [cart]);
+
+  useEffect(() => {
+    fetchCartItems().then((response) => {
+      setCart(response);
+    });
   }, []);
 
   return {
     cartItems,
     cart,
+    setCart,
     addToCart,
     clearCart,
     removeFromCart,
