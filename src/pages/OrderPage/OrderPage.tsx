@@ -19,7 +19,7 @@ function OrderPage() {
   };
 
   const totalPrice = cart && cart.totalPrice ? cart.totalPrice.centAmount / 100 : 0;
-
+  const discount = cart && cart.discountOnTotalPrice ? cart.discountOnTotalPrice.discountedAmount.centAmount / 100 : '';
   return (
     <Container>
       <h1>My Orders</h1>
@@ -28,9 +28,25 @@ function OrderPage() {
           <Row>
             <Col sm={12} md={4}>
               <h5>Manage Orders</h5>
-              <p className="lead my-4">
-                Current Total Price : <b>{totalPrice} EUR</b>
-              </p>
+              <Row>
+                <div className="lead my-4">
+                  {cart?.discountOnTotalPrice ? (
+                    <>
+                      <p>
+                        Current Total Price : <b className="text-success">{totalPrice} EUR</b>
+                      </p>
+                      <p>
+                        Your Discount : <b className="">{discount} EUR</b>
+                      </p>
+                    </>
+                  ) : (
+                    <p>
+                      Current Total Price : <b className="">{totalPrice} EUR</b>
+                    </p>
+                  )}
+                </div>
+              </Row>
+
               <Button variant="dark" onClick={handleShowModal}>
                 Clear Cart
               </Button>

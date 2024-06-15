@@ -23,7 +23,7 @@ const usePromo = () => {
       if (
         response &&
         response.discountCodes &&
-        response.discountCodes[0].state === 'MatchesCart' &&
+        // response.discountCodes[0].state === 'MatchesCart' &&
         response.discountCodes.length > 0
       ) {
         setAppliedPromoCode(response.discountCodes[0]);
@@ -76,8 +76,8 @@ const usePromo = () => {
 
         if (
           currentCart &&
-          currentCart.discountCodes.length > 0 &&
-          currentCart.discountCodes[0].state === 'MatchesCart'
+          currentCart.discountCodes.length > 0
+          // currentCart.discountCodes[0].state === 'MatchesCart'
         ) {
           setCart(currentCart);
           setAppliedPromoCode(currentCart.discountCodes[0]);

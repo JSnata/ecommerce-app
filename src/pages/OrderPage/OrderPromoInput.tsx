@@ -18,6 +18,7 @@ function OrderPromoInput() {
 
   useEffect(() => {
     const current = promos?.find((promo) => promo.id === appliedPromoCode?.discountCode.id);
+    console.log(currentPromo, 'CURRENT PROMO');
     if (current) {
       setCurrentPromo(current);
     }

@@ -30,6 +30,7 @@ const useCart = () => {
         productImageLink: item.variant?.images?.[0]?.url ?? '',
       }));
       setCartItems(items ?? []);
+      console.log(currentCart, 'CURRENT CART!!!!');
       // setCart(currentCart);
       return currentCart;
     } catch (error) {
