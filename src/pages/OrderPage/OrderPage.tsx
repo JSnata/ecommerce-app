@@ -19,7 +19,7 @@ function OrderPage() {
   };
 
   const totalPrice = cart && cart.totalPrice ? cart.totalPrice.centAmount / 100 : 0;
-  const discount = cart && cart.discountOnTotalPrice ? cart.discountOnTotalPrice.discountedAmount.centAmount / 100 : '';
+  const discount = cart && cart.discountOnTotalPrice ? cart.discountOnTotalPrice.discountedAmount.centAmount / 100 : 0;
   return (
     <Container>
       <h1>My Orders</h1>
@@ -33,15 +33,15 @@ function OrderPage() {
                   {cart?.discountOnTotalPrice ? (
                     <>
                       <p>
-                        Current Total Price : <b className="text-success">{totalPrice} EUR</b>
+                        Total price : <b className="text-decoration-line-through">{totalPrice + discount} EUR</b>
                       </p>
                       <p>
-                        Your Discount : <b className="">{discount} EUR</b>
+                        Your price : <b className="text-success">{totalPrice} EUR</b>
                       </p>
                     </>
                   ) : (
                     <p>
-                      Current Total Price : <b className="">{totalPrice} EUR</b>
+                      Total Price : <b className="">{totalPrice} EUR</b>
                     </p>
                   )}
                 </div>

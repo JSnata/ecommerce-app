@@ -50,9 +50,9 @@ function OrderSummary({
           <ListGroup.Item>Total Price: {totalPrice} €</ListGroup.Item>
         </ListGroup>
       </Card.Body>
-      <Card.Footer>
+      <Card.Footer className="p-1">
         <Row className="justify-content-center">
-          <Col sm={12} xl={6}>
+          <Col sm={12} xl={8}>
             <InputGroup style={{ width: '100%' }}>
               <Button variant="dark" onClick={handleDecrement}>
                 -
@@ -63,9 +63,15 @@ function OrderSummary({
               </Button>
             </InputGroup>
           </Col>
-          <Col sm={12} xl={6} className="d-flex justify-content-center">
-            <Button className="mx-2 my-1" type="button" size="sm" variant="danger" onClick={handleRemove}>
-              Delete
+          <Col sm={12} xl={4} className="d-flex justify-content-center">
+            <Button
+              style={{ width: '100%' }}
+              className="my-1"
+              type="button"
+              size="sm"
+              variant="danger"
+              onClick={handleRemove}
+            >
               <Trash3Fill />
             </Button>
           </Col>
