@@ -1,17 +1,15 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Cart3 } from 'react-bootstrap-icons';
-import { Badge, Container, Navbar, Offcanvas, Nav } from 'react-bootstrap';
+import { Container, Navbar, Offcanvas, Nav } from 'react-bootstrap';
 import useAuthContext from '../../hooks/useAuthContext';
 import SecondaryButton from '../../ui/Buttons/SecondaryButton/SecondaryButton';
 import NavBarProfile from '../NavBarProfile/NavBarProfile';
 import SecondaryNavigation from './SecondaryNavigation';
 import Logo from '../../ui/Logo/Logo';
-import useCart from '../../hooks/useCart';
 
 function NavigationBar() {
   const { user } = useAuthContext();
-  const { cart } = useCart();
   const location = useLocation();
 
   return (
@@ -35,7 +33,6 @@ function NavigationBar() {
             <div className="d-flex gap-2 justify-content-center justify-content-lg-end">
               <Nav.Link as={Link} to="/order">
                 <Cart3 size={25} />
-                <Badge bg="secondary">{cart?.lineItems.length || 0}</Badge>
               </Nav.Link>
               {!user && location.pathname !== '/register' && (
                 <SecondaryButton to="/register" link="/register">
