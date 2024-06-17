@@ -64,7 +64,7 @@ export default function AboutPage() {
             style={style.infoSofa}
             fio="Sofia Sharshunskaya"
             post="Frontend developer"
-            bio="I work in Moscow. Since high school, I wanted to work in the IT field, but I could not decide on the direction. I went to the institute in the direction of 'applied informatics'. I studied for 4 years and got a diploma. I started working as a database designer and developer, but this is not what I would like to do all my life. I realized that I liked JavaScript and began to delve into its study, got into RS School and now I'm trying to live to the end of the stage."
+            bio="I'm from Moscow. Since high school, I wanted to work in the IT field, but I could not decide on the direction. I went to the institute in the direction of 'applied informatics'. I studied for 4 years and got a diploma. I started working as a database designer and developer, but this is not what I would like to do all my life. I realized that I liked JavaScript and began to delve into its study, got into RS School and now I'm trying to live to the end of the stage."
             did="Login/Register page, product page, page about, validation logig"
             gitHub="https://github.com/SPHsofi"
           />
