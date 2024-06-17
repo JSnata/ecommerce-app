@@ -38,8 +38,8 @@ export default function AboutPage() {
             style={style.infoNata}
             fio="Natallia Kulikouskaya"
             post="Team Lead / Frontend developer"
-            bio="I’m from the Republic of Belarus, but now I live in Poland, while it’s difficult to get a normal job, before moving I worked as an SEO, now I’m learning English and taking this course to gain courage and finally go look for an offer. I decided to temporarily put my hobby aside and kick myself to study and do more business, although in quiet times I did drawing, I love books and walks, mountains and much more)"
-            did="Api connect, router, catalog page, header, "
+            bio="Originally from the Republic of Belarus, I currently reside in Poland. With a background in SEO, I am now focused on enhancing my English proficiency and completing a course to transition into a frontend developer role. I am eager to leverage my skills and embark on a new career path in frontend development."
+            did="Api connect, router, catalog page, header"
             gitHub="https://github.com/jsnata"
           />
         </Row>
