@@ -9,7 +9,7 @@ function SecondaryNavigation() {
         Catalog
       </Nav.Link>
       <Nav.Link as={NavLink} to="/about">
-        About page
+        About
       </Nav.Link>
     </Nav>
   );
