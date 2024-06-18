@@ -24,7 +24,10 @@ export default function AboutPage() {
                   The team was assembled from participants whom the mentor chose as his wards. Since February, we began
                   to communicate a lot and help each other with individual tasks. When it came time to assemble teams
                   for a group project, we did not hesitate to form a team. Our communication is set up well, Discord has
-                  sections for specific occasions, and Trello helps us manage tasks.
+                  sections for specific occasions, and Trello helps us manage tasks. Throughout all 7 weeks, we actively
+                  helped each other, suggested and advised useful things to implement. Each team member did both the
+                  layout and logic of the pages. If difficulties arose, everyone could work on the page together. Thus,
+                  we have a beautiful, functional commercial website example.
                 </p>
               </Col>
             </Row>
