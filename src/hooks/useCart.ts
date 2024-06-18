@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import { Cart, LineItem } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
 import CartService from '../API/CartService';

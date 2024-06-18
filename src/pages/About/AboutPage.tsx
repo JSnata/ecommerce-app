@@ -48,9 +48,9 @@ export default function AboutPage() {
             style={style.infoIlya}
             fio="Ilya Slepchenkov"
             post="Frontend developer"
-            bio="I work in Moscow (Zelenograd) as an engineer in the field of microelectronics and study at rsschool, but there is no time for the rest. Hobbies like most: books, TV series, some games, longboard."
-            did="Api connect, main page, basket page"
+            bio="I live in Zelenograd, Moscow, and work as a microelectronics engineer. At my job, there was a need for customer service development, which led me to programming. I started by self-studying PHP, JavaScript, CSS, and HTML, and then continued my education at RS School. During my studies, I realized that programming is exactly what I want to do. In the future, after completing my education at RS School, I plan to develop in the areas of frontend and backend development using Node.js to create efficient and modern web applications."
             gitHub="https://github.com/linderjk"
+            did="Commerce tools API, main page, cart, profile"
           />
           <Col xs={12} md={6} className={style.imgIlya}>
             <Image src={Ilya} alt="Ilya Slepchenkov" fluid />
