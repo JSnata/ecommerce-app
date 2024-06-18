@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, CardGroup, Col, Container, Row, Stack } from 'react-bootstrap';
+import { Button, Col, Container, Row, Stack } from 'react-bootstrap';
 import useCart, { type CartItem } from '../../hooks/useCart';
 import OrderSummary from './OrderSummary';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
+import OrderPromoInput from './OrderPromoInput';
 
 function OrderPage() {
   const { cartItems, removeFromCart, changeQuantity, clearCart, cart } = useCart();
@@ -12,45 +13,68 @@ function OrderPage() {
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const handleConfirmation = () => {
-    clearCart().then(() => handleCloseModal());
+  const handleConfirmation = async () => {
+    await clearCart();
+    handleCloseModal();
   };
 
   const totalPrice = cart && cart.totalPrice ? cart.totalPrice.centAmount / 100 : 0;
-
+  const discount = cart && cart.discountOnTotalPrice ? cart.discountOnTotalPrice.discountedAmount.centAmount / 100 : 0;
   return (
-    <Container fluid>
+    <Container>
       <h1>My Orders</h1>
       {cartItems && cartItems.length > 0 ? (
         <>
           <Row>
             <Col sm={12} md={4}>
               <h5>Manage Orders</h5>
-              <Row className="lead">Current Total Price : {totalPrice}</Row>
               <Row>
-                <Button variant="dark" onClick={handleShowModal}>
-                  Clear Cart
-                </Button>
+                <div className="lead my-4">
+                  {cart?.discountOnTotalPrice ? (
+                    <>
+                      <p>
+                        Total price : <b className="text-decoration-line-through">{totalPrice + discount} EUR</b>
+                      </p>
+                      <p>
+                        Your price : <b className="text-success">{totalPrice} EUR</b>
+                      </p>
+                    </>
+                  ) : (
+                    <p>
+                      Total Price : <b className="">{totalPrice} EUR</b>
+                    </p>
+                  )}
+                </div>
+              </Row>
+
+              <Button variant="dark" onClick={handleShowModal}>
+                Clear Cart
+              </Button>
+
+              <Row>
+                <OrderPromoInput />
               </Row>
             </Col>
-            <Col sm={12} md={8}>
-              <h5>Products</h5>
 
-              <CardGroup>
+            <Col sm={12} lg={8}>
+              <h5>Products</h5>
+              <Row>
                 {cartItems.map((item: CartItem) => (
-                  <OrderSummary
-                    key={item.id}
-                    quantity={item.quantity}
-                    price={item.price}
-                    totalPrice={item.totalPrice}
-                    productId={item.productId}
-                    productName={item.productName}
-                    productImageLink={item.productImageLink}
-                    onRemove={removeFromCart}
-                    onChange={changeQuantity}
-                  />
+                  <Col key={item.id} xs={12} sm={6} md={4} className="mb-4">
+                    <OrderSummary
+                      key={item.id}
+                      quantity={item.quantity}
+                      price={item.price}
+                      totalPrice={item.totalPrice}
+                      productId={item.productId}
+                      productName={item.productName}
+                      productImageLink={item.productImageLink}
+                      onRemove={removeFromCart}
+                      onChange={changeQuantity}
+                    />
+                  </Col>
                 ))}
-              </CardGroup>
+              </Row>
             </Col>
           </Row>
           <ModalWindow show={showModal} handleClose={handleCloseModal} modalSize="sm" title="Clear Cart">

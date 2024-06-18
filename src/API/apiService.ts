@@ -92,7 +92,7 @@ export default class ApiService {
         .get()
         .execute()
         .then((response) => {
-          console.log(response, 'Customer all cart');
+          console.log(response.body.results[0], 'Customer all cart');
         });
     } catch (error) {
       console.log(error);

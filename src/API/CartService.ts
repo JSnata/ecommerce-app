@@ -18,7 +18,7 @@ export default class CartService {
 
   static async initCartByID(id: string) {
     this.cartData = await CartService.getCartByID(id);
-    console.log('cart by id', this.cartData);
+    // console.log('cart by id', this.cartData);
     if (this.cartData) {
       this.currentCartId = this.cartData?.id;
     }
@@ -43,7 +43,7 @@ export default class CartService {
           },
         })
         .execute();
-      console.log('Анонимная корзина создана:', cart.body.id, cart.body);
+      // console.log('Анонимная корзина создана:', cart.body.id, cart.body);
       return cart.body;
     } catch (err) {
       console.error(err);
@@ -55,7 +55,7 @@ export default class CartService {
   static async getCartByID(id: string) {
     try {
       const response = await apiRoot.carts().withId({ ID: id }).get().execute();
-      console.log('Найдена корзина по ID', id, response);
+      // console.log('Найдена корзина по ID', id, response);
       return response.body;
     } catch (err) {
       console.error(err);
@@ -82,7 +82,7 @@ export default class CartService {
             ...lineItem,
           }) as CartAddLineItemAction,
       );
-      const updatedCart = await apiRoot
+      await apiRoot
         .carts()
         .withId({ ID: customerCartId })
         .post({
@@ -92,7 +92,7 @@ export default class CartService {
           },
         })
         .execute();
-      console.log('Корзины объединены:', updatedCart.body.id);
+      // console.log('Корзины объединены:', updatedCart.body.id);
     } catch (err) {
       console.error('Ошибка при объединении корзин:', err);
       toast.error(`${err}`);
@@ -168,7 +168,7 @@ export default class CartService {
         console.error('Product not found');
         return null;
       }
-      console.log(product);
+      // console.log(product);
       const versionCart = await this.getCartVersion();
       const cartId = await this.getCartId();
       return await apiRoot
@@ -257,6 +257,75 @@ export default class CartService {
       return response.body;
     } catch (err) {
       console.error('Error clear cart:', err);
+      toast.error(`${err}`);
+      return null;
+    }
+  }
+
+  static async getAllActivePromo() {
+    try {
+      const response = await apiRoot
+        .discountCodes()
+        .get({ queryArgs: { where: 'isActive=true' } })
+        .execute();
+      return response.body.results;
+    } catch (err) {
+      console.error('Error clear cart:', err);
+      toast.error(`${err}`);
+      return null;
+    }
+  }
+
+  static async addDiscountCode(codeName: string) {
+    try {
+      const versionCart = await this.getCartVersion();
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: this.currentCartId! })
+        .post({
+          body: {
+            version: versionCart,
+            actions: [
+              {
+                action: 'addDiscountCode',
+                code: codeName,
+              },
+            ],
+          },
+        })
+        .execute();
+      return response.body;
+    } catch (err) {
+      console.error('Error use promo code', err);
+      toast.error(`${err}`);
+      return null;
+    }
+  }
+
+  static async deleteDiscountCode(codeId: string) {
+    try {
+      const versionCart = await this.getCartVersion();
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: this.currentCartId! })
+        .post({
+          body: {
+            version: versionCart,
+            actions: [
+              {
+                action: 'removeDiscountCode',
+                discountCode: {
+                  typeId: 'discount-code',
+                  id: codeId,
+                },
+              },
+            ],
+          },
+        })
+        .execute();
+      return response.body;
+    } catch (err) {
+      console.error('Error remove promo code', err);
       toast.error(`${err}`);
       return null;
     }
