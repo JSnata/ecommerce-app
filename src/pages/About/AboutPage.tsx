@@ -39,7 +39,7 @@ export default function AboutPage() {
             fio="Natallia Kulikouskaya"
             post="Team Lead / Frontend developer"
             bio="Originally from the Republic of Belarus, I currently reside in Poland. With a background in SEO, I am now focused on enhancing my English proficiency and completing a course to transition into a frontend developer role. I am eager to leverage my skills and embark on a new career path in frontend development."
-            did="Api connect, router, catalog page, header"
+            did="Api connect, router, catalog page, header, filter products"
             gitHub="https://github.com/jsnata"
           />
         </Row>
@@ -50,7 +50,7 @@ export default function AboutPage() {
             post="Frontend developer"
             bio="I live in Zelenograd, Moscow, and work as a microelectronics engineer. At my job, there was a need for customer service development, which led me to programming. I started by self-studying PHP, JavaScript, CSS, and HTML, and then continued my education at RS School. During my studies, I realized that programming is exactly what I want to do. In the future, after completing my education at RS School, I plan to develop in the areas of frontend and backend development using Node.js to create efficient and modern web applications."
             gitHub="https://github.com/linderjk"
-            did="Commerce tools API, main page, cart, profile"
+            did="Commerce tools API, main page, cart, profile, basket page"
           />
           <Col xs={12} md={6} className={style.imgIlya}>
             <Image src={Ilya} alt="Ilya Slepchenkov" fluid />
