@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Cart, LineItem } from '@commercetools/platform-sdk';
+import { toast } from 'react-toastify';
 import CartService from '../API/CartService';
 
 export type CartItem = {
@@ -20,19 +21,21 @@ const useCart = () => {
   const fetchCartItems = async (): Promise<Cart | null> => {
     try {
       const currentCart = await CartService.getCartItems();
-      const items = currentCart?.lineItems.map((item: LineItem) => ({
-        id: item.id,
-        quantity: item.quantity,
-        price: item.price.value.centAmount / 100,
-        totalPrice: item.totalPrice.centAmount / 100,
-        productId: item.productId,
-        productName: item.name['en-GB'],
-        productImageLink: item.variant?.images?.[0]?.url ?? '',
-      }));
-      setCartItems(items ?? []);
-      console.log(currentCart, 'CURRENT CART!!!!');
-      // setCart(currentCart);
-      return currentCart;
+      setCart(currentCart);
+      console.log(currentCart, 'this cart with products');
+      const items = currentCart!.lineItems.map((item: LineItem) => {
+        console.log(item, 'item in cart');
+        return {
+          id: item.id,
+          quantity: item.quantity,
+          price: item.price.value.centAmount / 100,
+          totalPrice: item.totalPrice.centAmount / 100,
+          productId: item.productId,
+          productName: item.name['en-GB'],
+          productImageLink: item.variant?.images?.[0]?.url ?? '',
+        } as CartItem;
+      });
+      setCartItems(items);
     } catch (error) {
       console.error('Error fetching cart items:', error);
     }

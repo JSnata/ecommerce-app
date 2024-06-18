@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import {
   Row,
@@ -12,6 +11,7 @@ import {
   DropdownButton,
   Container,
   Breadcrumb,
+  Pagination,
 } from 'react-bootstrap';
 import { Category, ProductProjection } from '@commercetools/platform-sdk';
 import { Link, NavLink, useHistory } from 'react-router-dom';
@@ -21,7 +21,6 @@ import styles from './CatalogPage.module.css';
 import ProductCard from '../../ui/Cards/ProductCard/ProductCard';
 import Attributes from './attributes';
 import useCart from '../../hooks/useCart';
-import useAuthContext from '../../hooks/useAuthContext';
 
 function truncateToSentence(text: string) {
   const match = text.match(/(.*?\.)(\s|$)/);
@@ -50,12 +49,17 @@ const generateBreadcrumbPath = (categories: CategoryWithProduct[], currentCatego
     product: null,
   });
 
-  let category = categories.find((cat) => cat.category.id === currentCategoryId);
+  const findCategoryById = (id: string | null) => {
+    return categories.find((cat) => cat.category.id === id);
+  };
+
+  let category = findCategoryById(currentCategoryId);
 
   while (category) {
     path.push(category);
-    category = categories.find((cat) => cat.category.id === category?.category.parent?.id);
+    category = findCategoryById(category.category.parent?.id || null);
   }
+
   return path;
 };
 
@@ -65,36 +69,45 @@ export default function CatalogPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState<null | string>(null);
   const [sortOption, setSortOption] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 4;
   const history = useHistory();
   const categories = useCategory();
-  const { products, loading, error } = useProductsByCategory({
+  const { products, loading, error, totalPages } = useProductsByCategory({
     categoryId: currentCategoryId,
     colorFlower: filters['color-flower'],
     sizeFlower: filters['size-flower'],
     sort: sortOption,
     search: searchInput,
+    page: currentPage,
+    pageSize,
   });
-  const { cartItems, addToCart, removeFromCart, isInCart } = useCart();
-  const { user } = useAuthContext();
-
-  console.log('CARTITEMS', cartItems);
+  const { addToCart, removeFromCart, isInCart } = useCart();
 
   useEffect(() => {}, [filters, sortOption]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [products]);
+
   const handleBreadcrumbClick = (categoryId: string | null) => {
     setCurrentCategoryId(categoryId);
+    setCurrentPage(1);
   };
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleFilterChange = (filterName: string, value: string) => {
     setFilters({ ...filters, [filterName]: value });
+    setCurrentPage(1);
   };
 
   const handleResetFilters = () => {
     setFilters({ 'color-flower': '', 'size-flower': '' });
+    setCurrentPage(1);
   };
 
   // const handleAddToCart = (id: string) => {
@@ -104,24 +117,25 @@ export default function CatalogPage() {
   // const isProductInCart = (id: string) => cart.includes(id);
 
   const handleSortChange = (option: string | null) => {
-    let sortOption = null;
+    let sortOpt = null;
     switch (option) {
       case 'price-asc':
-        sortOption = 'price asc';
+        sortOpt = 'price asc';
         break;
       case 'price-desc':
-        sortOption = 'price desc';
+        sortOpt = 'price desc';
         break;
       case 'name-asc':
-        sortOption = 'name.en-gb asc';
+        sortOpt = 'name.en-gb asc';
         break;
       case 'name-desc':
-        sortOption = 'name.en-gb desc';
+        sortOpt = 'name.en-gb desc';
         break;
       default:
-        sortOption = null;
+        sortOpt = null;
     }
-    setSortOption(sortOption);
+    setSortOption(sortOpt);
+    setCurrentPage(1);
   };
 
   const handleCategoryDropDown = (categoryId: string | null) => {
@@ -134,6 +148,10 @@ export default function CatalogPage() {
   };
 
   const breadcrumbPath = generateBreadcrumbPath(categories, currentCategoryId);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <Row>
@@ -275,10 +293,6 @@ export default function CatalogPage() {
                   {!loading &&
                     !error &&
                     products.map((product) => {
-                      const currentCategory = categories.find((cat) =>
-                        product.categories.some((catRef) => catRef.id === cat.category.id),
-                      );
-
                       const productDescription = product.description
                         ? truncateToSentence(product.description['en-GB'] || '')
                         : '';
@@ -311,6 +325,36 @@ export default function CatalogPage() {
                 </Row>
               </Col>
             </Row>
+            {totalPages > 1 && (
+              <Row className="justify-content-center my-3">
+                <Col md={12} className="d-flex justify-content-center">
+                  <Pagination>
+                    <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+                    <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                    {[...Array(totalPages)].map((_, pageIndex) => {
+                      const pageNumber = pageIndex + 1;
+                      return (
+                        <Pagination.Item
+                          key={pageNumber}
+                          active={pageNumber === currentPage}
+                          onClick={() => handlePageChange(pageNumber)}
+                        >
+                          {pageNumber}
+                        </Pagination.Item>
+                      );
+                    })}
+                    <Pagination.Next
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    />
+                    <Pagination.Last
+                      onClick={() => handlePageChange(totalPages)}
+                      disabled={currentPage === totalPages}
+                    />
+                  </Pagination>
+                </Col>
+              </Row>
+            )}
           </Col>
         </Row>
       </Col>
