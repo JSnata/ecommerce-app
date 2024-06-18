@@ -6,8 +6,6 @@ import usePromo from '../../hooks/usePromo';
 function OrderPromo() {
   const { promos } = usePromo();
 
-  console.log(promos, 'PROMO DATA');
-
   return (
     <Container>
       <Row>
