@@ -19,6 +19,7 @@ const signingCustomer = async (username: string, password: string): Promise<ByPr
         body: {
           email: username,
           password,
+          activeCartSignInMode: 'MergeWithExistingCustomerCart',
         },
       })
       .execute();

@@ -47,3 +47,16 @@
   margin: 0 auto;
   width: 80%;
 }
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 10px;
+  max-width: 200px;
+}
+
+.buttonDisabled {
+  pointer-events: none;
+}

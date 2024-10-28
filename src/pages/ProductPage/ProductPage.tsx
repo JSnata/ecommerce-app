@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import CarouselComponent from '../../ui/Carusel/Carusel';
 import style from './ProductPage.module.css';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
 import useProducts from '../../hooks/useProducts';
+import useCart from '../../hooks/useCart';
 
 interface ProductParam {
   id: string;
@@ -31,6 +32,7 @@ function ProductPage() {
     productSrcArray.push(img?.url);
   });
   const [showModal, setShowModal] = useState(false);
+  const { addToCart, removeFromCart, isInCart } = useCart();
 
   const openModal = (event: React.MouseEvent<HTMLElement>) => {
     const targetElement = event.target as HTMLElement;
@@ -39,6 +41,13 @@ function ProductPage() {
     }
   };
   const handleClose = () => setShowModal(false);
+  const onAddToCart = () => {
+    addToCart(product?.id || '');
+  };
+
+  const onDeleteFromCart = () => {
+    removeFromCart(product?.id || '');
+  };
 
   return (
     <div>
@@ -71,10 +80,28 @@ function ProductPage() {
               {productPrice} {productCode}
             </h2>
           </Row>
+          <Row className={style.buttonContainer}>
+            <Button
+              className="mx-2"
+              variant={isInCart(product?.id || '') ? 'outline-secondary' : 'dark'}
+              onClick={onAddToCart}
+              disabled={isInCart(product?.id || '')}
+            >
+              {isInCart(product?.id || '') ? 'In Cart' : 'Add to Cart'}
+            </Button>
+
+            {isInCart(product?.id || '') ? (
+              <Button variant="dark" onClick={onDeleteFromCart} className="mx-2">
+                Delete
+              </Button>
+            ) : (
+              ''
+            )}
+          </Row>
         </Col>
       </Row>
       {showModal && (
-        <ModalWindow show={showModal} handleClose={handleClose} title={productName} modalSize="lg">
+        <ModalWindow show={showModal} handleClose={handleClose} title={productName ?? ''} modalSize="lg">
           <CarouselComponent
             srcArray={productSrcArray}
             interval={null}

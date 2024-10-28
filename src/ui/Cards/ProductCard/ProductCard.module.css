@@ -27,6 +27,7 @@
 }
 
 .discountPrice {
+  text-align: center;
   font-weight: 400;
   text-decoration: line-through;
   color: grey;
@@ -37,6 +38,7 @@
 }
 
 .price {
+  text-align: center;
   font-weight: 600;
   color: black;
 }
@@ -44,4 +46,15 @@
 .cardContent .oldPrice {
   text-decoration: line-through;
   opacity: 0.5;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.buttonDisabled {
+  pointer-events: none;
 }

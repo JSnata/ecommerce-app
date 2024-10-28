@@ -9,6 +9,7 @@ import { createCustomer } from './helpers/ClientAPI';
 import createAxiosInstance from './helpers/axiosInstance';
 import { userTokenCache } from './root/BuildCustomer';
 import { createApiCustomerWithKey } from './root/BuildCustomerWithKey';
+import CartService from './CartService';
 /**
  * ApiService is a class that provides methods for interacting with the CommerceTools API.
  */
@@ -45,11 +46,58 @@ export default class ApiService {
     try {
       this.userApi = await signingCustomer(email, password);
       this.axiosInstance = createAxiosInstance();
+      const cart = await ApiService.initializedCustomerCart();
+      console.log('Cart successfully initialized', cart);
     } catch (err) {
       console.error(err);
       toast.error(`${err}`);
     }
     return this.userApi;
+  }
+
+  static async initializedCustomerCart() {
+    const response = await ApiService.userApi?.me().carts().get().execute();
+    if (response && response.body.results.length <= 0) {
+      console.error(response.body, 'current user cart body');
+      const cartResponse = await ApiService.userApi
+        ?.me()
+        .carts()
+        .post({
+          body: {
+            currency: 'EUR',
+          },
+        })
+        .execute();
+      if (cartResponse) {
+        const { id, version } = cartResponse.body;
+        await CartService.mergeCart(id, version);
+        CartService.setCartIdToLocalStorage(id);
+        CartService.start();
+      }
+      console.log(cartResponse);
+    } else if (response) {
+      const { id, version } = response.body.results[0];
+      await CartService.mergeCart(id, version);
+      CartService.setCartIdToLocalStorage(id);
+      CartService.start();
+    }
+    console.log(response);
+  }
+
+  static async getAllCustomerCart() {
+    try {
+      return await ApiService.userApi
+        ?.me()
+        .carts()
+        .get()
+        .execute()
+        .then((response) => {
+          console.log(response.body.results[0], 'Customer all cart');
+        });
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 
   /**
