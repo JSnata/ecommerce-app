@@ -36,6 +36,7 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
+build
 build/Release
 
 # Dependency directories
@@ -120,6 +121,7 @@ dist
 .tern-port
 
 # Stores VSCode versions used for testing VSCode extensions
+.idea
 .vscode-test
 
 # yarn v2

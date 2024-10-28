@@ -1,0 +1,60 @@
+.card {
+  margin-bottom: 1px;
+  border: 1px solid rgb(18, 18, 18);
+  border-left: 0;
+  border-bottom: 0;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.cardImgContainer {
+  height: 350px;
+}
+
+.cardContent {
+  display: block;
+  padding: 10px;
+  text-align: center;
+  color: black;
+  text-decoration: none;
+}
+
+.cardContent h3 {
+  font-size: 24px;
+}
+
+.discountPrice {
+  text-align: center;
+  font-weight: 400;
+  text-decoration: line-through;
+  color: grey;
+}
+
+.cardContent h2 {
+  font-size: 24px;
+}
+
+.price {
+  text-align: center;
+  font-weight: 600;
+  color: black;
+}
+
+.cardContent .oldPrice {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.buttonDisabled {
+  pointer-events: none;
+}

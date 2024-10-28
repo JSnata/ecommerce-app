@@ -1,0 +1,62 @@
+.right {
+  border-bottom: 1px solid var(--bs-gray-900);
+  border-top: 1px solid var(--bs-gray-900);
+  border-right: 1px solid var(--bs-gray-900);
+}
+
+.left {
+  border: 1px solid var(--bs-gray-900);
+}
+
+.oldPrice {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.imgPage,
+.imgModal {
+  width: 100%;
+}
+
+.imgPage {
+  padding: 15%;
+}
+
+.imgModal {
+  padding: 10%;
+}
+
+.row {
+  --bs-gutter-x: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .left {
+    border-bottom: none;
+  }
+  .right {
+    border-left: 1px solid var(--bs-gray-900);
+  }
+}
+
+.carousel {
+  margin: 0 auto;
+  width: 60%;
+}
+.carouselModal {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 10px;
+  max-width: 200px;
+}
+
+.buttonDisabled {
+  pointer-events: none;
+}

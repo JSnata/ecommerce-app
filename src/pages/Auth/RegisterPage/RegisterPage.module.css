@@ -1,0 +1,32 @@
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+}
+
+.line {
+  color: var(--bs-black);
+  height: 1px;
+  box-shadow: 0 0 5px var(--bs-black);
+}
+
+.column {
+  margin: 0 auto;
+}
+
+.submitBtn {
+  margin-top: 2vh;
+  width: 100%;
+}
+
+.lineCol {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .lineCol {
+    display: block;
+  }
+}
